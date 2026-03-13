@@ -67,7 +67,7 @@ const isDark = computed(() => props.mode === 'afiliado');
   -webkit-backdrop-filter: blur(15px);
   border-bottom: 1px solid var(--card-border);
   z-index: 1000;
-  height: 90px; /* Reduced from 160px */
+  height: 110px; /* Increased from 90px */
   display: flex;
   align-items: center;
   transition: all 0.3s ease;
@@ -87,7 +87,7 @@ const isDark = computed(() => props.mode === 'afiliado');
 }
 
 .logo-img {
-  height: 60px; /* Balanced height */
+  height: 85px; /* Increased from 60px for better visibility */
   width: auto;
   object-fit: contain;
   transition: transform 0.3s ease, filter 0.3s ease;
