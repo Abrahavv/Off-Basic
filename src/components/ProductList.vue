@@ -38,7 +38,7 @@ const personalProducts = [
   {
     id: 'smartwatch',
     name: 'Smartwatch',
-    description: 'Rendimiento en tu muñeca. Monitoreo avanzado, notificaciones inteligentes y batería de larga duración.',
+    description: 'Experimenta el rendimiento máximo en tu muñeca. Incluye monitoreo avanzado de salud en tiempo real, notificaciones inteligentes sincronizadas y una batería de larga duración para toda la semana.',
     originalPrice: '45.00',
     price: '25.00',
     image: '/product-smartwatch.png',
@@ -56,7 +56,7 @@ const personalProducts = [
   {
     id: 'audifonos',
     name: 'Audífonos ANC',
-    description: 'Aísla el ruido. Domina tu entorno. Sonido de alta fidelidad con cancelación activa de ruido.',
+    description: 'Aísla el ruido exterior y domina tu entorno con tecnología de cancelación activa. Disfruta de un sonido de alta fidelidad con bajos profundos y hasta 35 horas de reproducción continua.',
     originalPrice: '35.00',
     price: '20.00',
     image: '/product-audifonos.png',
@@ -74,7 +74,7 @@ const personalProducts = [
   {
     id: 'dock',
     name: 'Dock Magnético',
-    description: 'Energía sin cables. Un solo lugar para tu reloj, audífonos y teléfono. Diseño minimalista.',
+    description: 'Simplifica tu carga con tecnología de inducción magnética. Un solo lugar elegante para cargar simultáneamente tu reloj, audífonos y teléfono móvil. Diseño minimalista de aluminio premium.',
     originalPrice: '40.00',
     price: '22.00',
     image: '/product-dock.png',
@@ -96,7 +96,7 @@ const aliadoProducts = [
   {
     id: 'smartwatch',
     name: 'Smartwatch',
-    description: 'Alta demanda, alta rotación.',
+    description: 'Producto de alta demanda y rotación garantizada. Ideal para expandir tu catálogo con un dispositivo confiable, moderno y con excelente margen de ganancia para tu negocio personal.',
     originalPrice: '25.00',
     price: '15.00',
     image: '/product-smartwatch.png',
@@ -106,7 +106,7 @@ const aliadoProducts = [
   {
     id: 'audifonos',
     name: 'Audífonos ANC',
-    description: 'Calidad que vende sola.',
+    description: 'Calidad de sonido premium que se vende sola gracias a su tecnología ANC. Un producto indispensable para clientes exigentes que buscan la mejor relación precio-valor en audio hoy.',
     originalPrice: '20.00',
     price: '12.00',
     image: '/product-audifonos.png',
@@ -116,7 +116,7 @@ const aliadoProducts = [
   {
     id: 'dock',
     name: 'Dock Magnético',
-    description: 'El accesorio que todos necesitan.',
+    description: 'El accesorio de carga que todos los usuarios necesitan. Optimiza tu inventario con este cargador 3 en 1 versátil, compacto y compatible con los dispositivos más populares del mercado.',
     originalPrice: '22.00',
     price: '13.00',
     image: '/product-dock.png',
@@ -510,6 +510,12 @@ const revealRef = useScrollReveal();
   color: var(--text-muted);
   font-weight: 300;
   margin-bottom: 0.75rem;
+  /* Force 3 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 4.8em; /* 1.6 line-height * 3 lines */
 }
 
 /* Shipping Badge */

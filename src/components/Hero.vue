@@ -52,13 +52,11 @@ const scrollToProducts = () => {
       <div class="particle p-11"></div>
       <div class="particle p-12"></div>
       
-      <!-- Ondas expansivas más pronunciadas -->
-      <div class="pulse-ring delay-1"></div>
-      <div class="pulse-ring delay-2"></div>
-      <div class="pulse-ring delay-3"></div>
+      <!-- Una sola onda expansiva -->
+      <div class="pulse-ring"></div>
     </div>
 
-    <Transition name="mode-switch" mode="out-in">
+    <Transition name="mode-switch" mode="out-in" appear>
 
       <!-- ========== PERSONAL MODE ========== -->
       <div v-if="!isAliado" class="container hero-inner" key="personal">
@@ -121,7 +119,7 @@ const scrollToProducts = () => {
         </h2>
 
         <div class="hero-actions">
-          <a :href="getLlaveUrl()" target="_blank" rel="noopener noreferrer" class="btn-primary">Llave</a>
+          <button class="btn-primary" @click="scrollToProducts">Acceso</button>
         </div>
       </div>
 
@@ -179,6 +177,12 @@ const scrollToProducts = () => {
   z-index: 1;
   pointer-events: none;
   overflow: hidden;
+  animation: fadeIn 1s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Base pearl gradient */
@@ -189,35 +193,56 @@ const scrollToProducts = () => {
   opacity: 0.9;
 }
 
-/* Randomly Appearing Particles */
+/* Círculos que salen del centro */
 .particle {
   position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 10px rgba(0, 208, 255, 0.6);
+  box-shadow: 0 0 8px rgba(0, 208, 255, 0.6);
   opacity: 0;
-  animation: appearDisappear var(--duration, 6s) infinite ease-in-out var(--delay, 0s);
+  animation: moveOutwards var(--duration, 6s) infinite cubic-bezier(0.4, 0, 0.2, 1) var(--delay, 0s);
+  transform-origin: center;
 }
 
-.p-1 { width: 5px; height: 5px; left: 15%; top: 20%; --duration: 5s; --delay: 0s; }
-.p-2 { width: 8px; height: 8px; left: 75%; top: 15%; --duration: 7s; --delay: 2s; }
-.p-3 { width: 4px; height: 4px; left: 85%; top: 60%; --duration: 4s; --delay: 1s; }
-.p-4 { width: 6px; height: 6px; left: 10%; top: 75%; --duration: 8s; --delay: 3s; }
-.p-5 { width: 9px; height: 9px; left: 50%; top: 80%; --duration: 6s; --delay: 1.5s; }
-.p-6 { width: 5px; height: 5px; left: 35%; top: 30%; --duration: 5.5s; --delay: 4s; }
-.p-7 { width: 7px; height: 7px; left: 90%; top: 35%; --duration: 6.5s; --delay: 0.5s; }
-.p-8 { width: 4px; height: 4px; left: 25%; top: 50%; --duration: 4.5s; --delay: 2.5s; }
-.p-9 { width: 6px; height: 6px; left: 65%; top: 65%; --duration: 7.5s; --delay: 1.2s; }
-.p-10 { width: 5px; height: 5px; left: 45%; top: 10%; --duration: 5s; --delay: 3.5s; }
-.p-11 { width: 8px; height: 8px; left: 55%; top: 90%; --duration: 8.5s; --delay: 0.8s; }
-.p-12 { width: 3px; height: 3px; left: 5%; top: 40%; --duration: 3.5s; --delay: 2.2s; }
+.p-1 { --dest-x: 15%; --dest-y: 20%; --duration: 5s; --delay: 0s; --angle: -135deg; }
+.p-2 { --dest-x: 75%; --dest-y: 15%; --duration: 7s; --delay: 2s; --angle: 45deg; }
+.p-3 { --dest-x: 85%; --dest-y: 60%; --duration: 4s; --delay: 1s; --angle: 110deg; }
+.p-4 { --dest-x: 10%; --dest-y: 75%; --duration: 8s; --delay: 3s; --angle: -110deg; }
+.p-5 { --dest-x: 50%; --dest-y: 80%; --duration: 6s; --delay: 1.5s; --angle: 180deg; }
+.p-6 { --dest-x: 35%; --dest-y: 30%; --duration: 5.5s; --delay: 4s; --angle: -45deg; }
+.p-7 { --dest-x: 90%; --dest-y: 35%; --duration: 6.5s; --delay: 0.5s; --angle: 70deg; }
+.p-8 { --dest-x: 25%; --dest-y: 50%; --duration: 4.5s; --delay: 2.5s; --angle: -90deg; }
+.p-9 { --dest-x: 65%; --dest-y: 65%; --duration: 7.5s; --delay: 1.2s; --angle: 135deg; }
+.p-10 { --dest-x: 45%; --dest-y: 10%; --duration: 5s; --delay: 3.5s; --angle: 0deg; }
+.p-11 { --dest-x: 55%; --dest-y: 90%; --duration: 8.5s; --delay: 0.8s; --angle: 180deg; }
+.p-12 { --dest-x: 5%; --dest-y: 40%; --duration: 3.5s; --delay: 2.2s; --angle: -70deg; }
 
-@keyframes appearDisappear {
-  0%, 100% { opacity: 0; transform: scale(0.3); }
-  50% { opacity: 0.96; transform: scale(1.2); }
+@keyframes moveOutwards {
+  0% { 
+    top: 40%; 
+    left: 50%; 
+    opacity: 0; 
+    transform: translate(-50%, -50%) scale(0.3) rotate(var(--angle)); 
+  }
+  20% { 
+    opacity: 0.95; 
+  }
+  80% { 
+    opacity: 0.95; 
+  }
+  100% { 
+    top: var(--dest-y); 
+    left: var(--dest-x); 
+    opacity: 0; 
+    transform: translate(-50%, -50%) scale(1.4) rotate(var(--angle)); 
+  }
 }
 
-/* Concentric Pulse Ring (Multiples) */
+/* Concentric Pulse Ring (Single) */
 .pulse-ring {
   position: absolute;
   top: 40%;
@@ -225,14 +250,19 @@ const scrollToProducts = () => {
   transform: translate(-50%, -50%);
   width: 600px;
   height: 600px;
+  max-width: 90vw;
+  max-height: 90vw;
   border-radius: 50%;
   border: 1px solid rgba(0, 208, 255, 0.25);
-  animation: expandRing 10s infinite cubic-bezier(0.21, 0.53, 0.56, 0.8);
+  animation: expandRing 5.5s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.pulse-ring.delay-1 { animation-delay: 0s; }
-.pulse-ring.delay-2 { animation-delay: 5s; }
-.pulse-ring.delay-3 { display: none; }
+@media (max-width: 768px) {
+  .pulse-ring {
+    width: 300px;
+    height: 300px;
+  }
+}
 
 @keyframes expandRing {
   0% { width: 200px; height: 200px; opacity: 0.95; border-width: 2px; }
@@ -252,23 +282,33 @@ const scrollToProducts = () => {
 }
 
 .floating-glow {
-  animation: float 4s ease-in-out infinite, glow 3s ease-in-out infinite;
+  animation: float 5s ease-in-out infinite, glow 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3)); }
+  50% { filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5)); }
 }
 
 /* ===== TITLES ===== */
 .hero-display {
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 8vw, 3.8rem);
+  font-size: clamp(1.8rem, 10vw, 3.8rem);
   font-weight: 800;
   letter-spacing: 4px;
-  line-height: 1;
-  margin-bottom: 1.25rem;
+  line-height: 1.1;
+  margin-bottom: 1rem;
   text-transform: uppercase;
   background: linear-gradient(to bottom, var(--text) 40%, var(--text-muted) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.15));
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.1));
 }
 
 .hero-title {
@@ -280,12 +320,12 @@ const scrollToProducts = () => {
 }
 
 .hero-tagline {
-  font-size: clamp(1.2rem, 3.5vw, 2rem);
+  font-size: clamp(1.1rem, 4vw, 1.8rem);
   font-weight: 800;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
   color: var(--accent);
   letter-spacing: 0.5px;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .hero-description {
@@ -361,7 +401,7 @@ const scrollToProducts = () => {
   width: 48px;
   height: 48px;
   object-fit: contain;
-  filter: drop-shadow(0 0 10px rgba(0,208,255,0.4));
+  filter: drop-shadow(0 0 6px rgba(0,208,255,0.3));
   transition: transform 0.3s ease;
 }
 
@@ -431,10 +471,22 @@ const scrollToProducts = () => {
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .hero {
-    padding: 110px 0 40px;
+    padding: 160px 0 40px;
   }
   .hero-logo {
-    width: 130px;
+    width: 120px;
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+  .hero-actions .btn-primary,
+  .hero-actions .btn-secondary {
+    width: 100%;
   }
   .baul-container {
     width: 160px;
@@ -443,5 +495,17 @@ const scrollToProducts = () => {
   .llaves-row {
     gap: 1.2rem;
   }
+  .hero-description p {
+    font-size: 0.9rem;
+    padding: 0 1rem;
+  }
+  .orb {
+    width: 200px;
+    height: 200px;
+    filter: blur(60px);
+    opacity: 0.15;
+  }
+  .orb-1 { top: -50px; right: -50px; }
+  .orb-2 { bottom: -50px; left: -50px; }
 }
 </style>

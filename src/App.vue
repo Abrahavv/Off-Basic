@@ -11,9 +11,13 @@ import PaymentMethods from './components/PaymentMethods.vue';
 import ObjectivesSection from './components/ObjectivesSection.vue';
 import FaqSection from './components/FaqSection.vue';
 import FooterSection from './components/FooterSection.vue';
+import ComparisonSection from './components/ComparisonSection.vue';
+import KeysSection from './components/KeysSection.vue';
 
-// Modes: 'personal' (Light) & 'aliado' (Dark)
+// Modos: 'personal' (Light) & 'aliado' (Dark)
 const currentMode = ref('personal');
+// Modo Mantenimiento 
+const isMaintenanceMode = ref(false);
 
 const toggleMode = () => {
   currentMode.value = currentMode.value === 'personal' ? 'aliado' : 'personal';
@@ -37,7 +41,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="app-wrapper">
+  <div v-if="isMaintenanceMode" class="maintenance-screen">
+    <img src="/Off-Basic-Web-Cromado.png" alt="Off Basic" class="maintenance-logo" />
+    <h1 class="maintenance-text">En mantenimiento</h1>
+  </div>
+  
+  <div v-else class="app-wrapper">
     <Navbar :mode="currentMode" @switch-mode="setMode" />
     <main>
       <Hero :mode="currentMode" @switch-mode="setMode" />
@@ -54,8 +63,10 @@ onMounted(() => {
       <!-- Aliado Mode Sections -->
       <template v-else>
         <BenefitsSection />
+        <ComparisonSection :mode="currentMode" />
         <ProductList :mode="currentMode" />
         <ObjectivesSection :mode="currentMode" />
+        <KeysSection :mode="currentMode" />
         <FounderSection :mode="currentMode" />
         <PaymentMethods :mode="currentMode" />
         <TestimonialsSection :mode="currentMode" />
@@ -69,6 +80,28 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.maintenance-screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #050505;
+  color: white;
+}
+.maintenance-logo {
+  max-width: 300px;
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+}
+.maintenance-text {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: var(--font-display);
+  letter-spacing: 2px;
+  color: var(--accent);
+}
+
 .app-wrapper {
   min-height: 100vh;
   display: flex;

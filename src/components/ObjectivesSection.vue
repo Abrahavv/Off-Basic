@@ -14,9 +14,11 @@ const revealRef = useScrollReveal();
 <template>
   <section class="objectives-section" :class="{ 'section-aliado': isAliado }">
     <div class="container scroll-reveal slide-right" ref="revealRef">
-      <h2 class="section-title" style="margin-bottom: 3.5rem;">Nuestra Esencia</h2>
+      <h2 class="section-title" style="margin-bottom: 3.5rem;">
+        {{ isAliado ? 'Nuestros objetivos' : 'Nuestra Esencia' }}
+      </h2>
       
-      <div class="objectives-grid">
+      <div class="objectives-grid" :class="{ 'aliado-grid': isAliado }">
         <!-- 01 Exclusividad -->
         <div class="objective-card" :class="{ 'card-aliado': isAliado }">
           <div class="obj-content">
@@ -99,6 +101,26 @@ const revealRef = useScrollReveal();
   align-items: flex-start;
 }
 
+.aliado-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3.5rem !important;
+}
+
+.aliado-grid .objective-card {
+  width: 75%;
+}
+
+.aliado-grid .objective-card:nth-child(even) {
+  align-self: flex-end;
+}
+
+.aliado-grid .objective-card:nth-child(even) .obj-number {
+  left: -5px;
+  right: auto;
+}
+
+
 .objective-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -173,6 +195,16 @@ const revealRef = useScrollReveal();
   .objectives-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
+  }
+  .aliado-grid .objective-card {
+    width: 100%;
+  }
+  .aliado-grid .objective-card:nth-child(even) {
+    align-self: flex-start;
+  }
+  .aliado-grid .objective-card:nth-child(even) .obj-number {
+    left: auto;
+    right: -5px;
   }
   .objectives-section {
     padding: var(--section-padding);

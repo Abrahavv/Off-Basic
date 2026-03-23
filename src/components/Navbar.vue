@@ -73,7 +73,10 @@ const scrollToProducts = () => {
     <!-- Countdown Bar (Both Modes) -->
     <div class="top-countdown-bar" :class="isAliado ? 'timer-bg-aliado' : 'timer-bg-personal'">
       <div class="countdown-center">
-        <span class="countdown-text">PRECIO DE LANZAMIENTO · SOLO POR TIEMPO LIMITADO</span>
+        <span class="countdown-text">
+          <span class="live-dot"></span>
+          PRECIO DE LANZAMIENTO · SOLO POR TIEMPO LIMITADO
+        </span>
         <div class="countdown-timer">
           <div class="time-block">
             <span class="time-value">{{ countdown.hours < 10 ? '0' + countdown.hours : countdown.hours }}</span>
@@ -211,6 +214,44 @@ const scrollToProducts = () => {
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #00ff00;
+  border-radius: 50%;
+  position: relative;
+  display: inline-block;
+  box-shadow: 0 0 5px #00ff00;
+  flex-shrink: 0;
+}
+
+.live-dot::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 50%;
+  background-color: #00ff00;
+  animation: pulse-live 1.5s infinite ease-out;
+  z-index: -1;
+}
+
+@keyframes pulse-live {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+@media (max-width: 500px) {
+  .countdown-text {
+    font-size: 0.55rem;
+    width: 100%;
+    text-align: center;
+    margin-bottom: -10px;
+  }
 }
 
 .countdown-timer {
@@ -350,45 +391,48 @@ const scrollToProducts = () => {
     padding: 0.4rem 0.5rem;
   }
   .countdown-center {
-    gap: 0.75rem;
+    gap: 0.8rem;
+    justify-content: center;
   }
   .countdown-text {
-    font-size: 0.65rem;
-    white-space: nowrap;
-  }
-  .countdown-label {
-    font-size: 0.65rem;
-    text-align: center;
-    width: 100%;
-  }
-  .navbar {
-    height: 56px;
-  }
-  .logo {
     display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    white-space: nowrap;
-    flex-shrink: 0;
+    font-size: 0.55rem;
+    width: 100%;
+    text-align: center;
+    margin-bottom: -5px;
+    justify-content: center;
+    flex-direction: row;
+    gap: 0.4rem;
   }
-  .logo-text {
-    font-size: 0.95rem;
-    margin-top: 1px;
-  }
-  .logo-img {
-    height: 32px;
-  }
-  .social-links {
+  .countdown-timer {
     gap: 0.25rem;
   }
-  .social-icon {
-    width: 32px;
-    height: 32px;
+  .time-block {
+    min-width: 32px;
+  }
+  .time-value {
+    font-size: 1rem;
+  }
+  .navbar {
+    height: 60px;
+  }
+  .logo-text {
+    font-size: 0.9rem;
+    letter-spacing: 0;
+  }
+  .logo-img {
+    height: 30px;
+  }
+  .social-links {
+    display: none; /* Ocultar redes en móvil para ahorrar espacio */
   }
   .mode-toggle-btn {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     padding: 0.3rem 0.6rem;
-    margin-right: 0.2rem;
+    margin-right: 0;
+  }
+  .nav-controls {
+    gap: 0.5rem;
   }
 }
 </style>

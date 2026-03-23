@@ -28,7 +28,7 @@ const revealRef = useScrollReveal();
 <template>
   <section class="testimonials-section" :class="{ 'section-aliado': isAliado }">
     <div class="container scroll-reveal slide-left" ref="revealRef">
-      <h2 class="section-title">{{ isAliado ? 'Ellos ya viven Fuera de lo básico' : 'Ellos ya viven Fuera de lo básico' }}</h2>
+      <h2 class="section-title">{{ isAliado ? 'Casos de éxito' : 'Ellos ya viven Fuera de lo básico' }}</h2>
       
       <div class="testimonials-grid">
         <div v-for="(t, i) in activeTestimonials" :key="i" class="testimonial-card" :class="{ 'card-aliado': isAliado }">
