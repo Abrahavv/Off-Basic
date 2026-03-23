@@ -1,5 +1,5 @@
 /* ===== GOOGLE FONTS ===== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Syne:wght@700;800&family=Bruno+Ace+SC&display=swap');
 
 /* ===== DESIGN TOKENS ===== */
 :root {
@@ -13,20 +13,22 @@
   /* Shared */
   --transition: 0.35s;
   --font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Bruno Ace SC', cursive;
   --radius: 6px;
-  --section-padding: 6rem 1.5rem;
+  --section-padding: 3rem 1.5rem;
 }
 
 /* ===== MODO PERSONAL (Light) ===== */
 .modo-personal {
   --bg: #FFFFFF;
-  --bg-alt: #F7F7F8;
+  --bg-alt: #FFFFFF;
   --text: #000000;
   --text-muted: #808080;
   --card-bg: #FFFFFF;
   --card-border: #E0E0E0;
-  --shadow: rgba(0, 0, 0, 0.06);
-  --header-bg: rgba(255, 255, 255, 0.92);
+  --shadow: rgba(0, 0, 0, 0.05);
+  --header-bg: rgba(255, 255, 255, 0.94);
+  --glow-color: rgba(0, 0, 0, 0.3);
 }
 
 /* ===== MODO ALIADO (Dark) ===== */
@@ -39,6 +41,7 @@
   --card-border: #222222;
   --shadow: rgba(0, 208, 255, 0.08);
   --header-bg: rgba(0, 0, 0, 0.94);
+  --glow-color: rgba(0, 208, 255, 0.35);
 }
 
 /* ===== RESET ===== */
@@ -165,6 +168,21 @@ img {
   font-weight: 300;
 }
 
+/* ===== DISPLAY TITLES ===== */
+.hero-display {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  background: linear-gradient(to bottom, var(--text) 30%, var(--text-muted) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /* ===== ANIMATIONS ===== */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
@@ -177,8 +195,8 @@ img {
 }
 
 @keyframes glow {
-  0%, 100% { filter: drop-shadow(0 0 15px rgba(0, 208, 255, 0.3)); }
-  50% { filter: drop-shadow(0 0 35px rgba(0, 208, 255, 0.7)); }
+  0%, 100% { filter: drop-shadow(0 0 15px var(--glow-color)); }
+  50% { filter: drop-shadow(0 0 35px var(--glow-color)); }
 }
 
 @keyframes shimmer {
@@ -189,6 +207,27 @@ img {
 .animate-fade-in {
   animation: fadeInUp 0.8s ease forwards;
 }
+
+/* ===== SCROLL REVEAL ANIMATIONS ===== */
+.scroll-reveal {
+  opacity: 0;
+  transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
+}
+
+.scroll-reveal.slide-left {
+  transform: translateX(-60px);
+}
+
+.scroll-reveal.slide-right {
+  transform: translateX(60px);
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 
 /* ===== SCROLL SMOOTH ===== */
 html {

@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { useScrollReveal } from '../composables/useScrollReveal';
 
 const props = defineProps({
   mode: String
@@ -20,16 +21,22 @@ const aliadoTestimonials = [
 ];
 
 const activeTestimonials = computed(() => isAliado.value ? aliadoTestimonials : personalTestimonials);
+
+const revealRef = useScrollReveal();
 </script>
 
 <template>
   <section class="testimonials-section" :class="{ 'section-aliado': isAliado }">
-    <div class="container">
-      <h2 class="section-title">{{ isAliado ? 'Ellos ya viven Fuera de lo básico.' : 'Ellos ya viven Fuera de lo básico.' }}</h2>
+    <div class="container scroll-reveal slide-left" ref="revealRef">
+      <h2 class="section-title">{{ isAliado ? 'Ellos ya viven Fuera de lo básico' : 'Ellos ya viven Fuera de lo básico' }}</h2>
       
       <div class="testimonials-grid">
         <div v-for="(t, i) in activeTestimonials" :key="i" class="testimonial-card" :class="{ 'card-aliado': isAliado }">
-          <div class="quote-mark">"</div>
+          <div class="testimonial-stars">
+            <svg v-for="star in 5" :key="star" class="star-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+            </svg>
+          </div>
           <p class="quote-text">{{ t.quote }}</p>
           <div class="author">
             <div class="author-avatar">{{ t.author.charAt(0) }}</div>
@@ -83,13 +90,16 @@ const activeTestimonials = computed(() => isAliado.value ? aliadoTestimonials : 
   box-shadow: 0 0 30px rgba(0, 208, 255, 0.15);
 }
 
-.quote-mark {
-  font-size: 4rem;
-  font-weight: 700;
+.testimonial-stars {
+  display: flex;
+  gap: 0.2rem;
+  margin-bottom: 1.25rem;
   color: var(--accent);
-  line-height: 1;
-  margin-bottom: -0.5rem;
-  opacity: 0.5;
+}
+
+.star-icon {
+  width: 18px;
+  height: 18px;
 }
 
 .quote-text {

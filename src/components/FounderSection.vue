@@ -1,17 +1,20 @@
 <script setup>
 import { computed } from 'vue';
+import { useScrollReveal } from '../composables/useScrollReveal';
 
 const props = defineProps({
   mode: String
 });
 
 const isAliado = computed(() => props.mode === 'aliado');
+
+const revealRef = useScrollReveal();
 </script>
 
 <template>
   <section class="founder-section" :class="{ 'section-aliado': isAliado }">
-    <div class="container">
-      <h2 class="section-title">Detrás de Off Basic.</h2>
+    <div class="container scroll-reveal slide-left" ref="revealRef">
+      <h2 class="section-title">Detrás de Off Basic</h2>
       
       <div class="founder-grid">
         <div class="founder-image-wrap">
@@ -22,6 +25,7 @@ const isAliado = computed(() => props.mode === 'aliado');
         </div>
         
         <div class="founder-content">
+          <p class="founder-subtitle">¿Quién es Luis Rocha?</p>
           <p class="founder-copy">
             Entiendo la necesidad de tecnología que no solo funcione, sino que eleve tu estándar. 
             Fundé Off Basic con una misión clara: traer la mejor tecnología premium, probada y garantizada, 
@@ -47,12 +51,22 @@ const isAliado = computed(() => props.mode === 'aliado');
   background-color: var(--bg);
 }
 
+.founder-subtitle {
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  color: var(--accent);
+  margin-bottom: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
 .founder-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
-  align-items: center;
-  margin-top: 2rem;
+  align-items: flex-start;
+  margin-top: 3.5rem;
 }
 
 .founder-image-wrap {

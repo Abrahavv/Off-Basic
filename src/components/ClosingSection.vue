@@ -1,16 +1,20 @@
 <script setup>
+import { useScrollReveal } from '../composables/useScrollReveal';
+
 const whatsappNumber = '1234567890';
 
 const getPostulacionUrl = () => {
   const msg = '¡Hola! Quiero postularme para ser Aliado oficial.';
   return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
 };
+
+const revealRef = useScrollReveal();
 </script>
 
 <template>
   <section class="closing-section">
-    <div class="container closing-inner">
-      <h2 class="section-title">Conviértete en Portador.</h2>
+    <div class="container closing-inner scroll-reveal slide-left" ref="revealRef">
+      <h2 class="baul-title">Conviértete en Portador</h2>
       <p class="closing-copy">
         No buscamos vendedores. Buscamos socios. 
         Evaluamos cada postulación para proteger la exclusividad de nuestra red.

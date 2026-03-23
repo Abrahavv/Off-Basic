@@ -45,20 +45,20 @@ onMounted(() => {
       <!-- Personal Mode Sections -->
       <template v-if="currentMode === 'personal'">
         <ProductList :mode="currentMode" />
-        <TestimonialsSection :mode="currentMode" />
         <ObjectivesSection :mode="currentMode" />
         <FounderSection :mode="currentMode" />
         <PaymentMethods :mode="currentMode" />
+        <TestimonialsSection :mode="currentMode" />
       </template>
 
       <!-- Aliado Mode Sections -->
       <template v-else>
         <BenefitsSection />
         <ProductList :mode="currentMode" />
-        <TestimonialsSection :mode="currentMode" />
         <ObjectivesSection :mode="currentMode" />
         <FounderSection :mode="currentMode" />
         <PaymentMethods :mode="currentMode" />
+        <TestimonialsSection :mode="currentMode" />
         <ClosingSection />
       </template>
 

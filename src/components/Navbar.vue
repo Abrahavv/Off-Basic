@@ -53,10 +53,18 @@ onUnmounted(() => {
   if (timer) clearInterval(timer);
 });
 
-// Placeholder for scroll function
 const scrollToProducts = () => {
-  console.log('Scrolling to products section...');
-  // Implement actual scroll logic here, e.g., using document.getElementById or router.push
+  const el = document.getElementById('productos');
+  if (el) {
+    const navbarHeight = 100; // Aligned with total scroll target for better proximity
+    const elementPosition = el.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+  }
 };
 </script>
 
@@ -83,7 +91,7 @@ const scrollToProducts = () => {
           </div>
         </div>
         <button class="btn-primary countdown-btn" @click="scrollToProducts">
-          {{ isAliado ? 'Acceder ahora' : 'Comprar ahora' }}
+          {{ isAliado ? 'Acceder ahora' : 'Comprar' }}
         </button>
       </div>
     </div>
@@ -341,6 +349,13 @@ const scrollToProducts = () => {
     gap: 0.5rem;
     padding: 0.4rem 0.5rem;
   }
+  .countdown-center {
+    gap: 0.75rem;
+  }
+  .countdown-text {
+    font-size: 0.65rem;
+    white-space: nowrap;
+  }
   .countdown-label {
     font-size: 0.65rem;
     text-align: center;
@@ -348,6 +363,17 @@ const scrollToProducts = () => {
   }
   .navbar {
     height: 56px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .logo-text {
+    font-size: 0.95rem;
+    margin-top: 1px;
   }
   .logo-img {
     height: 32px;

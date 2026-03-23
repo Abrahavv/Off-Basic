@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
+import { useScrollReveal } from '../composables/useScrollReveal';
 
 const props = defineProps({
   mode: String
@@ -65,11 +66,13 @@ const toggle = (index) => {
 watch(() => props.mode, () => {
   openIndex.value = null;
 });
+
+const revealRef = useScrollReveal();
 </script>
 
 <template>
   <section class="faq-section">
-    <div class="container">
+    <div class="container scroll-reveal slide-right" ref="revealRef">
       <h2 class="section-title">Preguntas Frecuentes</h2>
       
       <div class="faq-list">

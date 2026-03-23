@@ -18,12 +18,46 @@ const getLlaveUrl = () => {
 };
 
 const scrollToProducts = () => {
-  document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth' });
+  const el = document.getElementById('productos');
+  if (el) {
+    const navbarHeight = 100; // Aligned with total scroll target for better proximity
+    const elementPosition = el.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+  }
 };
 </script>
 
 <template>
   <section class="hero" :class="{ 'hero-aliado': isAliado }">
+    <!-- Animated Pearl Background Elements (Personal Mode) -->
+    <div v-if="!isAliado" class="hero-bg-elements">
+      <div class="pearl-gradient"></div>
+      
+      <!-- Partículas de aparición/desaparición -->
+      <div class="particle p-1"></div>
+      <div class="particle p-2"></div>
+      <div class="particle p-3"></div>
+      <div class="particle p-4"></div>
+      <div class="particle p-5"></div>
+      <div class="particle p-6"></div>
+      <div class="particle p-7"></div>
+      <div class="particle p-8"></div>
+      <div class="particle p-9"></div>
+      <div class="particle p-10"></div>
+      <div class="particle p-11"></div>
+      <div class="particle p-12"></div>
+      
+      <!-- Ondas expansivas más pronunciadas -->
+      <div class="pulse-ring delay-1"></div>
+      <div class="pulse-ring delay-2"></div>
+      <div class="pulse-ring delay-3"></div>
+    </div>
+
     <Transition name="mode-switch" mode="out-in">
 
       <!-- ========== PERSONAL MODE ========== -->
@@ -38,11 +72,12 @@ const scrollToProducts = () => {
           />
         </div>
 
-        <h1 class="hero-title">Fuera de lo básico.</h1>
-        <h2 class="hero-subtitle">
-          Tecnología premium para quienes exigen más.<br/>
-          Rendimiento, estilo y eficiencia en cada detalle.
-        </h2>
+        <h1 class="hero-display">Off Basic</h1>
+        <h2 class="hero-tagline">Fuera de lo básico</h2>
+        <div class="hero-description">
+          <p>Tecnología premium para quienes exigen más.</p>
+          <p>Rendimiento, estilo y eficiencia en cada detalle.</p>
+        </div>
 
         <div class="hero-actions">
           <button class="btn-primary" @click="scrollToProducts">Comprar</button>
@@ -79,7 +114,7 @@ const scrollToProducts = () => {
           </div>
         </div>
 
-        <h1 class="hero-title">El Baúl.</h1>
+        <h1 class="hero-title">El Baúl</h1>
         <h2 class="hero-subtitle">
           El inventario está protegido.<br/>
           Para ver los precios al mayor, necesitas la Llave.
@@ -112,14 +147,96 @@ const scrollToProducts = () => {
   transition: background-color var(--transition) ease;
 }
 
+/* Blue Tech Grid Details - Solo Aliado */
+.hero-aliado::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: 
+    linear-gradient(rgba(0, 208, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 208, 255, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  z-index: 0;
+  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 70%);
+  pointer-events: none;
+}
+
 .hero-aliado {
-  background: radial-gradient(ellipse at center, rgba(0, 208, 255, 0.04) 0%, var(--bg) 70%);
+  background: radial-gradient(ellipse at center, rgba(0, 208, 255, 0.05) 0%, var(--bg) 70%);
 }
 
 .hero-inner {
   position: relative;
   z-index: 2;
   max-width: 800px;
+}
+
+/* ===== NEW PEARL WHITE & BLUE GEOMETRY BG (Personal) ===== */
+.hero-bg-elements {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Base pearl gradient */
+.pearl-gradient {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 30%, #ffffff 0%, #f4f6fa 60%, #eef2f9 100%);
+  opacity: 0.9;
+}
+
+/* Randomly Appearing Particles */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(0, 208, 255, 0.6);
+  opacity: 0;
+  animation: appearDisappear var(--duration, 6s) infinite ease-in-out var(--delay, 0s);
+}
+
+.p-1 { width: 5px; height: 5px; left: 15%; top: 20%; --duration: 5s; --delay: 0s; }
+.p-2 { width: 8px; height: 8px; left: 75%; top: 15%; --duration: 7s; --delay: 2s; }
+.p-3 { width: 4px; height: 4px; left: 85%; top: 60%; --duration: 4s; --delay: 1s; }
+.p-4 { width: 6px; height: 6px; left: 10%; top: 75%; --duration: 8s; --delay: 3s; }
+.p-5 { width: 9px; height: 9px; left: 50%; top: 80%; --duration: 6s; --delay: 1.5s; }
+.p-6 { width: 5px; height: 5px; left: 35%; top: 30%; --duration: 5.5s; --delay: 4s; }
+.p-7 { width: 7px; height: 7px; left: 90%; top: 35%; --duration: 6.5s; --delay: 0.5s; }
+.p-8 { width: 4px; height: 4px; left: 25%; top: 50%; --duration: 4.5s; --delay: 2.5s; }
+.p-9 { width: 6px; height: 6px; left: 65%; top: 65%; --duration: 7.5s; --delay: 1.2s; }
+.p-10 { width: 5px; height: 5px; left: 45%; top: 10%; --duration: 5s; --delay: 3.5s; }
+.p-11 { width: 8px; height: 8px; left: 55%; top: 90%; --duration: 8.5s; --delay: 0.8s; }
+.p-12 { width: 3px; height: 3px; left: 5%; top: 40%; --duration: 3.5s; --delay: 2.2s; }
+
+@keyframes appearDisappear {
+  0%, 100% { opacity: 0; transform: scale(0.3); }
+  50% { opacity: 0.96; transform: scale(1.2); }
+}
+
+/* Concentric Pulse Ring (Multiples) */
+.pulse-ring {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 208, 255, 0.25);
+  animation: expandRing 10s infinite cubic-bezier(0.21, 0.53, 0.56, 0.8);
+}
+
+.pulse-ring.delay-1 { animation-delay: 0s; }
+.pulse-ring.delay-2 { animation-delay: 5s; }
+.pulse-ring.delay-3 { display: none; }
+
+@keyframes expandRing {
+  0% { width: 200px; height: 200px; opacity: 0.95; border-width: 2px; }
+  100% { width: 1300px; height: 1300px; opacity: 0; border-width: 0px; }
 }
 
 /* ===== FLOATING LOGO ===== */
@@ -139,12 +256,48 @@ const scrollToProducts = () => {
 }
 
 /* ===== TITLES ===== */
+.hero-display {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 8vw, 3.8rem);
+  font-weight: 800;
+  letter-spacing: 4px;
+  line-height: 1;
+  margin-bottom: 1.25rem;
+  text-transform: uppercase;
+  background: linear-gradient(to bottom, var(--text) 40%, var(--text-muted) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.15));
+}
+
 .hero-title {
   font-size: clamp(2.8rem, 7vw, 4.5rem);
   font-weight: 700;
   letter-spacing: -1px;
   margin-bottom: 1rem;
   line-height: 1.05;
+}
+
+.hero-tagline {
+  font-size: clamp(1.2rem, 3.5vw, 2rem);
+  font-weight: 800;
+  margin-bottom: 1.25rem;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.hero-description {
+  margin-bottom: 1.25rem;
+}
+
+.hero-description p {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  color: var(--text-muted);
+  font-weight: 300;
+  line-height: 1.6;
+  margin-bottom: 0.2rem;
 }
 
 .hero-subtitle {
@@ -248,25 +401,25 @@ const scrollToProducts = () => {
 }
 
 .orb-1 {
-  width: 350px;
-  height: 350px;
-  background: var(--accent);
-  top: -100px;
-  right: -80px;
-  opacity: 0.1;
+  width: 450px;
+  height: 450px;
+  background: rgba(0, 208, 255, 0.45);
+  top: -150px;
+  right: -150px;
+  opacity: 0.3;
 }
 
 .orb-2 {
-  width: 250px;
-  height: 250px;
-  background: var(--accent);
-  bottom: -60px;
-  left: -80px;
-  opacity: 0.06;
+  width: 450px;
+  height: 450px;
+  background: rgba(0, 208, 255, 0.45);
+  bottom: -150px;
+  left: -150px;
+  opacity: 0.3;
 }
 
 .orb-aliado {
-  opacity: 0.15;
+  opacity: 0.25;
   animation: orbBreathe 8s infinite alternate;
 }
 

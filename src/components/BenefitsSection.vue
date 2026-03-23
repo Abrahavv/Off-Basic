@@ -1,4 +1,6 @@
 <script setup>
+import { useScrollReveal } from '../composables/useScrollReveal';
+
 const benefits = [
   {
     icon: 'M13 10V3L4 14h7v7l9-11h-7z',
@@ -21,11 +23,13 @@ const benefits = [
     description: 'Recibe contenido profesional: fotos, videos y textos listos para tus redes sociales.'
   }
 ];
+
+const revealRef = useScrollReveal();
 </script>
 
 <template>
   <section class="benefits-section">
-    <div class="container">
+    <div class="container scroll-reveal slide-right" ref="revealRef">
       <h2 class="section-title">¿Por qué ser Aliado?</h2>
       <p class="section-subtitle">Beneficios diseñados para quienes quieren más que vender.</p>
       
