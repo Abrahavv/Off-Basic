@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import ProductModal from './ProductModal.vue';
+import AliadoProductModal from './AliadoProductModal.vue';
 import { useScrollReveal } from '../composables/useScrollReveal';
 
 const props = defineProps({
@@ -16,7 +17,6 @@ const isModalOpen = ref(false);
 const selectedProduct = ref(null);
 
 const openModal = (product) => {
-  if (isAliado.value) return; // Modal only for personal mode
   selectedProduct.value = product;
   isModalOpen.value = true;
 };
@@ -101,7 +101,16 @@ const aliadoProducts = [
     price: '15.00',
     image: '/product-smartwatch.png',
     rating: 4.8,
-    reviews: 124
+    reviews: 124,
+    stats: { roi: '140%', margin: '66', demand: 'Muy Alta', minOrder: '10' },
+    histogram: [
+      { month: 'Oct', percent: 45, value: 150 },
+      { month: 'Nov', percent: 65, value: 220 },
+      { month: 'Dic', percent: 100, value: 380 },
+      { month: 'Ene', percent: 85, value: 290 },
+      { month: 'Feb', percent: 75, value: 240 },
+      { month: 'Mar', percent: 90, value: 310 }
+    ]
   },
   {
     id: 'audifonos',
@@ -111,7 +120,16 @@ const aliadoProducts = [
     price: '12.00',
     image: '/product-audifonos.png',
     rating: 4.9,
-    reviews: 89
+    reviews: 89,
+    stats: { roi: '115%', margin: '55', demand: 'Alta', minOrder: '20' },
+    histogram: [
+      { month: 'Oct', percent: 30, value: 80 },
+      { month: 'Nov', percent: 50, value: 150 },
+      { month: 'Dic', percent: 90, value: 280 },
+      { month: 'Ene', percent: 75, value: 220 },
+      { month: 'Feb', percent: 60, value: 190 },
+      { month: 'Mar', percent: 85, value: 260 }
+    ]
   },
   {
     id: 'dock',
@@ -121,7 +139,16 @@ const aliadoProducts = [
     price: '13.00',
     image: '/product-dock.png',
     rating: 4.7,
-    reviews: 56
+    reviews: 56,
+    stats: { roi: '130%', margin: '60', demand: 'Media-Alta', minOrder: '15' },
+    histogram: [
+      { month: 'Oct', percent: 20, value: 40 },
+      { month: 'Nov', percent: 40, value: 90 },
+      { month: 'Dic', percent: 80, value: 190 },
+      { month: 'Ene', percent: 65, value: 150 },
+      { month: 'Feb', percent: 55, value: 120 },
+      { month: 'Mar', percent: 70, value: 160 }
+    ]
   }
 ];
 
@@ -257,6 +284,14 @@ const revealRef = useScrollReveal();
     <!-- Product Detail Modal (Personal Only) -->
     <ProductModal 
       v-if="!isAliado"
+      :show="isModalOpen" 
+      :product="selectedProduct" 
+      @close="closeModal" 
+    />
+
+    <!-- Aliado Product Modal (Aliados Only) -->
+    <AliadoProductModal 
+      v-if="isAliado"
       :show="isModalOpen" 
       :product="selectedProduct" 
       @close="closeModal" 

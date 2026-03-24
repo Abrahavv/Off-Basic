@@ -13,6 +13,7 @@ import FaqSection from './components/FaqSection.vue';
 import FooterSection from './components/FooterSection.vue';
 import ComparisonSection from './components/ComparisonSection.vue';
 import KeysSection from './components/KeysSection.vue';
+import BaulExplainer from './components/BaulExplainer.vue';
 
 // Modos: 'personal' (Light) & 'aliado' (Dark)
 const currentMode = ref('personal');
@@ -62,6 +63,7 @@ onMounted(() => {
 
       <!-- Aliado Mode Sections -->
       <template v-else>
+        <BaulExplainer :mode="currentMode" />
         <BenefitsSection />
         <ComparisonSection :mode="currentMode" />
         <ProductList :mode="currentMode" />

@@ -37,23 +37,19 @@ const scrollToProducts = () => {
     <!-- Animated Pearl Background Elements (Personal Mode) -->
     <div v-if="!isAliado" class="hero-bg-elements">
       <div class="pearl-gradient"></div>
+    </div>
+
+    <!-- Futuristic Rings Background Elements (Both Modes) -->
+    <div class="hero-bg-hologram">
+      <div class="cyber-ring-huge ring-huge-1"></div>
+      <div class="cyber-ring-huge ring-huge-2"></div>
+      <div class="cyber-ring-huge ring-huge-3"></div>
       
-      <!-- Partículas de aparición/desaparición -->
-      <div class="particle p-1"></div>
-      <div class="particle p-2"></div>
-      <div class="particle p-3"></div>
-      <div class="particle p-4"></div>
-      <div class="particle p-5"></div>
-      <div class="particle p-6"></div>
-      <div class="particle p-7"></div>
-      <div class="particle p-8"></div>
-      <div class="particle p-9"></div>
-      <div class="particle p-10"></div>
-      <div class="particle p-11"></div>
-      <div class="particle p-12"></div>
-      
-      <!-- Una sola onda expansiva -->
-      <div class="pulse-ring"></div>
+      <!-- Flechas diagonales (45 grados) -->
+      <div class="arrow-container arrow-tr"><div class="tech-chevron"></div></div>
+      <div class="arrow-container arrow-br"><div class="tech-chevron"></div></div>
+      <div class="arrow-container arrow-bl"><div class="tech-chevron"></div></div>
+      <div class="arrow-container arrow-tl"><div class="tech-chevron"></div></div>
     </div>
 
     <Transition name="mode-switch" mode="out-in" appear>
@@ -87,28 +83,14 @@ const scrollToProducts = () => {
       <div v-else class="container hero-inner hero-aliado-inner" key="aliado">
         
         <!-- El Baúl Visual -->
-        <div class="baul-visual">
+        <div class="baul-visual baul-floating">
+          <div class="cyber-glow"></div>
           <div class="baul-container">
             <img 
               src="/Baul-Off-Basic.png" 
               alt="El Baúl" 
-              class="baul-img floating-glow"
+              class="baul-img"
             />
-          </div>
-          <!-- 3 Llaves -->
-          <div class="llaves-row">
-            <div class="llave active">
-              <img src="/Llave Diamante.png" alt="Llave Activa" class="llave-icon" />
-              <span>Activa</span>
-            </div>
-            <div class="llave inactive">
-              <img src="/Llave Diamante.png" alt="Llave Pronto" class="llave-icon" />
-              <span>Pronto</span>
-            </div>
-            <div class="llave inactive">
-              <img src="/Llave Diamante.png" alt="Llave Pronto" class="llave-icon" />
-              <span>Pronto</span>
-            </div>
           </div>
         </div>
 
@@ -145,15 +127,15 @@ const scrollToProducts = () => {
   transition: background-color var(--transition) ease;
 }
 
-/* Blue Tech Grid Details - Solo Aliado */
+/* Animated Blue Tech Grid Details - Solo Aliado */
 .hero-aliado::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background-image: 
-    linear-gradient(rgba(0, 208, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 208, 255, 0.05) 1px, transparent 1px);
-  background-size: 30px 30px;
+    linear-gradient(rgba(0, 208, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 208, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
   z-index: 0;
   mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 70%);
   -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 70%);
@@ -193,81 +175,6 @@ const scrollToProducts = () => {
   opacity: 0.9;
 }
 
-/* Círculos que salen del centro */
-.particle {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 8px rgba(0, 208, 255, 0.6);
-  opacity: 0;
-  animation: moveOutwards var(--duration, 6s) infinite cubic-bezier(0.4, 0, 0.2, 1) var(--delay, 0s);
-  transform-origin: center;
-}
-
-.p-1 { --dest-x: 15%; --dest-y: 20%; --duration: 5s; --delay: 0s; --angle: -135deg; }
-.p-2 { --dest-x: 75%; --dest-y: 15%; --duration: 7s; --delay: 2s; --angle: 45deg; }
-.p-3 { --dest-x: 85%; --dest-y: 60%; --duration: 4s; --delay: 1s; --angle: 110deg; }
-.p-4 { --dest-x: 10%; --dest-y: 75%; --duration: 8s; --delay: 3s; --angle: -110deg; }
-.p-5 { --dest-x: 50%; --dest-y: 80%; --duration: 6s; --delay: 1.5s; --angle: 180deg; }
-.p-6 { --dest-x: 35%; --dest-y: 30%; --duration: 5.5s; --delay: 4s; --angle: -45deg; }
-.p-7 { --dest-x: 90%; --dest-y: 35%; --duration: 6.5s; --delay: 0.5s; --angle: 70deg; }
-.p-8 { --dest-x: 25%; --dest-y: 50%; --duration: 4.5s; --delay: 2.5s; --angle: -90deg; }
-.p-9 { --dest-x: 65%; --dest-y: 65%; --duration: 7.5s; --delay: 1.2s; --angle: 135deg; }
-.p-10 { --dest-x: 45%; --dest-y: 10%; --duration: 5s; --delay: 3.5s; --angle: 0deg; }
-.p-11 { --dest-x: 55%; --dest-y: 90%; --duration: 8.5s; --delay: 0.8s; --angle: 180deg; }
-.p-12 { --dest-x: 5%; --dest-y: 40%; --duration: 3.5s; --delay: 2.2s; --angle: -70deg; }
-
-@keyframes moveOutwards {
-  0% { 
-    top: 40%; 
-    left: 50%; 
-    opacity: 0; 
-    transform: translate(-50%, -50%) scale(0.3) rotate(var(--angle)); 
-  }
-  20% { 
-    opacity: 0.95; 
-  }
-  80% { 
-    opacity: 0.95; 
-  }
-  100% { 
-    top: var(--dest-y); 
-    left: var(--dest-x); 
-    opacity: 0; 
-    transform: translate(-50%, -50%) scale(1.4) rotate(var(--angle)); 
-  }
-}
-
-/* Concentric Pulse Ring (Single) */
-.pulse-ring {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;
-  height: 600px;
-  max-width: 90vw;
-  max-height: 90vw;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 208, 255, 0.25);
-  animation: expandRing 5.5s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-@media (max-width: 768px) {
-  .pulse-ring {
-    width: 300px;
-    height: 300px;
-  }
-}
-
-@keyframes expandRing {
-  0% { width: 200px; height: 200px; opacity: 0.95; border-width: 2px; }
-  100% { width: 1300px; height: 1300px; opacity: 0; border-width: 0px; }
-}
 
 /* ===== FLOATING LOGO ===== */
 .hero-logo-wrap {
@@ -315,7 +222,7 @@ const scrollToProducts = () => {
   font-size: clamp(2.8rem, 7vw, 4.5rem);
   font-weight: 700;
   letter-spacing: -1px;
-  margin-bottom: 1rem;
+  margin-bottom: 0.25rem;
   line-height: 1.05;
 }
 
@@ -345,7 +252,7 @@ const scrollToProducts = () => {
   color: var(--text-muted);
   font-weight: 300;
   max-width: 600px;
-  margin: 0 auto 2.5rem;
+  margin: 0 auto 1.5rem;
   line-height: 1.7;
 }
 
@@ -359,75 +266,143 @@ const scrollToProducts = () => {
 
 /* ===== BAÚL VISUAL ===== */
 .baul-visual {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
+  z-index: 2;
+}
+
+.baul-floating {
+  animation: floatPremium 6s ease-in-out infinite;
+}
+
+@keyframes floatPremium {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
 }
 
 .baul-container {
+  position: relative;
   width: 220px;
   height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  z-index: 5;
 }
 
 .baul-img {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 90%;
+  max-height: 90%;
   object-fit: contain;
+  position: relative;
+  z-index: 5;
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
 }
 
-.llaves-row {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
+/* Glowing center */
+.cyber-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 150px;
+  background: rgba(0, 208, 255, 0.4);
+  filter: blur(60px);
+  z-index: 1;
+  animation: glowBreathe 4s ease-in-out infinite alternate;
 }
 
-.llave {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
+@keyframes glowBreathe {
+  0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.8); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
 }
 
-.llave.active {
-  color: var(--accent);
+/* Vast Elegance Rings Background (Both Modes) */
+.hero-bg-hologram {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-.llave-icon {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 6px rgba(0,208,255,0.3));
-  transition: transform 0.3s ease;
+.cyber-ring-huge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 208, 255, 0.15);
 }
 
-.llave.active span {
-  color: var(--accent);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+.ring-huge-1 {
+  border-top-color: rgba(0, 208, 255, 0.6);
+  border-right-color: rgba(0, 208, 255, 0.3);
+  border-width: 2px;
+  animation: expandHugeRing 9s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
 }
 
-.llave.inactive {
-  color: var(--text-muted);
-  opacity: 0.4;
+.ring-huge-2 {
+  border-bottom-color: rgba(0, 208, 255, 0.5);
+  border-left-color: rgba(0, 208, 255, 0.2);
+  border-width: 3px;
+  animation: expandHugeRing 9s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94) 3s;
 }
 
-.llave.inactive .llave-icon {
-  filter: grayscale(100%) brightness(0.5);
+.ring-huge-3 {
+  border-color: rgba(0, 208, 255, 0.4);
+  border-width: 2px;
+  border-style: dashed;
+  animation: expandHugeRing 9s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94) 6s;
 }
 
-.llave.inactive span {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+@keyframes expandHugeRing {
+  0% {
+    width: 180px;
+    height: 180px;
+    opacity: 0.9;
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    width: 160vmax;
+    height: 160vmax;
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(180deg);
+  }
+}
+
+/* Diagonal Arrows */
+.arrow-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0; 
+  height: 0;
+  z-index: 2;
+}
+
+.arrow-tr { transform: rotate(45deg); }
+.arrow-br { transform: rotate(135deg); }
+.arrow-bl { transform: rotate(225deg); }
+.arrow-tl { transform: rotate(315deg); }
+
+.tech-chevron {
+  position: absolute;
+  width: 25px; 
+  height: 25px;
+  border-top: 3px solid rgba(0, 208, 255, 0.9);
+  border-left: 3px solid rgba(0, 208, 255, 0.9);
+  box-shadow: -2px -2px 10px rgba(0, 208, 255, 0.5);
+  animation: shootChevron 6s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes shootChevron {
+  0% { transform: translate(-50%, -120px) rotate(45deg) scale(0.5); opacity: 0; }
+  15% { opacity: 1; filter: drop-shadow(0 0 8px rgba(0, 208, 255, 1)); }
+  100% { transform: translate(-50%, -120vmax) rotate(45deg) scale(1.5); opacity: 0; }
 }
 
 /* ===== ORBS ===== */
@@ -491,9 +466,6 @@ const scrollToProducts = () => {
   .baul-container {
     width: 160px;
     height: 160px;
-  }
-  .llaves-row {
-    gap: 1.2rem;
   }
   .hero-description p {
     font-size: 0.9rem;
