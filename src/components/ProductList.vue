@@ -251,30 +251,34 @@ const revealRef = useScrollReveal();
               Envío Gratis
             </div>
 
-            <!-- Redesigned Footer (Personal Only) -->
             <div v-if="!isAliado" class="product-footer">
+              <div class="footer-actions">
+                <span class="more-info-link" @click.stop="openModal(product)">¡Más información del producto?</span>
+                <a 
+                  :href="getWhatsappUrl(product.name)" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  class="btn-primary product-buy-btn"
+                  @click.stop
+                >
+                  Comprar
+                </a>
+              </div>
+            </div>
+
+            <!-- Aliado Button Area -->
+            <div v-else class="aliado-footer-actions">
+              <span class="more-info-link" @click.stop="openModal(product)">¡Más información del producto?</span>
               <a 
                 :href="getWhatsappUrl(product.name)" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                class="btn-primary product-buy-btn"
-                @click.stop
+                class="btn-primary product-btn-aliado flex-center"
               >
-                Comprar
+                <img src="/Llave Diamante.png" class="btn-icon" alt="Llave" />
+                <span>Obtener Llave</span>
               </a>
             </div>
-
-            <!-- Aliado Button -->
-            <a 
-              v-else
-              :href="getWhatsappUrl(product.name)" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              class="btn-primary product-btn-aliado flex-center"
-            >
-              <img src="/Llave Diamante.png" class="btn-icon" alt="Llave" />
-              <span>Obtener Llave</span>
-            </a>
           </div>
         </div>
       </div>
@@ -596,13 +600,39 @@ const revealRef = useScrollReveal();
   box-shadow: 0 8px 24px rgba(0, 208, 255, 0.35);
 }
 
+.footer-actions, .aliado-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.more-info-link {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+  font-weight: 500;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.more-info-link:hover {
+  color: var(--accent);
+}
+
 .product-buy-btn svg {
   flex-shrink: 0;
 }
 
 .product-btn-aliado {
-  align-self: flex-start;
-  padding: 0.8rem 1.6rem;
+  padding: 0.8rem 1rem;
+  flex-shrink: 0;
 }
 
 .btn-icon {

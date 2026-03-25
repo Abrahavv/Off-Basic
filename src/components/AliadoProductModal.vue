@@ -125,7 +125,6 @@ const getWhatsappUrl = (productName) => {
                   </div>
                 </div>
 
-                <!-- CTA -->
                 <div class="cta-wrapper">
                   <a 
                     :href="getWhatsappUrl(product.name)" 
