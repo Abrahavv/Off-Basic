@@ -109,7 +109,7 @@ const revealRef = useScrollReveal();
   transform: translateX(-50px);
 }
 
-.step-item {
+.revealed .step-item {
   animation: slideInProgressive 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 

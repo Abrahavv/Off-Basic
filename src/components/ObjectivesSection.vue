@@ -94,12 +94,19 @@ const revealRef = useScrollReveal();
   display: flex;
   align-items: center;
   gap: 2rem;
+  opacity: 0;
+}
+
+.revealed .slide-objective-row {
   animation: slideInBar 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: var(--delay);
 }
 
 .slide-objective-row.reverse {
   flex-direction: row-reverse;
+}
+
+.revealed .slide-objective-row.reverse {
   animation: slideInBarReverse 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: var(--delay);
 }

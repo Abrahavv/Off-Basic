@@ -119,7 +119,7 @@ const products = [
 ];
 
 // --- APP STATE ---
-const isMaintenanceMode = ref(true); // Cambiar a false para desactivar el modo mantenimiento
+const isMaintenanceMode = ref(false); // Cambiar a false para desactivar el modo mantenimiento
 const currentMode = ref(localStorage.getItem('offbasic_mode') || 'personal');
 const activeProductId = ref(null);
 

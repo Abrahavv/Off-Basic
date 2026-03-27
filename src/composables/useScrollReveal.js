@@ -1,6 +1,6 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 
-export function useScrollReveal(options = { threshold: 0.15, rootMargin: '0px 0px -50px 0px' }) {
+export function useScrollReveal(options = { threshold: 0.05, rootMargin: '0px 0px -50px 0px' }) {
   const revealRef = ref(null);
   
   onMounted(() => {
