@@ -132,4 +132,25 @@ const revealRef = useScrollReveal();
     max-width: 300px;
   }
 }
+
+@media (max-width: 480px) {
+  .founder-image-wrap {
+    max-width: 240px;
+  }
+  .founder-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .founder-copy {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  .founder-copy.highlight {
+    font-size: 1.1rem;
+  }
+  .accent-line {
+    top: 10px;
+    left: 10px;
+  }
+}
 </style>

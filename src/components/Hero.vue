@@ -66,12 +66,9 @@ const scrollToProducts = () => {
           />
         </div>
 
-        <h1 class="hero-display">Off Basic</h1>
-        <h2 class="hero-tagline">Fuera de lo básico</h2>
-        <div class="hero-description">
-          <p>Tecnología premium para quienes exigen más.</p>
-          <p>Rendimiento, estilo y eficiencia en cada detalle.</p>
-        </div>
+        <h1 class="hero-title">OFF BASIC</h1>
+        <h2 class="hero-slogan">Fuera de lo básico</h2>
+        <h2 class="hero-subtitle">Productos premium: rendimiento, estilo y eficiencia en uno.</h2>
 
         <div class="hero-actions">
           <button class="btn-primary" @click="scrollToProducts">Comprar</button>
@@ -94,14 +91,28 @@ const scrollToProducts = () => {
           </div>
         </div>
 
-        <h1 class="hero-title">El Baúl</h1>
+        <div class="hero-tagline-wrap">
+          <span class="mini-badge">LLAVE DE ENTRADA · DISPONIBLE AHORA</span>
+        </div>
+
+        <h1 class="hero-title">Baúl De Off Basic</h1>
         <h2 class="hero-subtitle">
-          El inventario está protegido.<br/>
-          Para ver los precios al mayor, necesitas la Llave.
+          El inventario está protegido. Para ver los precios al mayor, necesitas la Llave.
         </h2>
 
         <div class="hero-actions">
-          <button class="btn-primary" @click="scrollToProducts">Acceso</button>
+          <button class="btn-primary" @click="scrollToProducts">ACCEDER</button>
+        </div>
+
+        <div class="hero-video-wrapper">
+          <iframe
+            class="hero-video"
+            src="https://www.youtube.com/embed/caAWn6xFWkI"
+            title="Baúl de Off Basic"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
         </div>
       </div>
 
@@ -116,11 +127,11 @@ const scrollToProducts = () => {
 <style scoped>
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 140px 0 60px;
+  padding: 110px 0 40px;
   overflow: hidden;
   text-align: center;
   background-color: var(--bg);
@@ -218,12 +229,39 @@ const scrollToProducts = () => {
   filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.1));
 }
 
-.hero-title {
+.hero-title,
+.hero-display-aliado {
   font-size: clamp(2.8rem, 7vw, 4.5rem);
   font-weight: 700;
   letter-spacing: -1px;
   margin-bottom: 0.25rem;
   line-height: 1.05;
+  text-transform: none;
+}
+
+/* Personal mode text colors */
+.hero-inner:not(.hero-aliado-inner) .hero-title {
+  color: #000;
+}
+
+.hero-inner:not(.hero-aliado-inner) .hero-slogan {
+  color: #00D0FF;
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  margin: 0.5rem auto;
+  font-weight: 800;
+}
+
+.hero-inner:not(.hero-aliado-inner) .hero-subtitle,
+.hero-inner:not(.hero-aliado-inner) .hero-subtitle-aliado {
+  color: #555;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.hero-inner:not(.hero-aliado-inner) .hero-subtitle + p,
+.hero-inner:not(.hero-aliado-inner) .hero-subtitle-aliado + p {
+  color: #555;
+  line-height: 1.25;
 }
 
 .hero-tagline {
@@ -233,15 +271,34 @@ const scrollToProducts = () => {
   color: var(--accent);
   letter-spacing: 0.5px;
   white-space: normal;
+  text-transform: none;
+}
+
+.hero-tagline-wrap {
+  margin-bottom: 1rem;
+}
+
+.mini-badge {
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  border: 1px solid #00D0FF;
+  border-radius: 50px;
+  background: rgba(0, 208, 255, 0.18);
+}
+
+.hero-actions .btn-primary {
+  min-width: 210px;
+  color: #000;
+  background: #00D0FF;
+  box-shadow: 0 10px 22px rgba(0, 208, 255, 0.45);
+  padding: 0.95rem 2rem;
 }
 
 .hero-description {
-  margin-bottom: 1.25rem;
-}
-
-.hero-description p {
-  font-size: clamp(0.95rem, 2vw, 1.1rem);
-  color: var(--text-muted);
   font-weight: 300;
   line-height: 1.6;
   margin-bottom: 0.2rem;
@@ -249,11 +306,35 @@ const scrollToProducts = () => {
 
 .hero-subtitle {
   font-size: clamp(1rem, 2.5vw, 1.25rem);
-  color: var(--text-muted);
-  font-weight: 300;
-  max-width: 600px;
-  margin: 0 auto 1.5rem;
-  line-height: 1.7;
+  color: #d8e9ff;
+  font-weight: 400;
+  max-width: 1000px;
+  margin: 0.2rem auto 1rem;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hero-video-wrapper {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-video {
+  width: 100%;
+  max-width: 860px;
+  height: 480px;
+  border: 2px solid rgba(56, 139, 255, 0.6);
+  border-radius: 16px;
+  box-shadow: 0 15px 30px rgba(0, 59, 122, 0.4);
+}
+
+@media (max-width: 768px) {
+  .hero-video {
+    height: 260px;
+  }
 }
 
 /* ===== ACTIONS ===== */
@@ -262,6 +343,22 @@ const scrollToProducts = () => {
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.hero-actions .btn-primary,
+.hero-actions .btn-secondary {
+  min-width: 170px;
+  width: fit-content;
+  text-align: center;
+}
+
+.hero-actions .btn-secondary {
+  border: 2px solid #00D0FF;
+  color: #00D0FF;
+  background: rgba(0, 208, 255, 0.06);
+}
+.hero-actions .btn-secondary:hover {
+  background: rgba(0, 208, 255, 0.12);
 }
 
 /* ===== BAÚL VISUAL ===== */
@@ -285,8 +382,8 @@ const scrollToProducts = () => {
 
 .baul-container {
   position: relative;
-  width: 220px;
-  height: 220px;
+  width: 160px;
+  height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -294,8 +391,8 @@ const scrollToProducts = () => {
 }
 
 .baul-img {
-  max-width: 90%;
-  max-height: 90%;
+  max-width: 80%;
+  max-height: 80%;
   object-fit: contain;
   position: relative;
   z-index: 5;
@@ -449,7 +546,7 @@ const scrollToProducts = () => {
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .hero {
-    padding: 160px 0 40px;
+    padding: 140px 0 40px;
   }
   .hero-logo {
     width: 120px;
@@ -467,12 +564,23 @@ const scrollToProducts = () => {
     width: 100%;
   }
   .baul-container {
-    width: 160px;
-    height: 160px;
+    width: 140px;
+    height: 140px;
   }
   .hero-description p {
     font-size: 0.9rem;
     padding: 0 1rem;
+  }
+  .hero-subtitle {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    max-width: 100%;
+    font-size: 0.95rem;
+    padding: 0 0.5rem;
+  }
+  .hero-video {
+    height: 260px;
   }
   .orb {
     width: 200px;
@@ -482,5 +590,58 @@ const scrollToProducts = () => {
   }
   .orb-1 { top: -50px; right: -50px; }
   .orb-2 { bottom: -50px; left: -50px; }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 120px 0 30px;
+  }
+  .hero-logo {
+    width: 100px;
+  }
+  .hero-display {
+    font-size: clamp(1.5rem, 9vw, 2.5rem);
+    letter-spacing: 2px;
+  }
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+  .hero-tagline {
+    font-size: clamp(0.9rem, 3.5vw, 1.4rem);
+  }
+  .hero-subtitle {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    padding: 0 0.5rem;
+  }
+  .mini-badge {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.75rem;
+  }
+  .hero-actions .btn-primary {
+    min-width: unset;
+    width: 100%;
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  .baul-container {
+    width: 120px;
+    height: 120px;
+  }
+  .cyber-glow {
+    width: 100px;
+    height: 100px;
+    filter: blur(40px);
+  }
+  .hero-video {
+    height: 200px;
+    border-radius: 10px;
+  }
+  .orb {
+    width: 150px;
+    height: 150px;
+    filter: blur(50px);
+    opacity: 0.1;
+  }
 }
 </style>

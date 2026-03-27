@@ -8,6 +8,20 @@ const getPostulacionUrl = () => {
   return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
 };
 
+const scrollToProducts = () => {
+  const el = document.getElementById('productos');
+  if (el) {
+    const navbarHeight = 100; // Aligned with total scroll target for better proximity
+    const elementPosition = el.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+  }
+};
+
 const revealRef = useScrollReveal();
 </script>
 
@@ -19,9 +33,9 @@ const revealRef = useScrollReveal();
         No buscamos vendedores. Buscamos socios. 
         Evaluamos cada postulación para proteger la exclusividad de nuestra red.
       </p>
-      <a :href="getPostulacionUrl()" target="_blank" rel="noopener noreferrer" class="btn-primary closing-btn">
+      <button @click="scrollToProducts" class="btn-primary closing-btn">
         Aliado
-      </a>
+      </button>
     </div>
   </section>
 </template>

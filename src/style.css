@@ -34,7 +34,7 @@
 /* ===== MODO ALIADO (Dark) ===== */
 .modo-aliado {
   --bg: #000000;
-  --bg-alt: #0A0A0A;
+  --bg-alt: #000000;
   --text: #FFFFFF;
   --text-muted: #808080;
   --card-bg: #111111;
@@ -97,6 +97,16 @@ img {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
+}
+
+/* iPhone-safe global responsive */
+@media (max-width: 480px) {
+  :root {
+    --section-padding: 2.5rem 1rem;
+  }
+  .container {
+    padding: 0 1rem;
+  }
 }
 
 /* ===== UTILITIES ===== */
@@ -223,9 +233,13 @@ img {
   transform: translateX(60px);
 }
 
+.scroll-reveal.slide-up {
+  transform: translateY(50px);
+}
+
 .scroll-reveal.revealed {
   opacity: 1;
-  transform: translateX(0);
+  transform: translate(0, 0);
 }
 
 

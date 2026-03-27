@@ -258,4 +258,38 @@ const revealRef = useScrollReveal();
   font-size: 0.95rem;
   line-height: 1.6;
 }
+
+@media (max-width: 480px) {
+  .card-negative, .card-positive {
+    padding: 1.5rem 1.25rem;
+  }
+  .card-header {
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+  }
+  .comparison-list li {
+    font-size: 0.85rem;
+  }
+  .comparison-title {
+    font-size: 1.8rem;
+  }
+  .comparison-info {
+    gap: 1.5rem;
+  }
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+  .feature-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  .feature-text h3 {
+    font-size: 1rem;
+  }
+  .feature-text p {
+    font-size: 0.85rem;
+  }
+}
 </style>

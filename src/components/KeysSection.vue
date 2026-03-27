@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useScrollReveal } from '../composables/useScrollReveal';
 
 const props = defineProps({
@@ -8,326 +8,483 @@ const props = defineProps({
 
 const isAliado = computed(() => props.mode === 'aliado');
 const revealRef = useScrollReveal();
+
+const activeKey = ref(1);
+
+const keys = [
+  {
+    id: 1,
+    number: '01 DE 03',
+    title: 'Llave Aliado',
+    subtitle: 'Tu primer acceso al Baúl. El pack de recursos, herramientas y sistemas que necesitas para dejar de improvisar y empezar a facturar al nivel de los mejores.',
+    status: 'DISPONIBLE',
+    image: '/Llave Aliado.png',
+    price: '19,99$',
+    benefits: [
+      'Pack de Catálogo Premium',
+      'Material de Marketing de alta gama',
+      'Checklist del Aliado Profesional',
+      'Guía de aplicación de los recursos',
+      'Acceso exclusivo de por vida'
+    ]
+  },
+  {
+    id: 2,
+    number: '02 DE 03',
+    title: 'Llave Mentoría',
+    subtitle: 'Sesiones personalizadas para acelerar tu crecimiento y dominar las estrategias de venta avanzada.',
+    status: 'PRÓXIMAMENTE',
+    image: '/Llave Oro.png',
+    locked: true
+  },
+  {
+    id: 3,
+    number: '03 DE 03',
+    title: 'Llave Maestra',
+    subtitle: 'El acceso total. Todos los recursos, sistemas avanzados para escalar sin límites.',
+    status: 'PRÓXIMAMENTE',
+    image: '/Llave Diamante.png',
+    locked: true
+  }
+];
+
+const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
 </script>
 
 <template>
-  <section class="keys-section section-aliado" v-if="isAliado">
-    <div class="container scroll-reveal slide-right" ref="revealRef">
-      <div class="keys-header">
-        <h2 class="section-title">El Baúl y Las Tres Llaves</h2>
-        <p class="section-subtitle">
-          Tu acceso exclusivo al pack de recursos, herramientas y sistemas que necesitas para dejar de improvisar y vender al nivel de los mejores.
-        </p>
-      </div>
-
-      <div class="keys-layout">
-        <!-- Left: Keys Stack -->
-        <div class="keys-stack">
-          <!-- Card 1: Llave Aliados (Available) -->
-          <div class="key-card active-card">
-            <div class="card-icon chrome-icon">
-              <img src="/Llave Aliado.png" alt="Llave Aliados" class="main-key-image" />
-            </div>
-            <div class="card-info">
-              <h4 class="key-main-title">LLAVE ALIADOS</h4>
-              <ul class="key-benefits">
-                <li><span>✓</span> Acceso al catálogo premium</li>
-                <li><span>✓</span> Material de marketing exclusivo</li>
-                <li><span>✓</span> Soporte prioritario de equipo</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Card 2: Oro (Locked) -->
-          <div class="key-card locked">
-            <div class="card-icon gold-icon">
-              <img src="/Llave Oro.png" alt="Llave Oro" class="main-key-image" />
-            </div>
-            <div class="card-info">
-              <h4 class="key-main-title" style="margin-bottom: 0;">PRÓXIMAMENTE</h4>
-            </div>
-          </div>
-
-          <!-- Card 3: Diamante (Locked) -->
-          <div class="key-card locked">
-            <div class="card-icon diamond-icon">
-              <img src="/Llave Diamante.png" alt="Llave Diamante" class="main-key-image" />
-            </div>
-            <div class="card-info">
-              <h4 class="key-main-title" style="margin-bottom: 0;">PRÓXIMAMENTE</h4>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right: Opportunity Panel -->
-        <div class="opportunity-panel">
-          <div class="opportunity-glow"></div>
-          <div class="opportunity-content">
-            <h3 class="opportunity-title">Tu oportunidad de entrar al Baúl</h3>
-            <p class="opportunity-desc">
-              Cada llave desbloquea un nivel diferente de acceso, beneficios y márgenes de ganancia. 
-              Elige tu camino y empieza a construir tu negocio hoy.
-            </p>
-            <div class="opportunity-badge">
-              <span class="badge-icon">🔑</span>
-              <span class="badge-text">Llave Aliados disponible ahora</span>
-            </div>
-          </div>
-        </div>
-      </div>
+  <section class="keys-showcase" v-if="isAliado">
+    <div class="container scroll-reveal slide-up" ref="revealRef">
       
+      <div class="keys-header">
+        <span class="keys-count-badge">1 DE 3 DISPONIBLES</span>
+        <h2 class="section-title">Tu oportunidad de entrar al Baúl.</h2>
+      </div>
+
+      <div class="keys-grid">
+        <!-- LEFT: Active Key Display -->
+        <div class="active-key-panel">
+          <div class="active-header">
+            <span class="status-badge" :class="{ 'status-available': !currentKey.locked }">
+              ● {{ currentKey.status }}
+            </span>
+          </div>
+
+          <div class="key-visual-main">
+            <div class="glow-container">
+              <div class="main-glow"></div>
+              <img :src="currentKey.image" alt="Key Image" class="main-key-img" />
+            </div>
+          </div>
+
+          <div class="key-info-main">
+            <span class="key-number">LLAVE {{ currentKey.number }}</span>
+            <h2 class="key-title">{{ currentKey.title }}</h2>
+            <p class="key-subtitle">{{ currentKey.subtitle }}</p>
+
+            <ul class="benefits-list" v-if="currentKey.benefits">
+              <li v-for="benefit in currentKey.benefits" :key="benefit" class="benefit-item">
+                <span class="check-icon">✓</span>
+                {{ benefit }}
+              </li>
+            </ul>
+
+            <div class="cta-area" v-if="!currentKey.locked">
+              <button class="btn-primary buy-key-btn">
+                Acceder
+              </button>
+              <p class="cta-hint">Garantía · Pago único · Sin suscripciones</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Sidebar with Other Keys -->
+        <div class="keys-sidebar">
+          <div 
+            v-for="key in keys" 
+            :key="key.id" 
+            class="sidebar-card"
+            :class="{ 
+              'active-card': activeKey === key.id, 
+              'locked-card': key.locked,
+              'key-aliado': key.id === 1,
+              'key-mentoria': key.id === 2,
+              'key-maestra': key.id === 3
+            }"
+            @click="key.locked ? null : activeKey = key.id"
+          >
+            <div class="card-visual">
+              <img :src="key.image" class="sidebar-key-img" />
+              <div class="card-glow"></div>
+            </div>
+            <div class="card-info">
+              <span class="card-status">{{ key.status.split('·')[0] }}</span>
+              <h4 class="card-title">{{ key.title }}</h4>
+              <div class="progress-bar" v-if="key.locked">
+                <div class="progress-track"></div>
+                <span class="progress-label">PRÓXIMAMENTE</span>
+              </div>
+              <div class="progress-bar available" v-else>
+                <div class="progress-track active"></div>
+                <span class="progress-label">DISPONIBLE</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar-footer-note">
+            🚀 El Baúl no para de crecer. Consigue el acceso ahora.
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 </template>
 
 <style scoped>
-.keys-section {
-  padding: var(--section-padding);
-  background-color: var(--bg-alt);
+.keys-showcase {
+  padding: 10rem 0;
+  background-color: var(--bg); /* Match app dark background */
   color: var(--text);
+  position: relative;
   overflow: hidden;
 }
 
 .keys-header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 5rem;
+}
+
+.keys-count-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 208, 255, 0.1);
+  color: #00d0ff; /* App cyan */
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(0, 208, 255, 0.2);
+}
+
+.keys-showcase .section-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: -1.5px;
   max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.section-title {
-  margin-bottom: 1.5rem;
-}
-
-.section-subtitle {
-  color: var(--text-muted);
-  font-size: 1.1rem;
-  line-height: 1.6;
-}
-
-.keys-layout {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 3rem;
-  align-items: center;
-  max-width: 1100px;
   margin: 0 auto;
 }
 
-.keys-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+.keys-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 4rem;
+  align-items: flex-start;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
-.key-card {
-  display: flex;
-  align-items: center;
-  gap: 3rem;
-  padding: 2.5rem;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 20px;
-  transition: transform 0.3s ease, border-color 0.3s ease;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-}
-
-@media (max-width: 700px) {
-  .key-card {
-    flex-direction: column;
-    text-align: center;
-    gap: 1.5rem;
-  }
-}
-
-.key-card.active-card {
-  border-color: var(--accent);
-  box-shadow: 0 10px 50px rgba(0, 208, 255, 0.15);
-  background: linear-gradient(145deg, var(--card-bg), rgba(0, 208, 255, 0.03));
-}
-
-.key-card.locked {
-  opacity: 0.75;
+/* LEFT PANEL */
+.active-key-panel {
   background: rgba(255, 255, 255, 0.02);
-}
-
-.card-icon {
-  width: 160px;
-  height: 160px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.03);
-  flex-shrink: 0;
+  border: 1px solid rgba(0, 208, 255, 0.15); /* App Cyan */
+  border-radius: 40px;
+  padding: 4rem;
   position: relative;
+  backdrop-filter: blur(20px);
 }
 
-.chrome-icon::before {
-  content: "";
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  background: var(--accent);
-  filter: blur(60px);
-  opacity: 0.2;
-  border-radius: 50%;
+.active-header {
+  margin-bottom: 2rem;
 }
 
-.main-key-image {
-  width: 140px;
-  height: 140px;
-  object-fit: contain;
-  z-index: 2;
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.status-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.gold-icon .main-key-image {
-  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+.status-available {
+  color: #00d0ff; /* App Cyan */
+  background: rgba(0, 208, 255, 0.1);
 }
 
-.diamond-icon .main-key-image {
-  filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.3));
-}
-
-.active-card:hover .main-key-image {
-  transform: scale(1.1) rotate(5deg);
-}
-
-.card-info {
-  flex-grow: 1;
+.key-visual-main {
+  height: 300px;
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  margin-bottom: 3rem;
 }
 
-.key-main-title {
-  font-size: 2.2rem;
+.glow-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(0, 208, 255, 0.2) 0%, transparent 70%); /* App Cyan */
+  filter: blur(40px);
+}
+
+@keyframes keyFloat {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+.main-key-img {
+  width: 250px;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+  position: relative;
+  z-index: 1;
+  animation: keyFloat 4s ease-in-out infinite;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-origin: center center;
+}
+
+.active-key-panel:hover .main-key-img {
+  animation-play-state: paused;
+  transform: translateY(0px) rotate(-15deg); /* Tilt down as if opening a door */
+}
+
+.key-info-main {
+  text-align: left;
+}
+
+.key-number {
+  font-size: 0.8rem;
+  color: rgba(0, 208, 255, 0.8); /* App Cyan */
   font-weight: 800;
+  margin-bottom: 0.5rem;
+  display: block;
+  letter-spacing: 2px;
+}
+
+.key-title {
+  font-size: 3.5rem;
+  font-weight: 900;
   margin-bottom: 1.5rem;
-  color: var(--text);
-  letter-spacing: -0.5px;
+  letter-spacing: -2px;
 }
 
-@media (max-width: 700px) {
-  .key-main-title {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-  }
+.key-subtitle {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #999;
+  margin-bottom: 2.5rem;
+  max-width: 500px;
 }
 
-
-
-.key-benefits {
+.benefits-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin-bottom: 3rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.key-benefits li {
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1rem;
+  color: #ddd;
+}
+
+.check-icon {
+  color: #00d0ff; /* App Cyan */
+  font-weight: 900;
+}
+
+.cta-area {
+  margin-top: 2rem;
+}
+
+.buy-key-btn {
+  width: 100%;
+  padding: 1.25rem 2rem;
+  background: #00d0ff; /* App Cyan */
+  color: #000;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.buy-key-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 20px rgba(0, 208, 255, 0.4);
+}
+
+.price-tag {
+  background: rgba(0,0,0,0.1);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+}
+
+.cta-hint {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #444;
+  margin-top: 1rem;
+}
+
+/* SIDEBAR */
+.keys-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sidebar-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sidebar-card.active-card {
+  background: rgba(0, 208, 255, 0.05); /* App Cyan */
+  border-color: rgba(0, 208, 255, 0.3);
+}
+
+.locked-card {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.card-visual {
+  width: 80px;
+  height: 80px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.card-glow {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 25px;
+  filter: blur(15px);
+  opacity: 0.6;
+}
+
+/* Key-specific glows */
+.key-aliado .card-glow {
+  background: radial-gradient(circle, rgba(0, 208, 255, 0.4) 0%, transparent 70%); /* Blue glow */
+}
+
+.key-mentoria .card-glow {
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, transparent 70%); /* Gold glow */
+}
+
+.key-maestra .card-glow {
+  background: radial-gradient(circle, rgba(138, 43, 226, 0.4) 0%, transparent 70%); /* Purple glow */
+}
+
+.sidebar-key-img {
+  width: 50px;
+  animation: keyFloat 4s ease-in-out infinite;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-origin: center center;
+}
+
+.sidebar-card:nth-child(2) .sidebar-key-img {
+  animation-delay: -1.3s;
+}
+
+.sidebar-card:nth-child(3) .sidebar-key-img {
+  animation-delay: -2.6s;
+}
+
+.sidebar-card:not(.locked-card):hover .sidebar-key-img {
+  animation-play-state: paused;
+  transform: translateY(0px) rotate(-15deg);
+}
+
+.card-status {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.progress-bar {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  font-size: 1.05rem;
 }
 
-@media (max-width: 700px) {
-  .key-benefits li {
-    justify-content: center;
-  }
+.progress-track {
+  width: 100px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
 }
 
-.key-benefits li span {
-  color: var(--accent);
-  font-weight: bold;
+.progress-track.active {
+  background: #00d0ff; /* App Cyan */
 }
 
-/* ===== OPPORTUNITY PANEL ===== */
-.opportunity-panel {
-  position: relative;
-  padding: 3rem 2.5rem;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 24px;
+.progress-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #444;
+}
+
+.sidebar-footer-note {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 15px;
+  background: rgba(0, 208, 255, 0.03); /* App Cyan */
+  border: 1px dashed rgba(0, 208, 255, 0.2);
+  font-size: 0.8rem;
+  color: #888;
   text-align: center;
-  overflow: hidden;
-  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
+  line-height: 1.4;
 }
 
-.opportunity-glow {
-  position: absolute;
-  top: -40px;
-  right: -40px;
-  width: 180px;
-  height: 180px;
-  background: rgba(0, 208, 255, 0.15);
-  filter: blur(80px);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.opportunity-content {
-  position: relative;
-  z-index: 2;
-}
-
-.opportunity-title {
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  font-weight: 800;
-  margin-bottom: 1.25rem;
-  color: var(--text);
-  line-height: 1.2;
-  letter-spacing: -0.5px;
-}
-
-.opportunity-desc {
-  font-size: 1.05rem;
-  line-height: 1.7;
-  color: var(--text-muted);
-  margin-bottom: 2rem;
-  font-weight: 300;
-}
-
-.opportunity-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.85rem 1.5rem;
-  background: linear-gradient(135deg, rgba(0, 208, 255, 0.15), rgba(0, 208, 255, 0.05));
-  border: 1px solid rgba(0, 208, 255, 0.3);
-  border-radius: 50px;
-  animation: badgePulse 3s ease-in-out infinite;
-}
-
-.badge-icon {
-  font-size: 1.3rem;
-}
-
-.badge-text {
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: var(--accent);
-}
-
-@keyframes badgePulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 208, 255, 0.2); }
-  50% { box-shadow: 0 0 20px 4px rgba(0, 208, 255, 0.15); }
-}
-
-@media (max-width: 900px) {
-  .keys-layout {
+@media (max-width: 968px) {
+  .keys-grid {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
-  .opportunity-panel {
-    padding: 2rem 1.5rem;
   }
 }
-
 </style>

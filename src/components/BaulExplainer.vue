@@ -13,9 +13,9 @@ const revealRef = useScrollReveal();
 <template>
   <section class="baul-explainer section-aliado" v-if="isAliado">
     <div class="container scroll-reveal slide-left" ref="revealRef">
-      <div class="explainer-grid">
+      <div class="explainer-content">
 
-        <!-- Left: Text -->
+        <!-- Text Content -->
         <div class="explainer-text">
           <h2 class="explainer-title">¿Qué es el Baúl de Off Basic?</h2>
           <p class="explainer-desc">
@@ -40,19 +40,6 @@ const revealRef = useScrollReveal();
           </div>
         </div>
 
-        <!-- Right: YouTube Video -->
-        <div class="explainer-video">
-          <div class="video-wrapper">
-            <iframe
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              title="¿Qué es el Baúl de Off Basic?"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
-          </div>
-        </div>
-
       </div>
     </div>
   </section>
@@ -66,20 +53,18 @@ const revealRef = useScrollReveal();
   overflow: hidden;
 }
 
-.explainer-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-  max-width: 1100px;
+.explainer-content {
+  max-width: 800px;
   margin: 0 auto;
+  text-align: center;
 }
 
-/* ===== TEXT SIDE ===== */
+/* ===== TEXT CONTENT ===== */
 .explainer-text {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  text-align: center;
 }
 
 .explainer-title {
@@ -107,17 +92,46 @@ const revealRef = useScrollReveal();
 .step-item {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   padding: 1rem 1.25rem;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 14px;
   transition: border-color 0.3s ease, transform 0.3s ease;
+  max-width: 400px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateX(100px);
+  animation: slideInFromRight 0.8s ease-out forwards;
+}
+
+.step-item:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.step-item:nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+.step-item:nth-child(3) {
+  animation-delay: 1s;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .step-item:hover {
   border-color: var(--accent);
-  transform: translateX(6px);
+  transform: translateX(0) scale(1.02);
 }
 
 .step-number {

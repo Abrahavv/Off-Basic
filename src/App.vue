@@ -1,8 +1,9 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import Navbar from './components/Navbar.vue';
 import Hero from './components/Hero.vue';
 import ProductList from './components/ProductList.vue';
+import ProductDetailView from './components/ProductDetailView.vue';
 import TestimonialsSection from './components/TestimonialsSection.vue';
 import FounderSection from './components/FounderSection.vue';
 import BenefitsSection from './components/BenefitsSection.vue';
@@ -14,15 +15,130 @@ import FooterSection from './components/FooterSection.vue';
 import ComparisonSection from './components/ComparisonSection.vue';
 import KeysSection from './components/KeysSection.vue';
 import BaulExplainer from './components/BaulExplainer.vue';
+import AffiliateVideoSection from './components/AffiliateVideoSection.vue';
+import ShoppingCart from './components/ShoppingCart.vue';
+import BottomPromoBar from './components/BottomPromoBar.vue';
+import BonusSection from './components/BonusSection.vue';
 
-// Modos: 'personal' (Light) & 'aliado' (Dark)
+// --- DATA ---
+const products = [
+  {
+    id: 1,
+    name: 'Smartwatch',
+    tag: 'MÁS VENDIDO',
+    price: 25.00,
+    originalPrice: 45.00,
+    rating: 4.8,
+    reviewCount: 124,
+    image: '/SmartWatch.png',
+    description: 'Experimenta el rendimiento máximo en tu muñeca. Incluye monitoreo avanzado de salud en tiempo real, notificaciones inteligentes...',
+    extraImages: ['/SmartWatch.png', '/SmartWatch.png'],
+    specs: [
+      { label: 'Batería', value: '7-10 días' },
+      { label: 'Resistencia', value: 'IP68 Sumergible' },
+      { label: 'Pantalla', value: '1.9" AMOLED' }
+    ],
+    stats: {
+      margin: 45,
+      roi: '220%',
+      demand: 'Muy Alta',
+      minOrder: 10
+    },
+    histogram: [
+      { month: 'Ene', percent: 40 },
+      { month: 'Feb', percent: 65 },
+      { month: 'Mar', percent: 85 },
+      { month: 'Abr', percent: 70 },
+      { month: 'May', percent: 90 },
+      { month: 'Jun', percent: 100 }
+    ]
+  },
+  {
+    id: 2,
+    name: 'Audífonos ANC',
+    tag: 'NUEVO',
+    price: 20.00,
+    originalPrice: 35.00,
+    rating: 4.9,
+    reviewCount: 89,
+    image: '/Audifonos.png',
+    description: 'Aísla el ruido exterior y domina tu entorno con tecnología de cancelación activa. Disfruta de un sonido de alta fidelidad con bajos...',
+    extraImages: ['/Audifonos.png', '/Audifonos.png'],
+    specs: [
+      { label: 'ANC', value: 'Hasta 40dB' },
+      { label: 'Autonomía', value: '30h con estuche' },
+      { label: 'Bluetooth', value: '5.3 Estable' }
+    ],
+    stats: {
+      margin: 52,
+      roi: '280%',
+      demand: 'Alta',
+      minOrder: 5
+    },
+    histogram: [
+      { month: 'Ene', percent: 30 },
+      { month: 'Feb', percent: 45 },
+      { month: 'Mar', percent: 60 },
+      { month: 'Abr', percent: 75 },
+      { month: 'May', percent: 85 },
+      { month: 'Jun', percent: 95 }
+    ]
+  },
+  {
+    id: 3,
+    name: 'Dock Magnético',
+    tag: 'LIMITADO',
+    price: 22.00,
+    originalPrice: 40.00,
+    rating: 4.7,
+    reviewCount: 56,
+    image: '/Cargador 3 en 1.png',
+    description: 'Simplifica tu carga con tecnología de inducción magnética. Un solo lugar elegante para cargar simultáneamente tu reloj...',
+    extraImages: ['/Cargador 3 en 1.png', '/Cargador 3 en 1.png'],
+    specs: [
+      { label: 'Capacidad', value: '10,000 mAh' },
+      { label: 'MagSafe', value: '15W Carga rápida' },
+      { label: 'Puertos', value: 'USB-C Bi-direccional' }
+    ],
+    stats: {
+      margin: 38,
+      roi: '180%',
+      demand: 'Media-Alta',
+      minOrder: 20
+    },
+    histogram: [
+      { month: 'Ene', percent: 20 },
+      { month: 'Feb', percent: 35 },
+      { month: 'Mar', percent: 50 },
+      { month: 'Abr', percent: 65 },
+      { month: 'May', percent: 80 },
+      { month: 'Jun', percent: 100 }
+    ]
+  }
+];
+
+// --- APP STATE ---
 const currentMode = ref('personal');
-// Modo Mantenimiento 
-const isMaintenanceMode = ref(false);
+const activeProductId = ref(null);
 
-const toggleMode = () => {
-  currentMode.value = currentMode.value === 'personal' ? 'aliado' : 'personal';
-};
+const activeProduct = computed(() => {
+  return products.find(p => p.id === activeProductId.value);
+});
+
+const displayProducts = computed(() => {
+  if (currentMode.value === 'aliado') {
+    return products.map(p => ({ ...p, name: `Pack de ${p.name}` }));
+  }
+  return products;
+});
+
+const activeProductData = computed(() => {
+  if (!activeProduct.value) return null;
+  if (currentMode.value === 'aliado') {
+    return { ...activeProduct.value, name: `Pack de ${activeProduct.value.name}` };
+  }
+  return activeProduct.value;
+});
 
 const setMode = (mode) => {
   currentMode.value = mode;
@@ -32,76 +148,109 @@ const applyThemeClass = () => {
   document.body.className = `modo-${currentMode.value}`;
 };
 
-watch(currentMode, () => {
-  applyThemeClass();
-});
+const closeProduct = () => {
+  window.history.pushState(null, null, window.location.pathname);
+  activeProductId.value = null;
+  // Small delay to ensure the re-render happens before scrolling
+  setTimeout(() => {
+    document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth' });
+  }, 50);
+};
 
 onMounted(() => {
+  applyThemeClass();
+  
+  const handleHash = () => {
+    const hash = window.location.hash;
+    if (hash.startsWith('#p-')) {
+      const id = parseInt(hash.replace('#p-', ''));
+      activeProductId.value = id;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    } else {
+      activeProductId.value = null;
+    }
+  };
+
+  handleHash();
+  window.addEventListener('popstate', handleHash);
+});
+
+watch(currentMode, () => {
   applyThemeClass();
 });
 </script>
 
 <template>
-  <div v-if="isMaintenanceMode" class="maintenance-screen">
-    <img src="/Off-Basic-Web-Cromado.png" alt="Off Basic" class="maintenance-logo" />
-    <h1 class="maintenance-text">En mantenimiento</h1>
-  </div>
-  
-  <div v-else class="app-wrapper">
-    <Navbar :mode="currentMode" @switch-mode="setMode" />
-    <main>
-      <Hero :mode="currentMode" @switch-mode="setMode" />
+  <div class="app-container">
+    <!-- SHOPPING CART DRAWER (always present) -->
+    <ShoppingCart />
 
-      <!-- Personal Mode Sections -->
-      <template v-if="currentMode === 'personal'">
-        <ProductList :mode="currentMode" />
-        <ObjectivesSection :mode="currentMode" />
-        <FounderSection :mode="currentMode" />
-        <PaymentMethods :mode="currentMode" />
-        <TestimonialsSection :mode="currentMode" />
-      </template>
+    <!-- PRODUCT ISOLATION VIEW -->
+    <template v-if="activeProductData">
+      <div class="isolation-overlay">
+        <ProductDetailView 
+          :product="activeProductData" 
+          :isAliado="currentMode === 'aliado'" 
+          @close="closeProduct" 
+        />
+      </div>
+    </template>
 
-      <!-- Aliado Mode Sections -->
-      <template v-else>
-        <BaulExplainer :mode="currentMode" />
-        <BenefitsSection />
-        <ComparisonSection :mode="currentMode" />
-        <ProductList :mode="currentMode" />
-        <ObjectivesSection :mode="currentMode" />
-        <KeysSection :mode="currentMode" />
-        <FounderSection :mode="currentMode" />
-        <PaymentMethods :mode="currentMode" />
-        <TestimonialsSection :mode="currentMode" />
-        <ClosingSection />
-      </template>
+    <!-- MAIN APP FLOW -->
+    <template v-else>
+      <div class="app-wrapper">
+        <Navbar :mode="currentMode" @switch-mode="setMode" />
+        <main>
+          <Hero :mode="currentMode" @switch-mode="setMode" />
 
-      <FaqSection :mode="currentMode" />
-    </main>
-    <FooterSection :mode="currentMode" />
+          <!-- Personal Mode Sections -->
+          <template v-if="currentMode === 'personal'">
+            <ProductList :mode="currentMode" :products="products" />
+            <ObjectivesSection :mode="currentMode" />
+            <FounderSection :mode="currentMode" />
+            <PaymentMethods :mode="currentMode" />
+            <TestimonialsSection :mode="currentMode" />
+          </template>
+
+          <!-- Aliado Mode Sections -->
+          <template v-else>
+            <!-- Video integrado en Hero para modo aliado -->
+            <BaulExplainer :mode="currentMode" />
+            <BenefitsSection />
+            <ComparisonSection :mode="currentMode" />
+            <ProductList :mode="currentMode" :products="displayProducts" />
+            <KeysSection :mode="currentMode" />
+            <BonusSection :mode="currentMode" />
+            <ObjectivesSection :mode="currentMode" />
+            <FounderSection :mode="currentMode" />
+            <PaymentMethods :mode="currentMode" />
+            <TestimonialsSection :mode="currentMode" />
+            <ClosingSection />
+          </template>
+
+          <FaqSection :mode="currentMode" />
+        </main>
+        <FooterSection :mode="currentMode" />
+        <BottomPromoBar :mode="currentMode" />
+      </div>
+    </template>
   </div>
 </template>
 
 <style scoped>
-.maintenance-screen {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #050505;
-  color: white;
+.app-container {
+  min-height: 100vh;
 }
-.maintenance-logo {
-  max-width: 300px;
-  margin-bottom: 2rem;
-  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+
+.isolation-overlay {
+  min-height: 100vh;
+  background-color: var(--bg);
+  animation: slideIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
-.maintenance-text {
-  font-size: 2rem;
-  font-weight: bold;
-  font-family: var(--font-display);
-  letter-spacing: 2px;
-  color: var(--accent);
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .app-wrapper {
@@ -109,6 +258,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
 }
+
 main {
   flex-grow: 1;
 }

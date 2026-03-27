@@ -72,7 +72,7 @@ const revealRef = useScrollReveal();
 
 <template>
   <section class="faq-section">
-    <div class="container scroll-reveal slide-right" ref="revealRef">
+    <div class="container scroll-reveal slide-up" ref="revealRef">
       <h2 class="section-title">Preguntas Frecuentes</h2>
       
       <div class="faq-list">
@@ -189,5 +189,20 @@ const revealRef = useScrollReveal();
 @keyframes slideUp {
   from { max-height: 200px; opacity: 1; }
   to { max-height: 0; opacity: 0; }
+}
+
+/* === Mobile === */
+@media (max-width: 480px) {
+  .faq-section {
+    padding: 2.5rem 1rem;
+  }
+  .faq-question {
+    font-size: 0.95rem;
+    padding: 1rem 0;
+  }
+  .faq-answer p {
+    font-size: 0.85rem;
+    padding-bottom: 1rem;
+  }
 }
 </style>

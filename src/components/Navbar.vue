@@ -1,5 +1,8 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useCart } from '../composables/useCart';
+
+const { cartCount, openCart } = useCart();
 
 const props = defineProps({
   mode: String
@@ -137,6 +140,16 @@ const scrollToProducts = () => {
             </svg>
           </a>
         </div>
+
+        <!-- Cart Icon -->
+        <button class="cart-btn" @click="openCart" aria-label="Carrito">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
+        </button>
         </div>
       </div>
     </div>
@@ -367,7 +380,7 @@ const scrollToProducts = () => {
 
 .mode-toggle-btn {
   background: transparent;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--accent);
   color: var(--text);
   font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
@@ -380,9 +393,10 @@ const scrollToProducts = () => {
 }
 
 .mode-toggle-btn:hover {
-  background: var(--text);
-  color: var(--bg);
-  border-color: var(--text);
+  background: var(--accent);
+  color: var(--black);
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(0, 208, 255, 0.3);
 }
 
 @media (max-width: 768px) {
@@ -424,7 +438,10 @@ const scrollToProducts = () => {
     height: 30px;
   }
   .social-links {
-    display: none; /* Ocultar redes en móvil para ahorrar espacio */
+    display: none;
+  }
+  .cart-btn {
+    margin-left: 0;
   }
   .mode-toggle-btn {
     font-size: 0.7rem;
@@ -434,5 +451,52 @@ const scrollToProducts = () => {
   .nav-controls {
     gap: 0.5rem;
   }
+}
+
+/* ===== CART BUTTON ===== */
+.cart-btn {
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  margin-left: 0.25rem;
+}
+
+.cart-btn:hover {
+  color: var(--accent);
+  background: rgba(0, 208, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.cart-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #ff4d6a;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 800;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(255, 77, 106, 0.5);
+  animation: badgePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes badgePop {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
 }
 </style>

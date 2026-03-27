@@ -1,659 +1,538 @@
 <script setup>
-import { ref, computed } from 'vue';
-import ProductModal from './ProductModal.vue';
-import AliadoProductModal from './AliadoProductModal.vue';
+import { computed, ref } from 'vue';
 import { useScrollReveal } from '../composables/useScrollReveal';
+import { useCart } from '../composables/useCart';
+
+const { addToCart } = useCart();
 
 const props = defineProps({
-  mode: String
+  mode: {
+    type: String,
+    default: 'personal'
+  },
+  products: {
+    type: Array,
+    required: true
+  }
 });
 
-const emit = defineEmits(['switch-mode']);
-
 const isAliado = computed(() => props.mode === 'aliado');
+const revealRef = useScrollReveal();
 
-// Modal State
-const isModalOpen = ref(false);
-const selectedProduct = ref(null);
+const isCatalogUnlocked = ref(false);
 
-const openModal = (product) => {
-  selectedProduct.value = product;
-  isModalOpen.value = true;
-};
-
-const closeModal = () => {
-  isModalOpen.value = false;
-  selectedProduct.value = null;
-};
-
-const whatsappNumber = '1234567890';
-
-// Calculate discount percentage
-const getDiscount = (original, current) => {
-  return Math.round((1 - parseFloat(current) / parseFloat(original)) * 100);
-};
-
-// Personal products
-const personalProducts = [
-  {
-    id: 'smartwatch',
-    name: 'Smartwatch',
-    description: 'Experimenta el rendimiento máximo en tu muñeca. Incluye monitoreo avanzado de salud en tiempo real, notificaciones inteligentes sincronizadas y una batería de larga duración para toda la semana.',
-    originalPrice: '45.00',
-    price: '25.00',
-    image: '/product-smartwatch.png',
-    extraImages: ['/product-smartwatch.png', '/product-smartwatch.png', '/product-smartwatch.png', '/product-smartwatch.png'],
-    rating: 4.8,
-    reviews: 124,
-    tag: 'Más Vendido',
-    specs: [
-      { label: 'Pantalla', value: 'AMOLED 1.91"' },
-      { label: 'Batería', value: 'Hasta 7 días' },
-      { label: 'Resistencia', value: 'IP68' },
-      { label: 'Conectividad', value: 'Bluetooth 5.2' }
-    ]
-  },
-  {
-    id: 'audifonos',
-    name: 'Audífonos ANC',
-    description: 'Aísla el ruido exterior y domina tu entorno con tecnología de cancelación activa. Disfruta de un sonido de alta fidelidad con bajos profundos y hasta 35 horas de reproducción continua.',
-    originalPrice: '35.00',
-    price: '20.00',
-    image: '/product-audifonos.png',
-    extraImages: ['/product-audifonos.png', '/product-audifonos.png', '/product-audifonos.png', '/product-audifonos.png'],
-    rating: 4.9,
-    reviews: 89,
-    tag: 'Nuevo',
-    specs: [
-      { label: 'Driver', value: '40mm Hi-Res' },
-      { label: 'ANC', value: 'Cancelación Activa' },
-      { label: 'Batería', value: '35 horas' },
-      { label: 'Conectividad', value: 'Bluetooth 5.3' }
-    ]
-  },
-  {
-    id: 'dock',
-    name: 'Dock Magnético',
-    description: 'Simplifica tu carga con tecnología de inducción magnética. Un solo lugar elegante para cargar simultáneamente tu reloj, audífonos y teléfono móvil. Diseño minimalista de aluminio premium.',
-    originalPrice: '40.00',
-    price: '22.00',
-    image: '/product-dock.png',
-    extraImages: ['/product-dock.png', '/product-dock.png', '/product-dock.png', '/product-dock.png'],
-    rating: 4.7,
-    reviews: 56,
-    tag: null,
-    specs: [
-      { label: 'Potencia', value: '15W Qi' },
-      { label: 'Puertos', value: '3 en 1' },
-      { label: 'Material', value: 'Aluminio' },
-      { label: 'Compatible', value: 'Universal MagSafe' }
-    ]
+const unlockCatalog = () => {
+  const password = prompt('Ingrese la Llave de Acceso para desbloquear el catálogo:');
+  if (password === 'offbasic2026') {
+    isCatalogUnlocked.value = true;
+  } else if (password !== null) {
+    alert('Llave incorrecta. Por favor, intente de nuevo.');
   }
-];
+};
 
-// Aliado products
-const aliadoProducts = [
-  {
-    id: 'smartwatch',
-    name: 'Smartwatch',
-    description: 'Producto de alta demanda y rotación garantizada. Ideal para expandir tu catálogo con un dispositivo confiable, moderno y con excelente margen de ganancia para tu negocio personal.',
-    originalPrice: '25.00',
-    price: '15.00',
-    image: '/product-smartwatch.png',
-    rating: 4.8,
-    reviews: 124,
-    stats: { roi: '140%', margin: '66', demand: 'Muy Alta', minOrder: '10' },
-    histogram: [
-      { month: 'Oct', percent: 45, value: 150 },
-      { month: 'Nov', percent: 65, value: 220 },
-      { month: 'Dic', percent: 100, value: 380 },
-      { month: 'Ene', percent: 85, value: 290 },
-      { month: 'Feb', percent: 75, value: 240 },
-      { month: 'Mar', percent: 90, value: 310 }
-    ]
-  },
-  {
-    id: 'audifonos',
-    name: 'Audífonos ANC',
-    description: 'Calidad de sonido premium que se vende sola gracias a su tecnología ANC. Un producto indispensable para clientes exigentes que buscan la mejor relación precio-valor en audio hoy.',
-    originalPrice: '20.00',
-    price: '12.00',
-    image: '/product-audifonos.png',
-    rating: 4.9,
-    reviews: 89,
-    stats: { roi: '115%', margin: '55', demand: 'Alta', minOrder: '20' },
-    histogram: [
-      { month: 'Oct', percent: 30, value: 80 },
-      { month: 'Nov', percent: 50, value: 150 },
-      { month: 'Dic', percent: 90, value: 280 },
-      { month: 'Ene', percent: 75, value: 220 },
-      { month: 'Feb', percent: 60, value: 190 },
-      { month: 'Mar', percent: 85, value: 260 }
-    ]
-  },
-  {
-    id: 'dock',
-    name: 'Dock Magnético',
-    description: 'El accesorio de carga que todos los usuarios necesitan. Optimiza tu inventario con este cargador 3 en 1 versátil, compacto y compatible con los dispositivos más populares del mercado.',
-    originalPrice: '22.00',
-    price: '13.00',
-    image: '/product-dock.png',
-    rating: 4.7,
-    reviews: 56,
-    stats: { roi: '130%', margin: '60', demand: 'Media-Alta', minOrder: '15' },
-    histogram: [
-      { month: 'Oct', percent: 20, value: 40 },
-      { month: 'Nov', percent: 40, value: 90 },
-      { month: 'Dic', percent: 80, value: 190 },
-      { month: 'Ene', percent: 65, value: 150 },
-      { month: 'Feb', percent: 55, value: 120 },
-      { month: 'Mar', percent: 70, value: 160 }
-    ]
-  }
-];
+const selectProduct = (id) => {
+  window.location.hash = `#p-${id}`;
+};
 
-const products = computed(() => isAliado.value ? aliadoProducts : personalProducts);
-
-const getWhatsappUrl = (productName) => {
+const getWhatsappUrl = (productName, price) => {
+  const whatsappNumber = '1234567890';
   if (isAliado.value) {
-    const msg = `¡Hola! Quiero la **Llave de acceso** para cotizar ${productName} al mayor.`;
+    const msg = `¡Hola! Quiero comprar ${productName} al mayor y conocer más sobre los márgenes.`;
     return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
   }
-  const msg = `¡Hola! Vi la web y quiero mi ${productName}.`;
+  const msg = `¡Hola! Vi la web y quiero mi ${productName} ($${price}).`;
   return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
 };
-
-const revealRef = useScrollReveal();
 </script>
 
 <template>
-  <section id="productos" class="products-section" :class="{ 'products-aliado': isAliado }">
-    <div class="container scroll-reveal slide-left" ref="revealRef">
-      
-      <!-- Title (Only for Aliado) -->
-      <h2 v-if="isAliado" class="section-title">Contenido del Baúl</h2>
-      <p v-if="isAliado" class="section-subtitle">Activos listos para mover. Requiere Llave para visualizar.</p>
+  <div class="products-wrapper" id="productos">
+    <section class="products-section" :class="{ 'aliado-theme': isAliado }">
+      <div class="container scroll-reveal slide-up" ref="revealRef">
+        
+        <header class="section-header">
+          <!-- Large Background Title -->
+          <h1 class="bg-title" v-if="!isAliado">PRODUCTOS PREMIUM</h1>
+          <h1 class="bg-title" v-else>CATÁLOGO ALIADOS</h1>
 
-      <!-- Title (Personal) -->
-      <h2 v-if="!isAliado" class="section-title">Productos Premium</h2>
+          <div class="category-pill">{{ isAliado ? 'Catálogo de Inversión' : 'Colección Premium' }}</div>
+          <h2 class="section-title">
+            {{ isAliado ? 'Contenido del Baúl' : 'Colección Exclusiva' }}
+          </h2>
+        </header>
 
-      <!-- Grid -->
-      <div class="products-grid">
-        <div 
-          v-for="(product, idx) in products" 
-          :key="product.id" 
-          class="product-card"
-          :class="{ 'card-aliado': isAliado }"
-          :style="{ animationDelay: `${idx * 0.12}s` }"
-          @click="openModal(product)"
-        >
-          <div class="product-image-wrap" :class="{ 'locked-image': isAliado }">
-            <img :src="product.image" :alt="product.name" class="product-img" />
-            
-            <!-- Discount Badge Removed -->
-
-
-            <!-- Product Tag -->
-            <div v-if="product.tag && !isAliado" class="product-tag">
-              {{ product.tag }}
-            </div>
-
-            <!-- Lock Overlay for Aliado -->
-            <div v-if="isAliado" class="lock-overlay">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-              </svg>
-            </div>
-
-            <!-- Quick View Overlay -->
-            <div v-if="!isAliado" class="quick-view-overlay">
-              <span class="quick-view-text">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                  <circle cx="12" cy="12" r="3"/>
+        <div class="products-grid" :class="{ 'locked-catalog': isAliado && !isCatalogUnlocked }">
+          <div 
+            v-for="product in products" 
+            :key="product.id" 
+            class="product-card"
+            @click="isAliado && !isCatalogUnlocked ? unlockCatalog() : selectProduct(product.id)"
+          >
+            <div class="card-visual">
+              <div v-if="product.tag" class="product-tag">{{ product.tag }}</div>
+              <img :src="product.image" :alt="product.name" class="product-image" />
+              
+              <!-- Lock Overlay for Aliado Mode -->
+              <div v-if="isAliado && !isCatalogUnlocked" class="lock-overlay">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="lock-icon">
+                  <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
                 </svg>
-                Ver Detalles
-              </span>
-            </div>
-          </div>
+              </div>
 
-          <div class="product-info">
-            <div class="title-price-header">
-              <div class="product-name-block">
-                <h3 class="product-name">{{ product.name }}</h3>
-                <!-- Star Rating -->
-                <div class="product-rating" v-if="product.rating">
-                  <div class="stars-row">
-                    <svg v-for="star in 5" :key="star" class="star-icon" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                    </svg>
+              <div class="card-overlay" v-if="!isAliado || isCatalogUnlocked">
+                <span class="overlay-btn">Ver Detalles</span>
+              </div>
+            </div>
+
+            <div class="card-content">
+              <div class="card-header">
+                <div class="header-main">
+                  <h3 class="product-name">{{ product.name }}</h3>
+                  <!-- Stars and Rating -->
+                  <div class="rating-row">
+                    <div class="stars">★★★★★</div>
+                    <span class="rating-val">{{ product.rating }} ({{ product.reviewCount }})</span>
                   </div>
-                  <span class="rating-text">{{ product.rating }} ({{ product.reviews }})</span>
+                </div>
+
+                <div class="header-price">
+                  <div class="product-price">
+                    <span class="old">${{ product.originalPrice.toFixed(2) }}</span>
+                    <span class="current">${{ product.price.toFixed(2) }}</span>
+                  </div>
                 </div>
               </div>
-              
-              <div class="price-block">
-                <span class="original-price">${{ product.originalPrice }}</span>
-                <span class="current-price">${{ product.price }}</span>
+
+              <p class="product-desc">{{ product.description }}</p>
+
+              <!-- Shipping Badge -->
+              <div class="shipping-badge">
+                <svg class="ship-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
+                  <path d="M15 18H9" />
+                  <path d="M19 18h2a1 1 0 0 0 1-1v-5l-4-4h-3v10" />
+                  <circle cx="7" cy="18" r="2" />
+                  <circle cx="17" cy="18" r="2" />
+                </svg>
+                <span>Envío Gratis</span>
               </div>
-            </div>
 
-            <p class="product-desc">{{ product.description }}</p>
+              <!-- Card Footer Actions: Symmetric layout -->
+              <div class="footer-actions" @click.stop>
+                <div class="info-link-wrapper">
+                  <span class="more-info-link" @click.stop="isAliado && !isCatalogUnlocked ? unlockCatalog() : selectProduct(product.id)">
+                    ¿Mas info del producto?
+                  </span>
+                </div>
 
-            <!-- Free Shipping Badge -->
-            <div v-if="!isAliado" class="shipping-badge">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16">
-                <rect x="1" y="3" width="15" height="13" rx="1"/>
-                <path d="M16 8l4 0 0 8-4 0"/>
-                <circle cx="6.5" cy="18.5" r="2.5"/>
-                <circle cx="17.5" cy="18.5" r="2.5"/>
-              </svg>
-              Envío Gratis
-            </div>
-
-            <div v-if="!isAliado" class="product-footer">
-              <div class="footer-actions">
-                <span class="more-info-link" @click.stop="openModal(product)">¡Más información del producto?</span>
-                <a 
-                  :href="getWhatsappUrl(product.name)" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  class="btn-primary product-buy-btn"
-                  @click.stop
+                <button
+                  v-if="!isAliado || isCatalogUnlocked"
+                  @click.stop="addToCart(product)"
+                  class="btn-primary product-buy-btn icon-only-btn"
+                  aria-label="Agregar al carrito"
+                  title="Agregar al carrito"
                 >
-                  Comprar
-                </a>
-              </div>
-            </div>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <path d="M16 10a4 4 0 01-8 0"/>
+                  </svg>
+                </button>
 
-            <!-- Aliado Button Area -->
-            <div v-else class="aliado-footer-actions">
-              <span class="more-info-link" @click.stop="openModal(product)">¡Más información del producto?</span>
-              <a 
-                :href="getWhatsappUrl(product.name)" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="btn-primary product-btn-aliado flex-center"
-              >
-                <img src="/Llave Diamante.png" class="btn-icon" alt="Llave" />
-                <span>Obtener Llave</span>
-              </a>
+                <button 
+                  v-if="isAliado && !isCatalogUnlocked"
+                  @click.stop="unlockCatalog" 
+                  class="btn-primary product-btn-locked"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-lock-icon">
+                    <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                  </svg>
+                  Obtener Llave
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-    </div>
-
-    <!-- Product Detail Modal (Personal Only) -->
-    <ProductModal 
-      v-if="!isAliado"
-      :show="isModalOpen" 
-      :product="selectedProduct" 
-      @close="closeModal" 
-    />
-
-    <!-- Aliado Product Modal (Aliados Only) -->
-    <AliadoProductModal 
-      v-if="isAliado"
-      :show="isModalOpen" 
-      :product="selectedProduct" 
-      @close="closeModal" 
-    />
-  </section>
+    </section>
+  </div>
 </template>
 
 <style scoped>
-.products-section {
-  padding: 2.5rem 1.5rem 3rem;
-  background-color: var(--bg-alt);
-  transition: background-color var(--transition) ease;
-  scroll-margin-top: 100px;
-}
-
-.products-aliado {
-  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%);
-}
-
-/* ===== GRID ===== */
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-/* ===== CARD ===== */
-.product-card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
+.products-wrapper {
+  min-height: 40vh;
+  position: relative;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  display: flex;
-  flex-direction: column;
-  animation: cardEntrance 0.6s ease both;
+}
+
+.products-section {
+  padding: 8rem 0;
+  background-color: var(--bg);
+  transition: background-color 0.3s ease;
+}
+
+.aliado-theme {
+  background-color: var(--bg-alt);
+}
+
+.aliado-theme {
+  background-color: var(--bg-alt);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 6rem;
   position: relative;
 }
 
-@keyframes cardEntrance {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Background Title Effect */
+.bg-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  font-weight: 900;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 0;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+}
+
+.products-section:not(.aliado-theme) .bg-title {
+  color: rgba(128, 128, 128, 0.2); /* Gray shadow for personal mode */
+}
+
+.products-section.aliado-theme .bg-title {
+  color: rgba(255, 255, 255, 0.1); /* Light for aliado mode */
+}
+
+@media (max-width: 768px) {
+  .bg-title { font-size: 4rem; }
+}
+
+.category-pill {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  background: rgba(0, 208, 255, 0.1);
+  color: #00d0ff;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  position: relative;
+  z-index: 1;
+  font-size: 3rem;
+  letter-spacing: -1.5px;
+  line-height: 1;
+  color: var(--text);
+}
+
+/* Card Styling */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.product-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 48px var(--shadow), 0 0 0 1px rgba(0, 208, 255, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
-.card-aliado {
-  border-color: rgba(0, 208, 255, 0.1);
-}
-
-.card-aliado:hover {
-  border-color: var(--accent);
-  box-shadow: 0 0 30px rgba(0, 208, 255, 0.15);
-}
-
-/* ===== IMAGE ===== */
-.product-image-wrap {
+.card-visual {
+  height: 320px;
+  padding: 2.5rem;
   position: relative;
-  height: 260px;
-  overflow: hidden;
-  background: var(--bg-alt);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
-.product-img {
+.product-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  object-fit: contain;
+  transition: filter 0.3s ease;
 }
 
-.product-card:hover .product-img {
-  transform: scale(1.08);
-}
-
-/* Discount Badge */
-.discount-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: linear-gradient(135deg, #ff4757, #ff6b81);
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 800;
-  padding: 0.35rem 0.7rem;
-  border-radius: 6px;
-  z-index: 3;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
-}
-
-/* Product Tag */
-.product-tag {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: var(--accent);
-  color: var(--black);
-  font-size: 0.7rem;
-  font-weight: 800;
-  padding: 0.3rem 0.65rem;
-  border-radius: 4px;
-  z-index: 3;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-}
-
-/* Quick View Overlay */
-.quick-view-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  z-index: 2;
-  cursor: pointer;
-}
-
-.product-card:hover .quick-view-overlay {
-  opacity: 1;
-}
-
-.quick-view-text {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #fff;
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  padding: 0.6rem 1.2rem;
-  border: 2px solid rgba(255, 255, 255, 0.6);
-  border-radius: 6px;
-  backdrop-filter: blur(4px);
-  transition: all 0.3s ease;
-}
-
-.product-card:hover .quick-view-text {
-  border-color: #fff;
-}
-
-/* Lock overlay for aliado */
-.locked-image .product-img {
-  filter: blur(6px) brightness(0.5);
+/* Locked Catalog Styles */
+.locked-catalog .product-image {
+  filter: blur(10px) brightness(0.85);
 }
 
 .lock-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent);
-  z-index: 2;
 }
 
-/* ===== INFO ===== */
-.product-info {
-  padding: 1.5rem;
+.lock-icon {
+  width: 44px;
+  height: 44px;
+  color: #00d0ff;
+  fill: #00d0ff; /* Solid fill for the lock body to match reference */
+}
+
+.product-tag {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  padding: 0.35rem 0.8rem;
+  background: #00d0ff;
+  color: var(--white);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.card-content {
+  padding: 1.5rem 2rem 2rem;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  flex: 1;
 }
 
-.title-price-header {
+.card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 0.75rem;
-  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
-.product-name-block {
+.header-main {
   flex: 1;
 }
 
 .product-name {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text);
   margin-bottom: 0.25rem;
-  line-height: 1.2;
 }
 
-/* Star Rating */
-.product-rating {
+/* Rating Rows */
+.rating-row {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
-.stars-row {
-  display: flex;
-  gap: 0.1rem;
-  color: #facc15;
+.stars {
+  color: #ffcc00; /* Gold */
+  font-size: 0.85rem;
+  letter-spacing: 1px;
 }
 
-.star-icon {
-  width: 14px;
-  height: 14px;
+.rating-val {
+  font-size: 0.75rem;
+  color: #888;
+  font-weight: 600;
 }
 
-.rating-text {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  font-weight: 500;
+.header-price {
+  text-align: right;
 }
 
-/* Price */
-.price-block {
+.product-price {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 0.1rem;
-  flex-shrink: 0;
 }
 
-.original-price {
-  font-size: 0.9rem;
-  color: var(--text-muted);
+.product-price .old {
+  font-size: 0.85rem;
+  color: #bbb;
   text-decoration: line-through;
-  opacity: 0.6;
+  margin-bottom: -0.25rem;
 }
 
-.current-price {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--accent);
-  letter-spacing: -0.5px;
+.product-price .current {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #00d0ff;
 }
 
 .product-desc {
   font-size: 0.9rem;
-  line-height: 1.6;
+  line-height: 1.5;
   color: var(--text-muted);
-  font-weight: 300;
-  margin-bottom: 0.75rem;
-  /* Force 3 lines */
+  margin-bottom: 1.5rem;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  height: 4.8em; /* 1.6 line-height * 3 lines */
 }
 
 /* Shipping Badge */
 .shipping-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #22c55e;
-  margin-bottom: 1rem;
-  padding: 0.3rem 0.6rem;
-  background: rgba(34, 197, 94, 0.08);
-  border-radius: 4px;
-  width: fit-content;
-  letter-spacing: 0.3px;
-}
-
-.shipping-badge svg {
-  color: #22c55e;
-}
-
-/* ===== FOOTER ===== */
-.product-footer {
-  margin-top: auto;
-}
-
-.product-buy-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  width: 100%;
-  padding: 0.85rem 1.2rem;
-  font-size: 0.95rem;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  background: rgba(34, 197, 94, 0.1); /* Adapts better to dark/light */
+  color: #22c55e; /* Vibrant Green text */
   border-radius: 8px;
+  font-size: 0.78rem;
   font-weight: 700;
+  width: fit-content;
+  margin-bottom: 2rem;
   transition: all 0.3s ease;
 }
 
-.product-buy-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 208, 255, 0.35);
+.ship-icon {
+  width: 1.1rem;
+  height: 1.1rem;
 }
 
-.footer-actions, .aliado-footer-actions {
+/* Footer Actions */
+.footer-actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  width: 100%;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.info-link-wrapper {
+  flex: 1;
 }
 
 .more-info-link {
-  font-size: 0.7rem;
-  color: var(--text-muted);
+  font-size: 0.73rem;
+  color: #999;
   text-decoration: underline;
-  text-underline-offset: 3px;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.3s ease;
-  font-weight: 500;
-  max-width: 45%;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.more-info-link:hover {
-  color: var(--accent);
+.product-buy-btn {
+  background-color: #00d0ff;
+  color: var(--white);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  min-width: 120px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.product-buy-btn svg {
-  flex-shrink: 0;
+.product-buy-btn:hover {
+  opacity: 0.9;
 }
 
-.product-btn-aliado {
-  padding: 0.8rem 1rem;
-  flex-shrink: 0;
+.product-buy-btn.icon-only-btn {
+  min-width: unset;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-icon {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
+.product-btn-locked {
+  background-color: #00d0ff;
+  color: var(--black);
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 900px) {
-  .products-grid {
-    grid-template-columns: 1fr 1fr;
+.product-btn-locked:hover {
+  background-color: #00b8e6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 208, 255, 0.4);
+}
+
+.btn-lock-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* === Mobile: iPhone-safe === */
+@media (max-width: 480px) {
+  .products-section {
+    padding: 4rem 0;
   }
-}
-
-@media (max-width: 600px) {
   .products-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
-  .product-image-wrap {
-    height: 220px;
+  .section-header {
+    margin-bottom: 3rem;
+  }
+  .section-title {
+    font-size: 2rem;
+  }
+  .bg-title {
+    font-size: 2.5rem;
+  }
+  .card-visual {
+    height: 250px;
+    padding: 1.5rem;
+  }
+  .card-content {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+  .product-name {
+    font-size: 1.2rem;
+  }
+  .product-price .current {
+    font-size: 1.3rem;
+  }
+  .product-desc {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+  .shipping-badge {
+    margin-bottom: 1.25rem;
+  }
+  .footer-actions {
+    gap: 0.75rem;
+  }
+  .product-btn-locked {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
   }
 }
 </style>
