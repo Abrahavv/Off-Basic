@@ -61,7 +61,6 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -247,7 +246,11 @@ img {
 /* ===== SCROLL SMOOTH ===== */
 html {
   scroll-behavior: smooth;
+}
+
+.app-container {
   overflow-x: hidden;
+  width: 100%;
 }
 
 /* ===== TRANSITION CLASSES ===== */

@@ -145,6 +145,10 @@ const activeProductData = computed(() => {
 const setMode = (mode) => {
   currentMode.value = mode;
   localStorage.setItem('offbasic_mode', mode);
+  // Add scroll to top on mode change
+  setTimeout(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 50);
 };
 
 const applyThemeClass = () => {
