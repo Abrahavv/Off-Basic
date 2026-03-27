@@ -19,6 +19,7 @@ import AffiliateVideoSection from './components/AffiliateVideoSection.vue';
 import ShoppingCart from './components/ShoppingCart.vue';
 import BottomPromoBar from './components/BottomPromoBar.vue';
 import BonusSection from './components/BonusSection.vue';
+import MaintenanceMode from './components/MaintenanceMode.vue';
 
 // --- DATA ---
 const products = [
@@ -118,6 +119,7 @@ const products = [
 ];
 
 // --- APP STATE ---
+const isMaintenanceMode = ref(true); // Cambiar a false para desactivar el modo mantenimiento
 const currentMode = ref(localStorage.getItem('offbasic_mode') || 'personal');
 const activeProductId = ref(null);
 
@@ -214,10 +216,14 @@ onMounted(() => {
 
 <template>
   <div class="app-container">
-    <!-- SHOPPING CART DRAWER (always present) -->
-    <ShoppingCart />
+    <!-- MAINTENANCE MODE -->
+    <MaintenanceMode v-if="isMaintenanceMode" />
 
-    <!-- PRODUCT ISOLATION VIEW -->
+    <template v-else>
+      <!-- SHOPPING CART DRAWER (always present) -->
+      <ShoppingCart />
+
+      <!-- PRODUCT ISOLATION VIEW -->
     <template v-if="activeProductData">
       <div class="isolation-overlay">
         <ProductDetailView 
@@ -265,6 +271,7 @@ onMounted(() => {
         <FooterSection :mode="currentMode" />
         <BottomPromoBar :mode="currentMode" />
       </div>
+    </template>
     </template>
   </div>
 </template>
