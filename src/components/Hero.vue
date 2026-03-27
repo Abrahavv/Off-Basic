@@ -127,7 +127,7 @@ const scrollToProducts = () => {
 <style scoped>
 .hero {
   position: relative;
-  min-height: 90vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
