@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted, watch, computed, onBeforeUnmount } from 'vue';
 import Navbar from './components/Navbar.vue';
 import Hero from './components/Hero.vue';
 import ProductList from './components/ProductList.vue';
@@ -118,7 +118,7 @@ const products = [
 ];
 
 // --- APP STATE ---
-const currentMode = ref('personal');
+const currentMode = ref(localStorage.getItem('offbasic_mode') || 'personal');
 const activeProductId = ref(null);
 
 const activeProduct = computed(() => {
@@ -142,6 +142,7 @@ const activeProductData = computed(() => {
 
 const setMode = (mode) => {
   currentMode.value = mode;
+  localStorage.setItem('offbasic_mode', mode);
 };
 
 const applyThemeClass = () => {
@@ -177,6 +178,37 @@ onMounted(() => {
 
 watch(currentMode, () => {
   applyThemeClass();
+});
+
+// Scroll position persistence
+const saveScrollPosition = () => {
+  const scrollY = window.scrollY;
+  localStorage.setItem('scrollPosition', scrollY.toString());
+};
+
+const restoreScrollPosition = () => {
+  const savedPosition = localStorage.getItem('scrollPosition');
+  if (savedPosition) {
+    const scrollY = parseInt(savedPosition, 10);
+    // Use nextTick to ensure DOM is ready
+    setTimeout(() => {
+      window.scrollTo(0, scrollY);
+    }, 100);
+  }
+};
+
+// Save scroll position before page unload
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', saveScrollPosition);
+});
+
+// Setup scroll position persistence
+onMounted(() => {
+  // Restore scroll position on page load
+  restoreScrollPosition();
+  
+  // Save scroll position on page unload
+  window.addEventListener('beforeunload', saveScrollPosition);
 });
 </script>
 

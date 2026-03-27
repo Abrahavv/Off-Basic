@@ -59,7 +59,7 @@ const revealRef = useScrollReveal();
 
 <style scoped>
 .benefits-section {
-  padding: 5rem 0;
+  padding: var(--section-padding);
   background-color: var(--bg);
   position: relative;
   overflow: hidden;

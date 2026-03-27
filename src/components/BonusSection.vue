@@ -51,7 +51,7 @@ const bonuses = [
 
 <style scoped>
 .bonus-section {
-  padding: 6rem 0;
+  padding: var(--section-padding);
   background-color: var(--bg-alt);
   position: relative;
   overflow: hidden;

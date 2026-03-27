@@ -76,7 +76,7 @@ const revealRef = useScrollReveal();
 
 <style scoped>
 .objectives-section {
-  padding: 4rem 2rem;
+  padding: var(--section-padding);
   background-color: var(--bg);
   position: relative;
   overflow: hidden;

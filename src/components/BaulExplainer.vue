@@ -65,6 +65,7 @@ const revealRef = useScrollReveal();
   flex-direction: column;
   gap: 1.5rem;
   text-align: center;
+  align-items: center;
 }
 
 .explainer-title {
@@ -87,41 +88,39 @@ const revealRef = useScrollReveal();
   flex-direction: column;
   gap: 1rem;
   margin-top: 0.5rem;
+  width: 100%;
+  max-width: 500px;
 }
 
 .step-item {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  padding: 1rem 1.75rem;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 14px;
   transition: border-color 0.3s ease, transform 0.3s ease;
-  max-width: 400px;
+  width: 100%;
+  max-width: 450px;
   margin: 0 auto;
   opacity: 0;
-  transform: translateX(100px);
-  animation: slideInFromRight 0.8s ease-out forwards;
+  transform: translateX(-50px);
 }
 
-.step-item:nth-child(1) {
-  animation-delay: 0.2s;
+.step-item {
+  animation: slideInProgressive 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
-.step-item:nth-child(2) {
-  animation-delay: 0.6s;
-}
+.step-item:nth-child(1) { animation-delay: 0.1s; }
+.step-item:nth-child(2) { animation-delay: 0.35s; }
+.step-item:nth-child(3) { animation-delay: 0.6s; }
 
-.step-item:nth-child(3) {
-  animation-delay: 1s;
-}
-
-@keyframes slideInFromRight {
+@keyframes slideInProgressive {
   0% {
     opacity: 0;
-    transform: translateX(100px);
+    transform: translateX(-50px);
   }
   100% {
     opacity: 1;
@@ -131,7 +130,7 @@ const revealRef = useScrollReveal();
 
 .step-item:hover {
   border-color: var(--accent);
-  transform: translateX(0) scale(1.02);
+  transform: translateX(5px) scale(1.02);
 }
 
 .step-number {

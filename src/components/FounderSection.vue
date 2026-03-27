@@ -19,7 +19,7 @@ const revealRef = useScrollReveal();
       <div class="founder-grid">
         <div class="founder-image-wrap">
           <div class="founder-image-container">
-            <img src="/founder.svg" alt="Fundador de Off Basic" class="founder-img" />
+            <img src="/founder.svg" alt="Fundador de Off Basic" class="founder-img" loading="lazy" />
           </div>
           <div class="accent-line"></div>
         </div>

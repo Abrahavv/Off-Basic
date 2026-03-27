@@ -35,7 +35,7 @@ onUnmounted(() => {
 <template>
   <Teleport to="body">
     <Transition name="bottom-bar">
-      <div v-if="isVisible" class="bottom-promo-bar">
+      <div v-if="isVisible" class="bottom-promo-bar" :class="{ 'aliado-bg': isAliado }">
         <div class="bar-inner">
           <div class="bar-text">
             <span class="bar-fire" v-if="!isAliado">🔥</span>
@@ -59,10 +59,13 @@ onUnmounted(() => {
   right: 0;
   z-index: 9990;
   background: #000000;
-  border-top: 1px solid rgba(0, 208, 255, 0.4);
-  box-shadow: 0 -2px 20px rgba(0, 208, 255, 0.15);
   padding: 0.65rem 1.25rem;
   padding-bottom: calc(0.65rem + env(safe-area-inset-bottom, 0px));
+  transition: background-color 0.3s ease;
+}
+
+.bottom-promo-bar.aliado-bg {
+  background-color: #121212;
 }
 
 .bar-inner {

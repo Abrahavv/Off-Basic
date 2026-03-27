@@ -11,6 +11,15 @@ const revealRef = useScrollReveal();
 
 const activeKey = ref(1);
 
+const scrollToProducts = () => {
+  const el = document.getElementById('productos');
+  if (el) {
+    const offset = 100;
+    const pos = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: pos, behavior: 'smooth' });
+  }
+};
+
 const keys = [
   {
     id: 1,
@@ -72,7 +81,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
           <div class="key-visual-main">
             <div class="glow-container">
               <div class="main-glow"></div>
-              <img :src="currentKey.image" alt="Key Image" class="main-key-img" />
+              <img :src="currentKey.image" alt="Key Image" class="main-key-img" loading="lazy" />
             </div>
           </div>
 
@@ -89,7 +98,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
             </ul>
 
             <div class="cta-area" v-if="!currentKey.locked">
-              <button class="btn-primary buy-key-btn">
+              <button class="btn-primary buy-key-btn" @click="scrollToProducts">
                 Acceder
               </button>
               <p class="cta-hint">Garantía · Pago único · Sin suscripciones</p>
@@ -113,7 +122,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
             @click="key.locked ? null : activeKey = key.id"
           >
             <div class="card-visual">
-              <img :src="key.image" class="sidebar-key-img" />
+              <img :src="key.image" class="sidebar-key-img" loading="lazy" />
               <div class="card-glow"></div>
             </div>
             <div class="card-info">
@@ -142,7 +151,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
 
 <style scoped>
 .keys-showcase {
-  padding: 10rem 0;
+  padding: var(--section-padding);
   background-color: var(--bg); /* Match app dark background */
   color: var(--text);
   position: relative;

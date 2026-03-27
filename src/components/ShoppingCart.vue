@@ -82,7 +82,7 @@ const handleBackdropClick = (e) => {
                 <TransitionGroup name="cart-item" tag="div">
                   <div v-for="item in cartItems" :key="item.id" class="cart-item">
                     <div class="item-image-wrap">
-                      <img :src="item.image" :alt="item.name" class="item-image" />
+                      <img :src="item.image" :alt="item.name" class="item-image" loading="lazy" />
                     </div>
                     <div class="item-info">
                       <div class="item-top-row">

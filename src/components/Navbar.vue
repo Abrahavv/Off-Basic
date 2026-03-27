@@ -403,10 +403,12 @@ const scrollToProducts = () => {
   .top-countdown-bar {
     gap: 0.5rem;
     padding: 0.4rem 0.5rem;
+    overflow: hidden;
   }
   .countdown-center {
     gap: 0.8rem;
     justify-content: center;
+    width: 100%;
   }
   .countdown-text {
     display: flex;
@@ -417,6 +419,9 @@ const scrollToProducts = () => {
     justify-content: center;
     flex-direction: row;
     gap: 0.4rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .countdown-timer {
     gap: 0.25rem;
@@ -427,8 +432,14 @@ const scrollToProducts = () => {
   .time-value {
     font-size: 1rem;
   }
+  .countdown-btn {
+    display: none;
+  }
   .navbar {
     height: 60px;
+  }
+  .nav-content {
+    padding: 0 0.75rem;
   }
   .logo-text {
     font-size: 0.9rem;
@@ -444,12 +455,13 @@ const scrollToProducts = () => {
     margin-left: 0;
   }
   .mode-toggle-btn {
-    font-size: 0.7rem;
-    padding: 0.3rem 0.6rem;
+    font-size: 0.65rem;
+    padding: 0.25rem 0.5rem;
     margin-right: 0;
+    white-space: nowrap;
   }
   .nav-controls {
-    gap: 0.5rem;
+    gap: 0.35rem;
   }
 }
 

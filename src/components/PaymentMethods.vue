@@ -32,7 +32,7 @@ const revealRef = useScrollReveal();
           class="payment-method" 
           :class="{ 'method-aliado': isAliado }"
         >
-          <img :src="method.src" :alt="method.name" class="method-logo" />
+          <img :src="method.src" :alt="method.name" class="method-logo" loading="lazy" />
         </div>
       </div>
     </div>

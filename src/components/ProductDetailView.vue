@@ -65,6 +65,7 @@ onMounted(() => {
               :src="product.extraImages ? product.extraImages[activeImageIndex] : product.image" 
               :alt="product.name" 
               class="main-img" 
+              loading="lazy"
             />
             
             <!-- Profit Badge (Aliado) -->
@@ -88,7 +89,7 @@ onMounted(() => {
               :class="{ active: activeImageIndex === idx }"
               @click="activeImageIndex = idx"
             >
-              <img :src="img" :alt="product.name" />
+              <img :src="img" :alt="product.name" loading="lazy" />
             </div>
           </div>
 

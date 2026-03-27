@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useScrollReveal } from '../composables/useScrollReveal';
 import { useCart } from '../composables/useCart';
 
@@ -21,10 +21,18 @@ const revealRef = useScrollReveal();
 
 const isCatalogUnlocked = ref(false);
 
+onMounted(() => {
+  if (localStorage.getItem('offbasic_catalog_unlocked') === 'true') {
+    isCatalogUnlocked.value = true;
+  }
+});
+
 const unlockCatalog = () => {
+  if (isCatalogUnlocked.value) return;
   const password = prompt('Ingrese la Llave de Acceso para desbloquear el catálogo:');
   if (password === 'offbasic2026') {
     isCatalogUnlocked.value = true;
+    localStorage.setItem('offbasic_catalog_unlocked', 'true');
   } else if (password !== null) {
     alert('Llave incorrecta. Por favor, intente de nuevo.');
   }
@@ -51,10 +59,6 @@ const getWhatsappUrl = (productName, price) => {
       <div class="container scroll-reveal slide-up" ref="revealRef">
         
         <header class="section-header">
-          <!-- Large Background Title -->
-          <h1 class="bg-title" v-if="!isAliado">PRODUCTOS PREMIUM</h1>
-          <h1 class="bg-title" v-else>CATÁLOGO ALIADOS</h1>
-
           <div class="category-pill">{{ isAliado ? 'Catálogo de Inversión' : 'Colección Premium' }}</div>
           <h2 class="section-title">
             {{ isAliado ? 'Contenido del Baúl' : 'Colección Exclusiva' }}
@@ -70,7 +74,7 @@ const getWhatsappUrl = (productName, price) => {
           >
             <div class="card-visual">
               <div v-if="product.tag" class="product-tag">{{ product.tag }}</div>
-              <img :src="product.image" :alt="product.name" class="product-image" />
+              <img :src="product.image" :alt="product.name" class="product-image" loading="lazy" />
               
               <!-- Lock Overlay for Aliado Mode -->
               <div v-if="isAliado && !isCatalogUnlocked" class="lock-overlay">
@@ -128,15 +132,16 @@ const getWhatsappUrl = (productName, price) => {
                 <button
                   v-if="!isAliado || isCatalogUnlocked"
                   @click.stop="addToCart(product)"
-                  class="btn-primary product-buy-btn icon-only-btn"
+                  class="btn-primary product-buy-btn"
                   aria-label="Agregar al carrito"
                   title="Agregar al carrito"
                 >
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
                     <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
                     <line x1="3" y1="6" x2="21" y2="6"/>
                     <path d="M16 10a4 4 0 01-8 0"/>
                   </svg>
+                  Agregar
                 </button>
 
                 <button 
@@ -169,6 +174,8 @@ const getWhatsappUrl = (productName, price) => {
   padding: 8rem 0;
   background-color: var(--bg);
   transition: background-color 0.3s ease;
+  overflow: hidden;
+  position: relative;
 }
 
 .aliado-theme {
@@ -183,33 +190,6 @@ const getWhatsappUrl = (productName, price) => {
   text-align: center;
   margin-bottom: 6rem;
   position: relative;
-}
-
-/* Background Title Effect */
-.bg-title {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 8rem;
-  font-weight: 900;
-  white-space: nowrap;
-  pointer-events: none;
-  z-index: 0;
-  text-transform: uppercase;
-  letter-spacing: -2px;
-}
-
-.products-section:not(.aliado-theme) .bg-title {
-  color: rgba(128, 128, 128, 0.2); /* Gray shadow for personal mode */
-}
-
-.products-section.aliado-theme .bg-title {
-  color: rgba(255, 255, 255, 0.1); /* Light for aliado mode */
-}
-
-@media (max-width: 768px) {
-  .bg-title { font-size: 4rem; }
 }
 
 .category-pill {

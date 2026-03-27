@@ -191,7 +191,7 @@ const scrollToProducts = () => {
 .hero-logo-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .hero-logo {
@@ -311,9 +311,6 @@ const scrollToProducts = () => {
   max-width: 1000px;
   margin: 0.2rem auto 1rem;
   line-height: 1.35;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .hero-video-wrapper {
@@ -355,7 +352,7 @@ const scrollToProducts = () => {
 .hero-actions .btn-secondary {
   border: 2px solid #00D0FF;
   color: #00D0FF;
-  background: rgba(0, 208, 255, 0.06);
+  background: #fff;
 }
 .hero-actions .btn-secondary:hover {
   background: rgba(0, 208, 255, 0.12);

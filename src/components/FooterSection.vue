@@ -13,6 +13,7 @@ const props = defineProps({
             :src="mode === 'aliado' ? '/Icono-web-Oscuro.png' : '/Icono-web-Claro.png'" 
             alt="Off Basic" 
             class="footer-logo"
+            loading="lazy"
           />
           <span class="logo-text">OFF BASIC</span>
         </div>
