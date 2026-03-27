@@ -180,7 +180,7 @@ const handleBackdropClick = (e) => {
                       <label class="radio-option" :class="{ active: form.deliveryType === 'delivery' }">
                         <input type="radio" v-model="form.deliveryType" value="delivery" />
                         <span class="radio-circle"></span>
-                        <span>🚚 Delivery Valencia</span>
+                        <span>🚚 Delivery</span>
                       </label>
                       <label class="radio-option" :class="{ active: form.deliveryType === 'shipping' }">
                         <input type="radio" v-model="form.deliveryType" value="shipping" />

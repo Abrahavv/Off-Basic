@@ -48,6 +48,7 @@ const revealRef = useScrollReveal();
 <style scoped>
 .baul-explainer {
   padding: var(--section-padding);
+  padding-top: calc(var(--section-padding) + 4rem); /* Bajar un poco más el baúl */
   background-color: var(--bg);
   color: var(--text);
   overflow: hidden;

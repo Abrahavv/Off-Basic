@@ -82,7 +82,7 @@ export function useCart() {
       .join('\n');
 
     const deliveryLabel = form.deliveryType === 'delivery'
-      ? 'Delivery Valencia'
+      ? 'Delivery'
       : 'Envío (correo o encomienda)';
 
     const paymentLabels = {
