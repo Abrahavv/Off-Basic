@@ -239,38 +239,34 @@ onMounted(() => {
       <div class="app-wrapper">
         <Navbar :mode="currentMode" @switch-mode="setMode" />
         <main>
-          <Transition name="mode-switch" mode="out-in">
-            <div :key="currentMode">
-              <Hero :mode="currentMode" @switch-mode="setMode" />
+          <Hero :mode="currentMode" @switch-mode="setMode" />
 
-              <!-- Personal Mode Sections -->
-              <template v-if="currentMode === 'personal'">
-                <ProductList :mode="currentMode" :products="products" />
-                <ObjectivesSection :mode="currentMode" />
-                <FounderSection :mode="currentMode" />
-                <PaymentMethods :mode="currentMode" />
-                <TestimonialsSection :mode="currentMode" />
-              </template>
+          <!-- Personal Mode Sections -->
+          <div v-show="currentMode === 'personal'" class="mode-fade-in">
+            <ProductList :mode="currentMode" :products="products" />
+            <ObjectivesSection :mode="currentMode" />
+            <FounderSection :mode="currentMode" />
+            <PaymentMethods :mode="currentMode" />
+            <TestimonialsSection :mode="currentMode" />
+          </div>
 
-              <!-- Aliado Mode Sections -->
-              <template v-else>
-                <!-- Video integrado en Hero para modo aliado -->
-                <BaulExplainer :mode="currentMode" />
-                <BenefitsSection />
-                <ComparisonSection :mode="currentMode" />
-                <ProductList :mode="currentMode" :products="displayProducts" />
-                <KeysSection :mode="currentMode" />
-                <BonusSection :mode="currentMode" />
-                <ObjectivesSection :mode="currentMode" />
-                <FounderSection :mode="currentMode" />
-                <PaymentMethods :mode="currentMode" />
-                <TestimonialsSection :mode="currentMode" />
-                <ClosingSection />
-              </template>
+          <!-- Aliado Mode Sections -->
+          <div v-show="currentMode === 'aliado'" class="mode-fade-in">
+            <!-- Video integrado en Hero para modo aliado -->
+            <BaulExplainer :mode="currentMode" />
+            <BenefitsSection />
+            <ComparisonSection :mode="currentMode" />
+            <ProductList :mode="currentMode" :products="displayProducts" />
+            <KeysSection :mode="currentMode" />
+            <BonusSection :mode="currentMode" />
+            <ObjectivesSection :mode="currentMode" />
+            <FounderSection :mode="currentMode" />
+            <PaymentMethods :mode="currentMode" />
+            <TestimonialsSection :mode="currentMode" />
+            <ClosingSection />
+          </div>
 
-              <FaqSection :mode="currentMode" />
-            </div>
-          </Transition>
+          <FaqSection :mode="currentMode" />
         </main>
         <FooterSection :mode="currentMode" />
         <BottomPromoBar :mode="currentMode" />

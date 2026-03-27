@@ -52,10 +52,8 @@ const scrollToProducts = () => {
       <div class="arrow-container arrow-tl"><div class="tech-chevron"></div></div>
     </div>
 
-    <Transition name="mode-switch" mode="out-in" appear>
-
       <!-- ========== PERSONAL MODE ========== -->
-      <div v-if="!isAliado" class="container hero-inner" key="personal">
+      <div v-show="!isAliado" class="container hero-inner mode-fade-in">
         
         <!-- Floating Logo -->
         <div class="hero-logo-wrap">
@@ -77,7 +75,7 @@ const scrollToProducts = () => {
       </div>
 
       <!-- ========== ALIADO MODE ========== -->
-      <div v-else class="container hero-inner hero-aliado-inner" key="aliado">
+      <div v-show="isAliado" class="container hero-inner hero-aliado-inner mode-fade-in">
         
         <!-- El Baúl Visual -->
         <div class="baul-visual baul-floating">
@@ -110,13 +108,12 @@ const scrollToProducts = () => {
             src="https://www.youtube.com/embed/caAWn6xFWkI"
             title="Baúl de Off Basic"
             frameborder="0"
+            loading="lazy"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
           ></iframe>
         </div>
       </div>
-
-    </Transition>
 
     <!-- Decorative orbs -->
     <div class="orb orb-1" :class="{ 'orb-aliado': isAliado }"></div>
