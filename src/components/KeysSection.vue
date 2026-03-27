@@ -66,7 +66,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
       
       <div class="keys-header">
         <span class="keys-count-badge">1 DE 3 DISPONIBLES</span>
-        <h2 class="section-title">Tu oportunidad de entrar al Baúl.</h2>
+        <h2 class="section-title">Tu oportunidad de entrar al Baúl</h2>
       </div>
 
       <div class="keys-grid">
@@ -151,7 +151,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
 
 <style scoped>
 .keys-showcase {
-  padding: var(--section-padding);
+  padding: 5rem 0;
   background-color: var(--bg); /* Match app dark background */
   color: var(--text);
   position: relative;
@@ -160,7 +160,8 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
 
 .keys-header {
   text-align: center;
-  margin-bottom: 5rem;
+  margin-bottom: 3.5rem;
+  padding: 0 1rem;
 }
 
 .keys-count-badge {
@@ -192,6 +193,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   align-items: flex-start;
   max-width: 1300px;
   margin: 0 auto;
+  width: 100%;
 }
 
 /* LEFT PANEL */
@@ -202,6 +204,8 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   padding: 4rem;
   position: relative;
   backdrop-filter: blur(20px);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .active-header {
@@ -230,6 +234,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   justify-content: center;
   align-items: center;
   margin-bottom: 3rem;
+  width: 100%;
 }
 
 .glow-container {
@@ -255,6 +260,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
 
 .main-key-img {
   width: 250px;
+  max-width: 100%;
   filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
   position: relative;
   z-index: 1;
@@ -270,6 +276,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
 
 .key-info-main {
   text-align: left;
+  width: 100%;
 }
 
 .key-number {
@@ -320,6 +327,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
 
 .cta-area {
   margin-top: 2rem;
+  width: 100%;
 }
 
 .buy-key-btn {
@@ -362,6 +370,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  width: 100%;
 }
 
 .sidebar-card {
@@ -374,6 +383,8 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sidebar-card.active-card {
@@ -395,6 +406,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   align-items: center;
   justify-content: center;
   position: relative;
+  flex-shrink: 0;
 }
 
 .card-glow {
@@ -408,17 +420,38 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   opacity: 0.6;
 }
 
-/* Key-specific glows */
+/* Key-specific styling */
+.key-aliado {
+  border-color: rgba(0, 208, 255, 0.15); /* Blue */
+}
+.key-aliado.active-card {
+  background: rgba(0, 208, 255, 0.05);
+  border-color: rgba(0, 208, 255, 0.3);
+}
 .key-aliado .card-glow {
-  background: radial-gradient(circle, rgba(0, 208, 255, 0.4) 0%, transparent 70%); /* Blue glow */
+  background: radial-gradient(circle, rgba(0, 208, 255, 0.4) 0%, transparent 70%); 
 }
 
+.key-mentoria {
+  border-color: rgba(255, 215, 0, 0.15); /* Gold */
+}
+.key-mentoria.active-card {
+  background: rgba(255, 215, 0, 0.05);
+  border-color: rgba(255, 215, 0, 0.3);
+}
 .key-mentoria .card-glow {
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, transparent 70%); /* Gold glow */
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, transparent 70%); 
 }
 
+.key-maestra {
+  border-color: rgba(138, 43, 226, 0.15); /* Purple */
+}
+.key-maestra.active-card {
+  background: rgba(138, 43, 226, 0.05);
+  border-color: rgba(138, 43, 226, 0.3);
+}
 .key-maestra .card-glow {
-  background: radial-gradient(circle, rgba(138, 43, 226, 0.4) 0%, transparent 70%); /* Purple glow */
+  background: radial-gradient(circle, rgba(138, 43, 226, 0.4) 0%, transparent 70%); 
 }
 
 .sidebar-key-img {
@@ -463,7 +496,8 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
 }
 
 .progress-track {
-  width: 100px;
+  flex: 1;
+  max-width: 100px;
   height: 3px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
@@ -477,6 +511,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   font-size: 0.6rem;
   font-weight: 700;
   color: #444;
+  white-space: nowrap;
 }
 
 .sidebar-footer-note {
@@ -489,11 +524,69 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   color: #888;
   text-align: center;
   line-height: 1.4;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 @media (max-width: 968px) {
   .keys-grid {
     grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .keys-showcase {
+    padding: 3rem 0;
+  }
+  
+  .keys-showcase .section-title {
+    font-size: clamp(2rem, 8vw, 2.5rem);
+  }
+  
+  .active-key-panel {
+    padding: 2rem;
+    border-radius: 20px;
+  }
+  
+  .key-title {
+    font-size: 2.2rem;
+  }
+  
+  .key-visual-main {
+    height: 250px;
+  }
+  
+  .main-key-img {
+    width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .active-key-panel {
+    padding: 1.5rem;
+  }
+  
+  .keys-showcase .section-title {
+    font-size: clamp(1.8rem, 8vw, 2rem);
+    line-height: 1.1;
+  }
+
+  .key-title {
+    font-size: 2rem;
+  }
+  
+  .key-subtitle {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .benefits-list {
+    gap: 0.75rem;
+  }
+  
+  .benefit-item {
+    font-size: 0.9rem;
   }
 }
 </style>

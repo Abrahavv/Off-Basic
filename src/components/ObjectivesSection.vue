@@ -291,65 +291,74 @@ const revealRef = useScrollReveal();
 }
 
 @media (max-width: 600px) {
+  /* Se eliminan los flex-direction: column para preservar el orden horizontal en móviles */
   .slide-objective-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  .slide-objective-row.reverse {
-    flex-direction: column;
-    align-items: flex-end;
+    gap: 0.75rem;
   }
   .diamond-line {
     display: none;
   }
-  .objective-slide-bar,
-  .slide-objective-row.reverse .objective-slide-bar {
-    width: 100%;
-    padding: 1.5rem;
+  .objective-slide-bar {
+    padding: 0.75rem 0.75rem 0.75rem 1.25rem;
     border-radius: 20px;
   }
-  .bar-content,
-  .slide-objective-row.reverse .bar-content {
-    flex-direction: row;
+  .slide-objective-row.reverse .objective-slide-bar {
+    padding: 0.75rem 1.25rem 0.75rem 0.75rem;
   }
-  .slide-objective-row.reverse .text-content {
-    text-align: left;
+  .bar-content {
+    gap: 0.75rem;
+  }
+  .diamond-shape {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+  }
+  .diamond-number {
+    font-size: 1.2rem;
   }
 }
 
 @media (max-width: 480px) {
   .objectives-section {
-    padding: 2.5rem 1rem;
+    padding: 2rem 1rem;
   }
   .diamond-shape {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
   }
   .diamond-number {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   .slide-objective-row {
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
   .objective-slide-bar {
-    padding: 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.75rem;
     border-radius: 16px;
   }
+  .slide-objective-row.reverse .objective-slide-bar {
+    padding: 0.5rem 0.75rem 0.5rem 0.5rem;
+  }
   .bar-title {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.15rem;
   }
   .bar-description {
-    font-size: 0.75rem;
-    line-height: 1.35;
+    font-size: 0.65rem;
+    line-height: 1.25;
   }
   .icon-circle {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
   }
   .icon-circle svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
+  }
+  .bar-content {
+    gap: 0.5rem;
   }
 }
 </style>
