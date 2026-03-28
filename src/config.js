@@ -1,7 +1,7 @@
 // ===== APP CONFIGURATION =====
 // Centralized constants to avoid hardcoding across components
 
-export const WHATSAPP_NUMBER = '584127778630';
+export const WHATSAPP_NUMBER = '584227867935';
 
 // Catalog access — hash-based validation (not plaintext)
 export const validateCatalogKey = (input) => {

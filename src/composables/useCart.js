@@ -1,4 +1,5 @@
 import { ref, computed, watch } from 'vue';
+import { WHATSAPP_NUMBER } from '../config.js';
 
 const STORAGE_KEY = 'offbasic_cart';
 
@@ -76,7 +77,7 @@ export function useCart() {
   };
 
   const generateWhatsAppUrl = (form) => {
-    const whatsappNumber = '584127778630';
+    const whatsappNumber = WHATSAPP_NUMBER;
     const itemLines = cartItems.value
       .map((i, index) => `${index + 1}. *${i.name}*\nCantidad: ${i.quantity}\nPrecio: $${i.price.toFixed(2)}\nSubtotal: $${(i.price * i.quantity).toFixed(2)}`)
       .join('\n');

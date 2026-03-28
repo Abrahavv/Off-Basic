@@ -43,7 +43,19 @@ const products = [
       margin: 45,
       roi: '220%',
       demand: 'Muy Alta',
-      minOrder: 10
+      minOrder: 10,
+      profitPerUnit: 11.25,
+      avgDailySales: 8,
+      restockDays: 3,
+      satisfaction: 96,
+      competitionLevel: 22,
+      monthlyRevenue: 6000,
+      categories: [
+        { name: 'Salud & Fitness', percent: 40 },
+        { name: 'Moda & Estilo', percent: 30 },
+        { name: 'Productividad', percent: 20 },
+        { name: 'Regalos', percent: 10 }
+      ]
     },
     histogram: [
       { month: 'Ene', percent: 40 },
@@ -74,7 +86,19 @@ const products = [
       margin: 52,
       roi: '280%',
       demand: 'Alta',
-      minOrder: 5
+      minOrder: 5,
+      profitPerUnit: 10.40,
+      avgDailySales: 6,
+      restockDays: 5,
+      satisfaction: 98,
+      competitionLevel: 35,
+      monthlyRevenue: 3600,
+      categories: [
+        { name: 'Trabajo Remoto', percent: 35 },
+        { name: 'Deportes', percent: 25 },
+        { name: 'Viajes', percent: 25 },
+        { name: 'Gaming', percent: 15 }
+      ]
     },
     histogram: [
       { month: 'Ene', percent: 30 },
@@ -105,7 +129,19 @@ const products = [
       margin: 38,
       roi: '180%',
       demand: 'Media-Alta',
-      minOrder: 20
+      minOrder: 20,
+      profitPerUnit: 8.36,
+      avgDailySales: 4,
+      restockDays: 7,
+      satisfaction: 94,
+      competitionLevel: 15,
+      monthlyRevenue: 2640,
+      categories: [
+        { name: 'Oficina & Escritorio', percent: 45 },
+        { name: 'Hogar', percent: 30 },
+        { name: 'Regalos Corp.', percent: 15 },
+        { name: 'Viajes', percent: 10 }
+      ]
     },
     histogram: [
       { month: 'Ene', percent: 20 },

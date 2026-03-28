@@ -104,6 +104,36 @@ onMounted(() => {
               <span>Rentabilidad</span>
             </div>
           </div>
+
+          <!-- Charts below image (Aliado only) -->
+          <div v-if="isAliado" class="visual-side-charts">
+            <!-- Category Distribution -->
+            <div class="chart-box" v-if="product.stats?.categories">
+              <h4 class="chart-lbl">Distribución por Segmento de Mercado</h4>
+              <div class="category-bars">
+                <div v-for="cat in product.stats.categories" :key="cat.name" class="cat-row">
+                  <span class="cat-name">{{ cat.name }}</span>
+                  <div class="cat-track">
+                    <div class="cat-fill" :style="{ width: cat.percent + '%' }"></div>
+                  </div>
+                  <span class="cat-pct">{{ cat.percent }}%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sales Projection Histogram -->
+            <div class="chart-box" v-if="product.histogram">
+              <h4 class="chart-lbl">Proyección de Ventas (6 meses)</h4>
+              <div class="bars">
+                <div v-for="d in product.histogram" :key="d.month" class="bar-col">
+                  <div class="bar-track">
+                    <div class="bar-fill" :style="{ height: d.percent + '%' }"></div>
+                  </div>
+                  <span class="bar-name">{{ d.month }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- INFO SIDE -->
@@ -141,31 +171,111 @@ onMounted(() => {
 
           </div>
 
-          <!-- MODE: ALIADO -->
+          <!-- MODE: ALIADO — Enhanced Analytics Dashboard -->
           <div v-if="isAliado" class="aliado-controls">
+            
+            <!-- Primary Metrics Grid (2 rows of 3) -->
             <div class="metrics-grid">
-              <div class="m-card">
+              <div class="m-card highlight-card">
                 <span class="m-title">ROI</span>
                 <span class="m-val accent">{{ product.stats.roi }}</span>
+                <span class="m-trend up">↑ Creciente</span>
               </div>
               <div class="m-card">
                 <span class="m-title">Demanda</span>
                 <span class="m-val">{{ product.stats.demand }}</span>
+                <span class="m-trend up">⚡ Activa</span>
               </div>
               <div class="m-card">
                 <span class="m-title">Mínimo</span>
                 <span class="m-val">{{ product.stats.minOrder }} ud.</span>
               </div>
+              <div class="m-card">
+                <span class="m-title">Ganancia/ud.</span>
+                <span class="m-val accent">${{ product.stats.profitPerUnit?.toFixed(2) }}</span>
+              </div>
+              <div class="m-card">
+                <span class="m-title">Venta Diaria</span>
+                <span class="m-val">{{ product.stats.avgDailySales }} ud.</span>
+                <span class="m-trend up">📈 Promedio</span>
+              </div>
+              <div class="m-card">
+                <span class="m-title">Restock</span>
+                <span class="m-val">{{ product.stats.restockDays }} días</span>
+              </div>
             </div>
 
-            <div class="chart-box" v-if="product.histogram">
-              <h4 class="chart-lbl">Proyección de Ventas (6 meses)</h4>
-              <div class="bars">
-                <div v-for="d in product.histogram" :key="d.month" class="bar-col">
-                  <div class="bar-track">
-                    <div class="bar-fill" :style="{ height: d.percent + '%' }"></div>
+            <!-- Gauges Row: Satisfaction + Competition + Revenue -->
+            <div class="gauges-row">
+              <!-- Circular Satisfaction Gauge -->
+              <div class="gauge-card">
+                <h4 class="gauge-label">Satisfacción del Cliente</h4>
+                <div class="circular-gauge">
+                  <svg viewBox="0 0 120 120" class="gauge-svg">
+                    <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8"/>
+                    <circle cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="8"
+                      stroke-linecap="round"
+                      :stroke-dasharray="(product.stats.satisfaction / 100) * 327 + ' 327'"
+                      stroke-dashoffset="0"
+                      transform="rotate(-90, 60, 60)"
+                      class="gauge-arc"
+                    />
+                  </svg>
+                  <div class="gauge-center">
+                    <span class="gauge-value">{{ product.stats.satisfaction }}%</span>
+                    <span class="gauge-sub">Clientes satisfechos</span>
                   </div>
-                  <span class="bar-name">{{ d.month }}</span>
+                </div>
+              </div>
+
+              <!-- Competition Level -->
+              <div class="gauge-card">
+                <h4 class="gauge-label">Nivel de Competencia</h4>
+                <div class="competition-meter">
+                  <div class="comp-visual">
+                    <div class="comp-bar-track">
+                      <div class="comp-bar-fill" :style="{ width: product.stats.competitionLevel + '%' }">
+                        <span class="comp-percent">{{ product.stats.competitionLevel }}%</span>
+                      </div>
+                    </div>
+                    <div class="comp-labels">
+                      <span>Baja</span>
+                      <span>Media</span>
+                      <span>Alta</span>
+                    </div>
+                  </div>
+                  <p class="comp-insight" v-if="product.stats.competitionLevel < 30">
+                    🟢 Mercado poco saturado — ventaja competitiva alta
+                  </p>
+                  <p class="comp-insight" v-else-if="product.stats.competitionLevel < 60">
+                    🟡 Competencia moderada — diferenciación es clave
+                  </p>
+                  <p class="comp-insight" v-else>
+                    🔴 Alta competencia — se requiere estrategia fuerte
+                  </p>
+                </div>
+              </div>
+
+              <!-- Monthly Revenue -->
+              <div class="gauge-card revenue-card">
+                <h4 class="gauge-label">Proyección Mensual</h4>
+                <div class="revenue-display">
+                  <span class="revenue-currency">$</span>
+                  <span class="revenue-amount">{{ product.stats.monthlyRevenue?.toLocaleString() }}</span>
+                </div>
+                <div class="revenue-breakdown">
+                  <div class="rev-item">
+                    <span class="rev-label">Margen Bruto</span>
+                    <span class="rev-val accent">{{ product.stats.margin }}%</span>
+                  </div>
+                  <div class="rev-item">
+                    <span class="rev-label">Unidades/mes</span>
+                    <span class="rev-val">{{ product.stats.avgDailySales * 30 }}</span>
+                  </div>
+                  <div class="rev-item">
+                    <span class="rev-label">Ganancia neta</span>
+                    <span class="rev-val accent">${{ (product.stats.profitPerUnit * product.stats.avgDailySales * 30).toFixed(0) }}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -179,15 +289,16 @@ onMounted(() => {
             </div>
             <button 
               @click="addToCart(product, quantity)" 
-              class="btn-primary main-cta icon-only-btn"
+              class="btn-primary main-cta"
               aria-label="Agregar al carrito"
               title="Agregar al carrito"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
                 <line x1="3" y1="6" x2="21" y2="6"/>
                 <path d="M16 10a4 4 0 01-8 0"/>
               </svg>
+              Agregar
             </button>
           </div>
 
@@ -198,7 +309,6 @@ onMounted(() => {
             <div class="t-badge">💬 Soporte 24/7</div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -287,6 +397,30 @@ onMounted(() => {
   grid-template-columns: 1.15fr 1fr;
   gap: 5rem;
   align-items: start;
+}
+
+.quick-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  background: rgba(255,255,255,0.03);
+  padding: 0.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.q-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.q-icon {
+  font-size: 1.1rem;
 }
 
 /* VISUAL SIDE */
@@ -436,35 +570,87 @@ onMounted(() => {
 .main-cta {
   flex: 1;
   padding: 1.25rem;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   border-radius: 12px;
   text-align: center;
   font-weight: 800;
-}
-
-.main-cta.icon-only-btn {
-  flex: none;
-  width: 55px;
-  height: 55px;
-  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+}
+ 
+/* Sidebar charts (Aliado only, below image) */
+.visual-side-charts {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 /* ALIADO SPECIFIC */
-.metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
-.m-card { padding: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-.m-title { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
-.m-val { font-size: 1.8rem; font-weight: 800; }
+.metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
+.m-card { padding: 1.25rem; background: rgba(255,255,255,0.03); border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: border-color 0.3s ease, transform 0.3s ease; display: flex; flex-direction: column; gap: 0.35rem; }
+@media (hover: hover) {
+  .m-card:hover { border-color: rgba(0, 208, 255, 0.2); transform: translateY(-2px); }
+}
+.highlight-card { border-color: rgba(0, 208, 255, 0.15); background: rgba(0, 208, 255, 0.04); }
+.m-title { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; display: block; letter-spacing: 0.5px; }
+.m-val { font-size: 1.6rem; font-weight: 800; }
 .m-val.accent { color: var(--accent); }
+.m-trend { font-size: 0.7rem; color: #4ade80; font-weight: 600; }
+.m-trend.up { color: #4ade80; }
 
-.chart-box { padding: 2rem; background: rgba(255,255,255,0.02); border-radius: 20px; margin-bottom: 3rem; border: 1px solid rgba(255,255,255,0.05); }
-.chart-lbl { text-align: center; margin-bottom: 2rem; font-size: 0.9rem; }
+/* Gauges Row */
+.gauges-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
+.gauge-card { padding: 1.5rem; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+.gauge-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; text-align: center; margin: 0; }
+
+/* Circular Gauge */
+.circular-gauge { position: relative; width: 130px; height: 130px; display: flex; align-items: center; justify-content: center; }
+.gauge-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.gauge-arc { transition: stroke-dasharray 1.5s cubic-bezier(0.4, 0, 0.2, 1); filter: drop-shadow(0 0 6px rgba(0, 208, 255, 0.3)); }
+.gauge-center { display: flex; flex-direction: column; align-items: center; z-index: 2; }
+.gauge-value { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+.gauge-sub { font-size: 0.6rem; color: var(--text-muted); text-align: center; max-width: 80px; line-height: 1.2; }
+
+/* Competition Meter */
+.competition-meter { width: 100%; display: flex; flex-direction: column; gap: 0.75rem; }
+.comp-visual { width: 100%; }
+.comp-bar-track { width: 100%; height: 28px; background: rgba(255,255,255,0.05); border-radius: 14px; overflow: hidden; position: relative; }
+.comp-bar-fill { height: 100%; background: linear-gradient(90deg, #4ade80, #eab308, #ef4444); border-radius: 14px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); min-width: 50px; }
+.comp-percent { font-size: 0.75rem; font-weight: 800; color: #000; }
+.comp-labels { display: flex; justify-content: space-between; margin-top: 0.4rem; }
+.comp-labels span { font-size: 0.65rem; color: var(--text-muted); }
+.comp-insight { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; text-align: center; margin: 0; }
+
+/* Revenue Card */
+.revenue-card { align-items: center; }
+.revenue-display { display: flex; align-items: baseline; gap: 0.25rem; }
+.revenue-currency { font-size: 1.4rem; font-weight: 700; color: var(--accent); opacity: 0.7; }
+.revenue-amount { font-size: 2.4rem; font-weight: 900; color: var(--accent); letter-spacing: -1px; }
+.revenue-breakdown { width: 100%; display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; }
+.rev-item { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.rev-item:last-child { border-bottom: none; }
+.rev-label { font-size: 0.75rem; color: var(--text-muted); }
+.rev-val { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+.rev-val.accent { color: var(--accent); }
+
+/* Category Distribution Bars */
+.category-bars { display: flex; flex-direction: column; gap: 0.9rem; }
+.cat-row { display: grid; grid-template-columns: 120px 1fr 45px; gap: 0.75rem; align-items: center; }
+.cat-name { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cat-track { height: 10px; background: rgba(255,255,255,0.05); border-radius: 5px; overflow: hidden; }
+.cat-fill { height: 100%; background: linear-gradient(90deg, var(--accent), rgba(0, 208, 255, 0.5)); border-radius: 5px; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+.cat-pct { font-size: 0.8rem; font-weight: 700; color: var(--accent); text-align: right; }
+
+/* Chart boxes */
+.chart-box { padding: 1.5rem; background: rgba(255,255,255,0.02); border-radius: 20px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.05); }
+.chart-lbl { text-align: center; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--text-muted); margin-top: 0; }
 .bars { height: 150px; display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
 .bar-col { flex: 1; display: flex; flex-direction: column; gap: 0.75rem; align-items: center; }
 .bar-track { width: 100%; height: 100px; background: rgba(255,255,255,0.05); border-radius: 6px; display: flex; align-items: flex-end; }
-.bar-fill { width: 100%; background: var(--accent); border-radius: 6px; }
+.bar-fill { width: 100%; background: linear-gradient(to top, var(--accent), rgba(0, 208, 255, 0.4)); border-radius: 6px; transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
 .bar-name { font-size: 0.75rem; color: var(--text-muted); }
 
 .key-icon { width: 24px; height: 24px; filter: brightness(0); }
@@ -476,6 +662,7 @@ onMounted(() => {
 @media (max-width: 1000px) {
   .detail-grid { grid-template-columns: 1fr; gap: 3rem; }
   .product-name { font-size: 2.8rem; }
+  .gauges-row { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 600px) {
@@ -484,7 +671,8 @@ onMounted(() => {
   }
   .buy-section { flex-direction: column; align-items: stretch; }
   .qty { justify-content: center; }
-  .metrics-grid { grid-template-columns: 1fr; }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .gauges-row { grid-template-columns: 1fr; gap: 1rem; }
   .trust-footer { flex-wrap: wrap; gap: 1.5rem; }
   .detail-grid { gap: 2rem; }
   .product-name { font-size: 2.2rem; }
@@ -498,5 +686,11 @@ onMounted(() => {
   .s-row { padding: 0.8rem; }
   .chart-box { padding: 1.25rem; }
   .comparison-title { font-size: 1.8rem; }
+  .cat-row { grid-template-columns: 90px 1fr 40px; }
+  .cat-name { font-size: 0.7rem; }
+  .revenue-amount { font-size: 2rem; }
+  .circular-gauge { width: 110px; height: 110px; }
+  .gauge-value { font-size: 1.5rem; }
+  .visual-side-charts { margin-top: 1.5rem; gap: 1rem; }
 }
 </style>
