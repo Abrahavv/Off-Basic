@@ -48,9 +48,9 @@ onMounted(() => {
         <!-- Cart Button -->
         <button class="detail-cart-btn" @click="openCart" aria-label="Ver carrito">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="21" r="1"/>
-            <circle cx="20" cy="21" r="1"/>
-            <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
           </svg>
           <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
         </button>
@@ -105,8 +105,8 @@ onMounted(() => {
             </div>
           </div>
 
-          <!-- Charts below image (Aliado only) -->
-          <div v-if="isAliado" class="visual-side-charts">
+          <!-- Charts: Desktop Version (Hidden on Mobile) -->
+          <div v-if="isAliado" class="visual-side-charts desktop-charts">
             <!-- Category Distribution -->
             <div class="chart-box" v-if="product.stats?.categories">
               <h4 class="chart-lbl">Distribución por Segmento de Mercado</h4>
@@ -202,6 +202,36 @@ onMounted(() => {
               <div class="m-card">
                 <span class="m-title">Restock</span>
                 <span class="m-val">{{ product.stats.restockDays }} días</span>
+              </div>
+            </div>
+
+            <!-- Charts: Mobile Version (Hidden on Desktop) -->
+            <div class="visual-side-charts mobile-charts">
+              <!-- Category Distribution -->
+              <div class="chart-box" v-if="product.stats?.categories">
+                <h4 class="chart-lbl">Distribución por Segmento de Mercado</h4>
+                <div class="category-bars">
+                  <div v-for="cat in product.stats.categories" :key="cat.name" class="cat-row">
+                    <span class="cat-name">{{ cat.name }}</span>
+                    <div class="cat-track">
+                      <div class="cat-fill" :style="{ width: cat.percent + '%' }"></div>
+                    </div>
+                    <span class="cat-pct">{{ cat.percent }}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sales Projection Histogram -->
+              <div class="chart-box" v-if="product.histogram">
+                <h4 class="chart-lbl">Proyección de Ventas (6 meses)</h4>
+                <div class="bars">
+                  <div v-for="d in product.histogram" :key="d.month" class="bar-col">
+                    <div class="bar-track">
+                      <div class="bar-fill" :style="{ height: d.percent + '%' }"></div>
+                    </div>
+                    <span class="bar-name">{{ d.month }}</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -378,18 +408,19 @@ onMounted(() => {
   position: absolute;
   top: -2px;
   right: -2px;
-  background: var(--accent);
-  color: var(--bg);
-  font-size: 0.75rem;
+  background: #ff4d6a;
+  color: #fff;
+  font-size: 0.6rem;
   font-weight: 800;
-  min-width: 20px;
-  height: 20px;
-  border-radius: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 4px;
-  border: 2px solid var(--bg);
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(255, 77, 106, 0.5);
+  border: 1.5px solid var(--bg);
 }
 
 .detail-grid {
@@ -563,9 +594,44 @@ onMounted(() => {
 .s-value { font-size: 1.1rem; font-weight: 600; }
 
 .buy-section { display: flex; align-items: center; gap: 2rem; }
-.qty { display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; }
-.qty button { width: 50px; height: 50px; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
-.qty span { width: 40px; text-align: center; font-weight: 800; }
+.qty { 
+  display: flex; 
+  align-items: center; 
+  border: 1px solid var(--card-border); 
+  border-radius: 8px; 
+  background: rgba(255,255,255,0.03);
+}
+
+.qty button { 
+  width: 50px; 
+  height: 50px; 
+  background: none; 
+  border: none; 
+  color: var(--text); 
+  font-size: 1.5rem; 
+  cursor: pointer; 
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qty button:hover:not(:disabled) {
+  background: rgba(0, 208, 255, 0.1);
+  color: var(--accent);
+}
+
+.qty button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.qty span { 
+  width: 40px; 
+  text-align: center; 
+  font-weight: 800; 
+  color: var(--text);
+}
 
 .main-cta {
   flex: 1;
@@ -580,13 +646,16 @@ onMounted(() => {
   gap: 0.5rem;
 }
  
-/* Sidebar charts (Aliado only, below image) */
+/* Sidebar charts: now part of the main analytics flow */
 .visual-side-charts {
-  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  margin-bottom: 2.5rem;
 }
+
+.mobile-charts { display: none; }
+.desktop-charts { display: flex; }
 
 /* ALIADO SPECIFIC */
 .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
@@ -663,6 +732,8 @@ onMounted(() => {
   .detail-grid { grid-template-columns: 1fr; gap: 3rem; }
   .product-name { font-size: 2.8rem; }
   .gauges-row { grid-template-columns: 1fr; }
+  .mobile-charts { display: flex; }
+  .desktop-charts { display: none; }
 }
 
 @media (max-width: 600px) {

@@ -70,7 +70,7 @@ const getWhatsappUrl = (productName, price) => {
     <section class="products-section" :class="{ 'aliado-theme': isAliado }">
       <div class="container scroll-reveal slide-up" ref="revealRef">
         
-        <header class="section-header">
+        <header class="section-header" id="baul-content">
           <div class="category-pill">{{ isAliado ? 'Catálogo de Inversión' : 'Colección Premium' }}</div>
           <h2 class="section-title">
             {{ isAliado ? 'Contenido del Baúl' : 'Colección Exclusiva' }}

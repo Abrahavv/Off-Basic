@@ -12,11 +12,16 @@ const revealRef = useScrollReveal();
 const activeKey = ref(1);
 
 const scrollToProducts = () => {
-  const el = document.getElementById('productos');
-  if (el) {
-    const offset = 100;
-    const pos = el.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top: pos, behavior: 'smooth' });
+  const target = document.getElementById('baul-content') || document.getElementById('productos');
+  if (target) {
+    const nav = document.querySelector('.navbar-wrapper');
+    const offset = nav ? nav.offsetHeight + 20 : 100;
+    const pos = target.getBoundingClientRect().top + window.scrollY - offset;
+
+    window.scrollTo({
+      top: pos,
+      behavior: 'smooth'
+    });
   }
 };
 

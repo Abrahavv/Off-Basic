@@ -41,6 +41,8 @@ export function useCart() {
         quantity: qty
       });
     }
+    // Auto-open cart for feedback
+    isCartOpen.value = true;
   };
 
   const removeFromCart = (id) => {
@@ -95,7 +97,7 @@ export function useCart() {
     const paymentLabel = paymentLabels[form.paymentMethod] || 'Pago Móvil (Bs)';
 
     const msg = [
-      'Off Basic',
+      '*Off Basic*',
       '🛒 *NUEVA ORDEN*',
       `👤 *Cliente:* ${form.name}`,
       `📞 *Teléfono:* ${form.phone}`,

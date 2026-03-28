@@ -68,14 +68,14 @@ onUnmounted(() => {
 });
 
 const scrollToProducts = () => {
-  const el = document.getElementById('productos');
-  if (el) {
-    const navbarHeight = 100; // Aligned with total scroll target for better proximity
-    const elementPosition = el.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.scrollY - navbarHeight;
+  const target = document.getElementById('baul-content') || document.getElementById('productos');
+  if (target) {
+    const nav = document.querySelector('.navbar-wrapper');
+    const offset = nav ? nav.offsetHeight + 20 : 100;
+    const pos = target.getBoundingClientRect().top + window.scrollY - offset;
 
     window.scrollTo({
-      top: offsetPosition,
+      top: pos,
       behavior: 'smooth'
     });
   }
