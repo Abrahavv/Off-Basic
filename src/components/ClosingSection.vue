@@ -1,7 +1,8 @@
 <script setup>
 import { useScrollReveal } from '../composables/useScrollReveal';
+import { WHATSAPP_NUMBER } from '../config.js';
 
-const whatsappNumber = '1234567890';
+const whatsappNumber = WHATSAPP_NUMBER;
 
 const getPostulacionUrl = () => {
   const msg = '¡Hola! Quiero postularme para ser Aliado oficial.';
@@ -13,7 +14,7 @@ const scrollToProducts = () => {
   if (el) {
     const navbarHeight = 100; // Aligned with total scroll target for better proximity
     const elementPosition = el.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+    const offsetPosition = elementPosition + window.scrollY - navbarHeight;
 
     window.scrollTo({
       top: offsetPosition,

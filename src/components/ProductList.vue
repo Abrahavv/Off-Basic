@@ -2,6 +2,7 @@
 import { computed, ref, onMounted } from 'vue';
 import { useScrollReveal } from '../composables/useScrollReveal';
 import { useCart } from '../composables/useCart';
+import { WHATSAPP_NUMBER, validateCatalogKey, CATALOG_UNLOCK_TTL } from '../config.js';
 
 const { addToCart } = useCart();
 
@@ -22,18 +23,30 @@ const revealRef = useScrollReveal();
 const isCatalogUnlocked = ref(false);
 
 onMounted(() => {
-  if (localStorage.getItem('offbasic_catalog_unlocked') === 'true') {
-    isCatalogUnlocked.value = true;
+  const unlockData = localStorage.getItem('offbasic_catalog_unlocked');
+  if (unlockData) {
+    try {
+      const { timestamp } = JSON.parse(unlockData);
+      if (Date.now() - timestamp < CATALOG_UNLOCK_TTL) {
+        isCatalogUnlocked.value = true;
+      } else {
+        localStorage.removeItem('offbasic_catalog_unlocked');
+      }
+    } catch {
+      // Legacy format or corrupt — clear it
+      localStorage.removeItem('offbasic_catalog_unlocked');
+    }
   }
 });
 
 const unlockCatalog = () => {
   if (isCatalogUnlocked.value) return;
   const password = prompt('Ingrese la Llave de Acceso para desbloquear el catálogo:');
-  if (password === 'offbasic2026') {
+  if (password === null) return;
+  if (validateCatalogKey(password)) {
     isCatalogUnlocked.value = true;
-    localStorage.setItem('offbasic_catalog_unlocked', 'true');
-  } else if (password !== null) {
+    localStorage.setItem('offbasic_catalog_unlocked', JSON.stringify({ timestamp: Date.now() }));
+  } else {
     alert('Llave incorrecta. Por favor, intente de nuevo.');
   }
 };
@@ -43,13 +56,12 @@ const selectProduct = (id) => {
 };
 
 const getWhatsappUrl = (productName, price) => {
-  const whatsappNumber = '1234567890';
   if (isAliado.value) {
     const msg = `¡Hola! Quiero comprar ${productName} al mayor y conocer más sobre los márgenes.`;
-    return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   }
   const msg = `¡Hola! Vi la web y quiero mi ${productName} ($${price}).`;
-  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 };
 </script>
 
@@ -182,10 +194,6 @@ const getWhatsappUrl = (productName, price) => {
   background-color: var(--bg-alt);
 }
 
-.aliado-theme {
-  background-color: var(--bg-alt);
-}
-
 .section-header {
   text-align: center;
   margin-bottom: 6rem;
@@ -236,9 +244,11 @@ const getWhatsappUrl = (productName, price) => {
   flex-direction: column;
 }
 
-.product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+@media (hover: hover) {
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  }
 }
 
 .card-visual {
@@ -366,6 +376,7 @@ const getWhatsappUrl = (productName, price) => {
   margin-bottom: 1.5rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

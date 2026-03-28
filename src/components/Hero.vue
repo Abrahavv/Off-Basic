@@ -9,8 +9,10 @@ const emit = defineEmits(['switch-mode']);
 
 const isAliado = computed(() => props.mode === 'aliado');
 
+import { WHATSAPP_NUMBER } from '../config.js';
+
 // WhatsApp
-const whatsappNumber = '1234567890';
+const whatsappNumber = WHATSAPP_NUMBER;
 
 const getLlaveUrl = () => {
   const msg = '¡Hola! Vi El Baúl y necesito la **Llave Maestra** para ingresar.';
@@ -22,7 +24,7 @@ const scrollToProducts = () => {
   if (el) {
     const navbarHeight = 100; // Aligned with total scroll target for better proximity
     const elementPosition = el.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+    const offsetPosition = elementPosition + window.scrollY - navbarHeight;
 
     window.scrollTo({
       top: offsetPosition,
@@ -53,7 +55,7 @@ const scrollToProducts = () => {
     </div>
 
       <!-- ========== PERSONAL MODE ========== -->
-      <div v-show="!isAliado" class="container hero-inner mode-fade-in">
+      <div v-if="!isAliado" class="container hero-inner mode-fade-in">
         
         <!-- Floating Logo -->
         <div class="hero-logo-wrap">
@@ -75,7 +77,7 @@ const scrollToProducts = () => {
       </div>
 
       <!-- ========== ALIADO MODE ========== -->
-      <div v-show="isAliado" class="container hero-inner hero-aliado-inner mode-fade-in">
+      <div v-if="isAliado" class="container hero-inner hero-aliado-inner mode-fade-in">
         
         <!-- El Baúl Visual -->
         <div class="baul-visual baul-floating">
@@ -636,6 +638,20 @@ const scrollToProducts = () => {
     height: 150px;
     filter: blur(50px);
     opacity: 0.1;
+  }
+  /* ANIM-03: Reduce GPU-heavy animations on mobile */
+  .arrow-container {
+    display: none;
+  }
+  .ring-huge-3 {
+    display: none;
+  }
+  .cyber-ring-huge {
+    border-width: 1px;
+  }
+  .floating-glow {
+    animation: float 5s ease-in-out infinite;
+    filter: none;
   }
 }
 </style>

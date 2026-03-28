@@ -164,28 +164,6 @@ const closeProduct = () => {
   }, 50);
 };
 
-onMounted(() => {
-  applyThemeClass();
-  
-  const handleHash = () => {
-    const hash = window.location.hash;
-    if (hash.startsWith('#p-')) {
-      const id = parseInt(hash.replace('#p-', ''));
-      activeProductId.value = id;
-      window.scrollTo({ top: 0, behavior: 'instant' });
-    } else {
-      activeProductId.value = null;
-    }
-  };
-
-  handleHash();
-  window.addEventListener('popstate', handleHash);
-});
-
-watch(currentMode, () => {
-  applyThemeClass();
-});
-
 // Scroll position persistence
 const saveScrollPosition = () => {
   const scrollY = window.scrollY;
@@ -196,25 +174,38 @@ const restoreScrollPosition = () => {
   const savedPosition = localStorage.getItem('scrollPosition');
   if (savedPosition) {
     const scrollY = parseInt(savedPosition, 10);
-    // Use nextTick to ensure DOM is ready
     setTimeout(() => {
       window.scrollTo(0, scrollY);
     }, 100);
   }
 };
 
-// Save scroll position before page unload
+const handleHash = () => {
+  const hash = window.location.hash;
+  if (hash.startsWith('#p-')) {
+    const id = parseInt(hash.replace('#p-', ''));
+    activeProductId.value = id;
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  } else {
+    activeProductId.value = null;
+  }
+};
+
+onMounted(() => {
+  applyThemeClass();
+  handleHash();
+  restoreScrollPosition();
+  window.addEventListener('popstate', handleHash);
+  window.addEventListener('beforeunload', saveScrollPosition);
+});
+
 onBeforeUnmount(() => {
+  window.removeEventListener('popstate', handleHash);
   window.removeEventListener('beforeunload', saveScrollPosition);
 });
 
-// Setup scroll position persistence
-onMounted(() => {
-  // Restore scroll position on page load
-  restoreScrollPosition();
-  
-  // Save scroll position on page unload
-  window.addEventListener('beforeunload', saveScrollPosition);
+watch(currentMode, () => {
+  applyThemeClass();
 });
 </script>
 

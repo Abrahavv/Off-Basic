@@ -65,7 +65,7 @@
 }
 
 .accent-text {
-  color: var(--accent-primary); /* Azul cyan característico de Off Basic */
+  color: var(--accent); /* Azul cyan característico de Off Basic */
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: 0.15em;

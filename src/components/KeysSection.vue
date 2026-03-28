@@ -15,7 +15,7 @@ const scrollToProducts = () => {
   const el = document.getElementById('productos');
   if (el) {
     const offset = 100;
-    const pos = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    const pos = el.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({ top: pos, behavior: 'smooth' });
   }
 };
@@ -559,6 +559,10 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   
   .main-key-img {
     width: 200px;
+  }
+  /* ANIM-07: Disable sidebar float animation on mobile */
+  .sidebar-key-img {
+    animation: none;
   }
 }
 

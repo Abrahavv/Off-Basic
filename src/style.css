@@ -107,6 +107,15 @@ img {
   .container {
     padding: 0 1rem;
   }
+  .scroll-reveal.slide-left {
+    transform: translateX(-20px);
+  }
+  .scroll-reveal.slide-right {
+    transform: translateX(20px);
+  }
+  .scroll-reveal.slide-up {
+    transform: translateY(20px);
+  }
 }
 
 /* ===== UTILITIES ===== */
@@ -222,6 +231,9 @@ img {
 .scroll-reveal {
   opacity: 0;
   transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scroll-reveal:not(.revealed) {
   will-change: opacity, transform;
 }
 
@@ -240,6 +252,7 @@ img {
 .scroll-reveal.revealed {
   opacity: 1;
   transform: translate(0, 0);
+  will-change: auto;
 }
 
 
@@ -276,4 +289,23 @@ html {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .scroll-reveal.slide-left,
+  .scroll-reveal.slide-right,
+  .scroll-reveal.slide-up {
+    transform: none !important;
+  }
 }

@@ -23,9 +23,14 @@ const formErrors = ref({});
 
 const validateForm = () => {
   const errors = {};
-  if (!form.value.name.trim()) errors.name = true;
-  if (!form.value.phone.trim()) errors.phone = true;
-  if (!form.value.address.trim()) errors.address = true;
+  const name = form.value.name.trim();
+  const phone = form.value.phone.trim();
+  const address = form.value.address.trim();
+  
+  if (!name || name.length > 100) errors.name = true;
+  if (!phone || !/^[\d\s\-+()]{7,15}$/.test(phone)) errors.phone = true;
+  if (!address || address.length > 300) errors.address = true;
+  
   formErrors.value = errors;
   return Object.keys(errors).length === 0;
 };
@@ -33,7 +38,7 @@ const validateForm = () => {
 const submitOrder = () => {
   if (!validateForm()) return;
   const url = generateWhatsAppUrl(form.value);
-  window.open(url, '_blank');
+  window.open(url, '_blank', 'noopener,noreferrer');
   clearCart();
   closeCart();
   form.value = { name: '', phone: '', address: '', deliveryType: 'delivery', paymentMethod: 'pago_movil' };
@@ -46,7 +51,7 @@ const useGPS = () => {
   }
   navigator.geolocation.getCurrentPosition(
     (pos) => {
-      form.value.address = `📍 ${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
+      form.value.address = `📍 ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
     },
     () => {
       alert('No se pudo obtener tu ubicación. Permite el acceso al GPS.');
@@ -64,7 +69,7 @@ const handleBackdropClick = (e) => {
     <Transition name="cart-fade">
       <div v-if="isCartOpen" class="cart-overlay" @click="handleBackdropClick">
         <Transition name="cart-slide">
-          <div class="cart-drawer" v-if="isCartOpen">
+          <div class="cart-drawer">
 
             <!-- ========== CART VIEW ========== -->
             <div v-if="!isCheckoutOpen" class="cart-view">

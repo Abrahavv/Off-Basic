@@ -183,11 +183,11 @@ const revealRef = useScrollReveal();
 
 @keyframes slideDown {
   from { max-height: 0; opacity: 0; }
-  to { max-height: 200px; opacity: 1; }
+  to { max-height: 500px; opacity: 1; }
 }
 
 @keyframes slideUp {
-  from { max-height: 200px; opacity: 1; }
+  from { max-height: 500px; opacity: 1; }
   to { max-height: 0; opacity: 0; }
 }
 

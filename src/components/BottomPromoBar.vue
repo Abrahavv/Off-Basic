@@ -12,14 +12,19 @@ const scrollToProducts = () => {
   const el = document.getElementById('productos');
   if (el) {
     const offset = 100;
-    const pos = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    const pos = el.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({ top: pos, behavior: 'smooth' });
   }
 };
 
+let scrollTicking = false;
 const handleScroll = () => {
-  // Show after scrolling past ~500px (approximately past the hero)
-  isVisible.value = window.scrollY > 500;
+  if (scrollTicking) return;
+  scrollTicking = true;
+  requestAnimationFrame(() => {
+    isVisible.value = window.scrollY > 500;
+    scrollTicking = false;
+  });
 };
 
 onMounted(() => {

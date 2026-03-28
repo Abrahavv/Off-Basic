@@ -194,7 +194,7 @@ const revealRef = useScrollReveal();
     padding: 0 1.5rem;
   }
   .benefit-card-compact { 
-    transform: translateX(50px);
+    transform: translateX(30px);
   }
 }
 

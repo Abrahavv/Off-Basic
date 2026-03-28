@@ -1,8 +1,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useCart } from '../composables/useCart';
+import { WHATSAPP_NUMBER } from '../config.js';
 
-const { addToCart, toggleCart, cartTotalItems } = useCart();
+const { addToCart, openCart, cartCount } = useCart();
 
 const props = defineProps({
   product: Object,
@@ -16,13 +17,12 @@ const activeTab = ref('features');
 const quantity = ref(1);
 
 const getWhatsappUrl = (productName, price) => {
-  const whatsappNumber = '1234567890';
   if (props.isAliado) {
     const msg = `¡Hola! Quiero la **Llave de acceso** para vender ${productName} al mayor y conocer más sobre los márgenes.`;
-    return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   }
   const msg = `¡Hola! Vi la web y quiero mi ${productName} ($${price}).`;
-  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 };
 
 const incrementQty = () => { if (quantity.value < 10) quantity.value++; };
@@ -46,13 +46,13 @@ onMounted(() => {
         </button>
 
         <!-- Cart Button -->
-        <button class="detail-cart-btn" @click="toggleCart" aria-label="Ver carrito">
+        <button class="detail-cart-btn" @click="openCart" aria-label="Ver carrito">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="21" r="1"/>
             <circle cx="20" cy="21" r="1"/>
             <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
           </svg>
-          <span v-if="cartTotalItems > 0" class="cart-badge">{{ cartTotalItems }}</span>
+          <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
         </button>
       </div>
 

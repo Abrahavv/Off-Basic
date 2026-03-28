@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { WHATSAPP_NUMBER } from '../config.js';
 
 const props = defineProps({
   mode: String
@@ -8,13 +9,8 @@ const props = defineProps({
 const isAliado = computed(() => props.mode === 'aliado');
 
 const abrirCompra = () => {
-  const url = 'https://wa.me/1234567890?text=' + encodeURIComponent('¡Hola! Quiero la Llave Aliado.');
-  window.open(url, '_blank');
-};
-
-const activarSonido = () => {
-  // Esto se puede conectar a reproducción de video real si necesitas.
-  alert('Sonido activado.');
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=` + encodeURIComponent('¡Hola! Quiero la Llave Aliado.');
+  window.open(url, '_blank', 'noopener,noreferrer');
 };
 </script>
 
