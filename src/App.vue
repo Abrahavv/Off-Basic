@@ -273,27 +273,27 @@ watch(currentMode, () => {
           <Hero :mode="currentMode" @switch-mode="setMode" />
 
           <!-- Personal Mode Sections -->
-          <div v-show="currentMode === 'personal'" class="mode-fade-in">
-            <ProductList :mode="currentMode" :products="products" />
-            <ObjectivesSection :mode="currentMode" />
-            <FounderSection :mode="currentMode" />
-            <PaymentMethods :mode="currentMode" />
-            <TestimonialsSection :mode="currentMode" />
+          <div v-if="currentMode === 'personal'" class="mode-fade-in">
+            <ProductList mode="personal" :products="products" />
+            <ObjectivesSection mode="personal" />
+            <FounderSection mode="personal" />
+            <PaymentMethods mode="personal" />
+            <TestimonialsSection mode="personal" />
           </div>
 
           <!-- Aliado Mode Sections -->
-          <div v-show="currentMode === 'aliado'" class="mode-fade-in">
+          <div v-if="currentMode === 'aliado'" class="mode-fade-in">
             <!-- Video integrado en Hero para modo aliado -->
-            <BaulExplainer :mode="currentMode" />
+            <BaulExplainer mode="aliado" />
             <BenefitsSection />
-            <ComparisonSection :mode="currentMode" />
-            <ProductList :mode="currentMode" :products="displayProducts" />
-            <KeysSection :mode="currentMode" />
-            <BonusSection :mode="currentMode" />
-            <ObjectivesSection :mode="currentMode" />
-            <FounderSection :mode="currentMode" />
-            <PaymentMethods :mode="currentMode" />
-            <TestimonialsSection :mode="currentMode" />
+            <ComparisonSection mode="aliado" />
+            <ProductList mode="aliado" :products="displayProducts" />
+            <KeysSection mode="aliado" />
+            <BonusSection mode="aliado" />
+            <ObjectivesSection mode="aliado" />
+            <FounderSection mode="aliado" />
+            <PaymentMethods mode="aliado" />
+            <TestimonialsSection mode="aliado" />
             <ClosingSection />
           </div>
 
