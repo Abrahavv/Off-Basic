@@ -12,7 +12,7 @@ const revealRef = useScrollReveal();
 
 <template>
   <section class="baul-explainer section-aliado" v-if="isAliado">
-    <div class="container scroll-reveal slide-left" ref="revealRef">
+    <div class="container scroll-reveal slide-right" ref="revealRef">
       <div class="explainer-content">
 
         <!-- Text Content -->
@@ -107,7 +107,7 @@ const revealRef = useScrollReveal();
   max-width: 450px;
   margin: 0 auto;
   opacity: 0;
-  transform: translateX(-50px);
+  transform: translateX(50px);
 }
 
 .revealed .step-item {
@@ -121,13 +121,14 @@ const revealRef = useScrollReveal();
 @keyframes slideInProgressive {
   0% {
     opacity: 0;
-    transform: translateX(-50px);
+    transform: translateX(50px);
   }
   100% {
     opacity: 1;
     transform: translateX(0);
   }
 }
+
 
 .step-item:hover {
   border-color: var(--accent);
@@ -198,6 +199,12 @@ const revealRef = useScrollReveal();
 
   .step-item {
     padding: 0.85rem 1rem;
+    transform: translateX(40px); /* Start from right on mobile */
+  }
+
+  /* Shared animation name works for both now as they both start from right */
+  .revealed .step-item {
+    animation-name: slideInProgressive;
   }
 
   .step-number {

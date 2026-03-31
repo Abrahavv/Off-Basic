@@ -639,9 +639,9 @@ const scrollToProducts = () => {
     filter: blur(50px);
     opacity: 0.1;
   }
-  /* ANIM-03: Reduce GPU-heavy animations on mobile */
+  /* Removed display: none to keep arrow animations on mobile */
   .arrow-container {
-    display: none;
+    display: block;
   }
   .ring-huge-3 {
     display: none;
