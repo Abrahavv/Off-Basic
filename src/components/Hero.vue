@@ -32,6 +32,20 @@ const scrollToProducts = () => {
     });
   }
 };
+
+const onModelLoad = (event) => {
+  const modelViewer = event.target;
+  if (modelViewer.model && modelViewer.model.materials) {
+    modelViewer.model.materials.forEach(material => {
+      // Gris cromo
+      material.pbrMetallicRoughness.setBaseColorFactor([0.7, 0.7, 0.7, 1]);
+      // Metálico al máximo
+      material.pbrMetallicRoughness.setMetallicFactor(1.0);
+      // Rugosidad mínima para el brillo
+      material.pbrMetallicRoughness.setRoughnessFactor(0.05);
+    });
+  }
+};
 </script>
 
 <template>
@@ -57,13 +71,25 @@ const scrollToProducts = () => {
       <!-- ========== PERSONAL MODE ========== -->
       <div v-if="!isAliado" class="container hero-inner mode-fade-in">
         
-        <!-- Floating Logo -->
+        <!-- Floating 3D Logo -->
         <div class="hero-logo-wrap">
-          <img 
-            src="/Off-Basic-Web-Cromado.png" 
-            alt="Off Basic Logo" 
-            class="hero-logo floating-glow"
-          />
+          <model-viewer 
+            src="/Logo3d.glb" 
+            alt="Off Basic 3D Logo" 
+            auto-rotate 
+            camera-controls 
+            interaction-prompt="none"
+            shadow-intensity="1" 
+            shadow-softness="0"
+            exposure="1"
+            environment-image="neutral"
+            class="hero-logo-3d"
+            disable-zoom
+            @load="onModelLoad"
+            power-preference="high-performance"
+            interpolation-decay="200"
+            minimum-pixel-ratio="2"
+          ></model-viewer>
         </div>
 
         <h1 class="hero-title">OFF BASIC</h1>
@@ -79,15 +105,27 @@ const scrollToProducts = () => {
       <!-- ========== ALIADO MODE ========== -->
       <div v-if="isAliado" class="container hero-inner hero-aliado-inner mode-fade-in">
         
-        <!-- El Baúl Visual -->
+        <!-- El Baúl 3D Visual -->
         <div class="baul-visual baul-floating">
           <div class="cyber-glow"></div>
           <div class="baul-container">
-            <img 
-              src="/Baul-Off-Basic.png" 
-              alt="El Baúl" 
-              class="baul-img"
-            />
+            <model-viewer 
+              src="/Baul3d.glb" 
+              alt="El Baúl 3D" 
+              auto-rotate 
+              camera-controls
+              interaction-prompt="none"
+              shadow-intensity="1" 
+              shadow-softness="0"
+              exposure="1"
+              environment-image="neutral"
+              class="baul-3d"
+              disable-zoom
+              @load="onModelLoad"
+              power-preference="high-performance"
+              interpolation-decay="200"
+              minimum-pixel-ratio="2"
+            ></model-viewer>
           </div>
         </div>
 
@@ -193,13 +231,16 @@ const scrollToProducts = () => {
   margin-bottom: 0.5rem;
 }
 
-.hero-logo {
-  width: 180px;
-  height: auto;
+.hero-logo-3d {
+  width: 280px;
+  height: 280px;
+  background-color: transparent;
+  --poster-color: transparent;
+  outline: none;
 }
 
 .floating-glow {
-  animation: float 5s ease-in-out infinite, glow 4s ease-in-out infinite;
+  /* Keep the glow for the container if needed, but model-viewer handles lighting */
 }
 
 @keyframes float {
@@ -386,12 +427,12 @@ const scrollToProducts = () => {
   z-index: 5;
 }
 
-.baul-img {
-  max-width: 80%;
-  max-height: 80%;
-  object-fit: contain;
-  position: relative;
-  z-index: 5;
+.baul-3d {
+  width: 250px;
+  height: 250px;
+  background-color: transparent;
+  --poster-color: transparent;
+  outline: none;
   filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
 }
 
@@ -560,8 +601,16 @@ const scrollToProducts = () => {
     width: 100%;
   }
   .baul-container {
-    width: 140px;
-    height: 140px;
+    width: 200px;
+    height: 200px;
+  }
+  .hero-logo-3d {
+    width: 200px;
+    height: 200px;
+  }
+  .baul-3d {
+    width: 200px;
+    height: 200px;
   }
   .hero-description p {
     font-size: 0.9rem;
@@ -621,8 +670,16 @@ const scrollToProducts = () => {
     font-size: 0.9rem;
   }
   .baul-container {
-    width: 120px;
-    height: 120px;
+    width: 160px;
+    height: 160px;
+  }
+  .hero-logo-3d {
+    width: 160px;
+    height: 160px;
+  }
+  .baul-3d {
+    width: 160px;
+    height: 160px;
   }
   .cyber-glow {
     width: 100px;
