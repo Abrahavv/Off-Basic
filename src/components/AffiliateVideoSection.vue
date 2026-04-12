@@ -45,7 +45,7 @@ const abrirCompra = () => {
 .affiliate-video-section {
   background: radial-gradient(circle at top, rgba(148, 221, 61, 0.07), rgba(0, 0, 0, 0.96));
   color: #d8f99b;
-  padding: 4rem 2rem 3rem;
+  padding: 1.5rem 2rem 1rem;
   text-align: center;
 }
 

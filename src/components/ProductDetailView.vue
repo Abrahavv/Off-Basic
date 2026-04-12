@@ -31,6 +31,13 @@ const decrementQty = () => { if (quantity.value > 1) quantity.value--; };
 onMounted(() => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
+const compColor = computed(() => {
+  const pct = props.product.stats?.competitionLevel || 0;
+  if (pct < 31) return '#4ade80'; // Verde
+  if (pct <= 66) return '#eab308'; // Amarillo (>33 and >50)
+  if (pct <= 73) return '#f97316'; // Naranja (>66)
+  return '#ef4444'; // Rojo (>73)
+});
 </script>
 
 <template>
@@ -264,7 +271,7 @@ onMounted(() => {
                 <div class="competition-meter">
                   <div class="comp-visual">
                     <div class="comp-bar-track">
-                      <div class="comp-bar-fill" :style="{ width: product.stats.competitionLevel + '%' }">
+                      <div class="comp-bar-fill" :style="{ width: product.stats.competitionLevel + '%', background: compColor }">
                         <span class="comp-percent">{{ product.stats.competitionLevel }}%</span>
                       </div>
                     </div>
@@ -275,13 +282,16 @@ onMounted(() => {
                     </div>
                   </div>
                   <p class="comp-insight" v-if="product.stats.competitionLevel < 30">
-                    🟢 Mercado poco saturado — ventaja competitiva alta
+                    🟢 Competencia Baja — ventaja competitiva alta
                   </p>
-                  <p class="comp-insight" v-else-if="product.stats.competitionLevel < 60">
-                    🟡 Competencia moderada — diferenciación es clave
+                  <p class="comp-insight" v-else-if="product.stats.competitionLevel <= 66">
+                    🟡 Competencia Media — diferenciación es clave
+                  </p>
+                  <p class="comp-insight" v-else-if="product.stats.competitionLevel <= 73">
+                    🟠 Competencia Moderada-Alta — estrategia requerida
                   </p>
                   <p class="comp-insight" v-else>
-                    🔴 Alta competencia — se requiere estrategia fuerte
+                    🔴 Competencia Muy Alta — mercado saturado
                   </p>
                 </div>
               </div>
@@ -318,17 +328,17 @@ onMounted(() => {
               <button @click="incrementQty" :disabled="quantity >= 10">+</button>
             </div>
             <button 
-              @click="addToCart(product, quantity)" 
+              @click="addToCart(product, quantity, !isAliado)" 
               class="btn-primary main-cta"
-              aria-label="Agregar al carrito"
-              title="Agregar al carrito"
+              :aria-label="isAliado ? 'Agregar al pedido' : 'Agregar al carrito'"
+              :title="isAliado ? 'Agregar al pedido' : 'Agregar al carrito'"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
                 <line x1="3" y1="6" x2="21" y2="6"/>
                 <path d="M16 10a4 4 0 01-8 0"/>
               </svg>
-              Agregar
+              {{ isAliado ? 'Agregar al Pedido' : 'Agregar' }}
             </button>
           </div>
 
@@ -687,7 +697,7 @@ onMounted(() => {
 .competition-meter { width: 100%; display: flex; flex-direction: column; gap: 0.75rem; }
 .comp-visual { width: 100%; }
 .comp-bar-track { width: 100%; height: 28px; background: rgba(255,255,255,0.05); border-radius: 14px; overflow: hidden; position: relative; }
-.comp-bar-fill { height: 100%; background: linear-gradient(90deg, #4ade80, #eab308, #ef4444); border-radius: 14px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); min-width: 50px; }
+.comp-bar-fill { height: 100%; border-radius: 14px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1); min-width: 50px; }
 .comp-percent { font-size: 0.75rem; font-weight: 800; color: #000; }
 .comp-labels { display: flex; justify-content: space-between; margin-top: 0.4rem; }
 .comp-labels span { font-size: 0.65rem; color: var(--text-muted); }

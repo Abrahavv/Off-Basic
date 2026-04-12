@@ -91,7 +91,7 @@ const products = [
       avgDailySales: 6,
       restockDays: 5,
       satisfaction: 98,
-      competitionLevel: 35,
+      competitionLevel: 30,
       monthlyRevenue: 3600,
       categories: [
         { name: 'Trabajo Remoto', percent: 35 },
@@ -165,7 +165,7 @@ const activeProduct = computed(() => {
 
 const displayProducts = computed(() => {
   if (currentMode.value === 'aliado') {
-    return products.map(p => ({ ...p, name: `Pack de ${p.name}` }));
+    return products.map(p => ({ ...p, id: `aliado-${p.id}`, name: `Pack de ${p.name}` }));
   }
   return products;
 });
@@ -173,7 +173,7 @@ const displayProducts = computed(() => {
 const activeProductData = computed(() => {
   if (!activeProduct.value) return null;
   if (currentMode.value === 'aliado') {
-    return { ...activeProduct.value, name: `Pack de ${activeProduct.value.name}` };
+    return { ...activeProduct.value, id: `aliado-${activeProduct.value.id}`, name: `Pack de ${activeProduct.value.name}` };
   }
   return activeProduct.value;
 });
@@ -219,7 +219,9 @@ const restoreScrollPosition = () => {
 const handleHash = () => {
   const hash = window.location.hash;
   if (hash.startsWith('#p-')) {
-    const id = parseInt(hash.replace('#p-', ''));
+    const rawId = hash.replace('#p-', '');
+    // Handle both numeric IDs and 'aliado-X' IDs
+    const id = parseInt(rawId.replace('aliado-', ''));
     activeProductId.value = id;
     window.scrollTo({ top: 0, behavior: 'instant' });
   } else {

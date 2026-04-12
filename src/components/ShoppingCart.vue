@@ -309,10 +309,16 @@ const handleBackdropClick = (e) => {
   text-align: center;
 }
 
-/* ===== CART ITEMS ===== */
+.cart-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .cart-items-scroll {
   flex: 1;
   overflow-y: auto;
+  min-height: 0;
   padding: 1rem 1.5rem;
 }
 
@@ -516,6 +522,7 @@ const handleBackdropClick = (e) => {
 .checkout-form-scroll {
   flex: 1;
   overflow-y: auto;
+  min-height: 0;
   padding: 1.25rem 1.5rem;
 }
 

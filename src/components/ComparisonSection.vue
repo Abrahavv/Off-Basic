@@ -78,6 +78,7 @@ const revealRef = useScrollReveal();
 <style scoped>
 .comparison-section {
   padding: var(--section-padding);
+  padding-bottom: 0.5rem;
   background-color: var(--bg-alt);
   color: var(--text);
   overflow: hidden;

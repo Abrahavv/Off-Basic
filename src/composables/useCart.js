@@ -28,7 +28,7 @@ export function useCart() {
     cartItems.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
   );
 
-  const addToCart = (product, qty = 1) => {
+  const addToCart = (product, qty = 1, shouldOpen = true) => {
     const existing = cartItems.value.find(i => i.id === product.id);
     if (existing) {
       existing.quantity += qty;
@@ -41,8 +41,9 @@ export function useCart() {
         quantity: qty
       });
     }
-    // Auto-open cart for feedback
-    isCartOpen.value = true;
+    if (shouldOpen) {
+      isCartOpen.value = true;
+    }
   };
 
   const removeFromCart = (id) => {

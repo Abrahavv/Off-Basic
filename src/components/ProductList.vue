@@ -143,17 +143,17 @@ const getWhatsappUrl = (productName, price) => {
 
                 <button
                   v-if="!isAliado || isCatalogUnlocked"
-                  @click.stop="addToCart(product)"
-                  class="btn-primary product-buy-btn"
-                  aria-label="Agregar al carrito"
-                  title="Agregar al carrito"
+                  @click.stop="addToCart(product, 1, !isAliado)"
+                  class="btn-primary product-btn"
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
-                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-                    <line x1="3" y1="6" x2="21" y2="6"/>
-                    <path d="M16 10a4 4 0 01-8 0"/>
-                  </svg>
-                  Agregar
+                  <span class="btn-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                      <line x1="3" y1="6" x2="21" y2="6"/>
+                      <path d="M16 10a4 4 0 01-8 0"/>
+                    </svg>
+                  </span>
+                  <span class="btn-text">{{ isAliado ? 'Agregar al Pedido' : 'Agregar' }}</span>
                 </button>
 
                 <button 
@@ -183,7 +183,7 @@ const getWhatsappUrl = (productName, price) => {
 }
 
 .products-section {
-  padding: 8rem 0;
+  padding: 2rem 0;
   background-color: var(--bg);
   transition: background-color 0.3s ease;
   overflow: hidden;
@@ -196,7 +196,7 @@ const getWhatsappUrl = (productName, price) => {
 
 .section-header {
   text-align: center;
-  margin-bottom: 6rem;
+  margin-bottom: 1.5rem;
   position: relative;
 }
 
@@ -212,7 +212,7 @@ const getWhatsappUrl = (productName, price) => {
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
 }
 
 .section-title {
@@ -490,8 +490,9 @@ const getWhatsappUrl = (productName, price) => {
     gap: 1.5rem;
   }
   .section-header {
-    margin-bottom: 3rem;
-  }
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
   .section-title {
     font-size: 2rem;
   }

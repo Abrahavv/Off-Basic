@@ -58,7 +58,7 @@ const bonuses = [
 }
 
 .section-header {
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .section-title {
