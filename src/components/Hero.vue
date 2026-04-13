@@ -102,8 +102,9 @@ const onModelLoad = (event) => {
           <div class="cyber-glow"></div>
           <div class="baul-container">
             <model-viewer 
-              src="/Baul3d.glb" 
+              src="./Baul3d.glb" 
               loading="eager"
+              reveal="auto"
               alt="El Baúl 3D" 
               auto-rotate 
               camera-controls
@@ -113,6 +114,7 @@ const onModelLoad = (event) => {
               exposure="1"
               environment-image="neutral"
               class="baul-3d"
+              style="z-index: 10; position: relative;"
               disable-zoom
               @load="onModelLoad"
               power-preference="high-performance"
