@@ -3,15 +3,40 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="/Icono-web-Pestaña.png" id="favicon" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <meta name="description" content="Off Basic | Relojes, Audífonos y Cargadores | Venezuela Envío Gratis" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Off Basic | Smartwatch, Relojes, Audífonos y Cargadores | Venezuela Envío Gratis</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/Icono-web-Pestaña.png" id="favicon" />
+
+  <!-- Fonts: preconnect first, then single load -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Syne:wght@700;800&family=Bruno+Ace+SC&display=swap" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Syne:wght@700;800&family=Bruno+Ace+SC&display=swap" />
+  </noscript>
+
+  <!-- Preload the above-the-fold 3D model for fast first paint -->
+  <link rel="preload" href="/Logo3d.glb" as="fetch" crossorigin="anonymous" />
+
+  <!-- Preload logo poster image for instant visual feedback -->
+  <link rel="preload" href="/Off-Basic-Web-Cromado.png" as="image" />
+
+  <!-- model-viewer: loaded async to never block render -->
+  <script>
+    var s = document.createElement('script');
+    s.type = 'module';
+    s.src = 'https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js';
+    document.head.appendChild(s);
+    window.__MV_ENABLED = true;
+  </script>
 </head>
 
 <body>

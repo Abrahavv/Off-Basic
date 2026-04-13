@@ -1,5 +1,7 @@
-/* ===== GOOGLE FONTS ===== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Syne:wght@700;800&family=Bruno+Ace+SC&display=swap');
+/* ===== GOOGLE FONTS =====
+ * Loaded via index.html with media="print" trick for non-blocking load.
+ * Do NOT add @import url() here — it blocks CSS parsing.
+ */
 
 /* ===== DESIGN TOKENS ===== */
 :root {
@@ -61,6 +63,8 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Smooth text rendering on mobile */
+  text-rendering: optimizeLegibility;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -308,4 +312,32 @@ html {
   .scroll-reveal.slide-up {
     transform: none !important;
   }
+}
+
+/* ===== LOW-END DEVICE OVERRIDES =====
+ * Applied via JS when device is detected as low-end.
+ * Disables GPU-intensive effects globally.
+ */
+.low-end-device * {
+  /* Override any complex filter — orbs/glows already handled per-component */
+}
+
+.low-end-device .scroll-reveal:not(.revealed) {
+  /* Skip slide animations on low-end — straight fadeIn only */
+  transform: none !important;
+}
+
+/* content-visibility: skip paint/layout for off-screen sections */
+section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
+/* ===== PERFORMANCE: GPU LAYER HINTS =====
+ * Promote only actively animating elements — not everything.
+ */
+.baul-floating,
+.hero-logo-3d,
+.hero-logo-fallback {
+  transform: translateZ(0);
 }
