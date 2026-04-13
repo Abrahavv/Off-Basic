@@ -162,7 +162,7 @@ const onModelLoad = (event) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 110px 0 40px;
+  padding: 70px 0 10px;
   overflow: hidden;
   text-align: center;
   background-color: var(--bg);
@@ -218,12 +218,13 @@ const onModelLoad = (event) => {
 .hero-logo-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0rem;
+  margin-top: 1.5rem;
 }
 
 .hero-logo-3d {
-  width: 280px;
-  height: 280px;
+  width: 260px;
+  height: 260px;
   background-color: transparent;
   outline: none;
   animation: float3d 5s ease-in-out infinite;
@@ -240,16 +241,15 @@ const onModelLoad = (event) => {
   height: 250px;
   background-color: transparent;
   outline: none;
-  animation: float3d 6s ease-in-out infinite;
-  will-change: transform;
+  animation: floatSimple 6s ease-in-out infinite;
 }
 
 /* ===== TITLES ===== */
 .hero-title {
-  font-size: clamp(2.8rem, 7vw, 4.5rem);
+  font-size: clamp(2.4rem, 6vw, 3.8rem);
   font-weight: 700;
   letter-spacing: -1px;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.1rem;
   line-height: 1.05;
 }
 
@@ -275,7 +275,7 @@ const onModelLoad = (event) => {
   background: rgba(0, 208, 255, 0.18);
 }
 
-.hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+.hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
 .hero-actions .btn-primary { min-width: 210px; color: #000; background: #00D0FF; box-shadow: 0 10px 22px rgba(0, 208, 255, 0.45); }
 .hero-actions .btn-secondary { border: 2px solid #00D0FF; color: #00D0FF; background: #fff; }
 
@@ -298,7 +298,15 @@ const onModelLoad = (event) => {
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
 }
 
-.baul-visual { position: relative; display: flex; flex-direction: column; align-items: center; margin-bottom: 0.5rem; z-index: 2; }
+.baul-visual { 
+  position: relative; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  margin-bottom: 0.5rem; 
+  margin-top: 3.5rem; 
+  z-index: 2; 
+}
 .baul-floating { animation: floatPremium 6s ease-in-out infinite; }
 @keyframes floatPremium { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
