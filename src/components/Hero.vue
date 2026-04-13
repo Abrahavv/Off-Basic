@@ -73,7 +73,6 @@ const onModelLoad = (event) => {
         <div class="hero-logo-wrap">
           <model-viewer 
             src="/Logo3d.glb" 
-            poster="/Off-Basic-Web-Cromado.png"
             loading="eager"
             alt="Off Basic 3D Logo" 
             auto-rotate 
@@ -110,7 +109,6 @@ const onModelLoad = (event) => {
           <div class="baul-container">
             <model-viewer 
               src="/Baul3d.glb" 
-              poster="/Baul-Off-Basic.png"
               loading="eager"
               alt="El Baúl 3D" 
               auto-rotate 
