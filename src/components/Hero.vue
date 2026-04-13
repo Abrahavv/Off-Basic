@@ -317,7 +317,14 @@ const onModelLoad = (event) => {
 
 @keyframes glowBreathe { 0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.8); } 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); } }
 
-.hero-bg-hologram { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.hero-bg-hologram { 
+  position: absolute; 
+  top: 0; left: 0; right: 0; bottom: 0; 
+  z-index: 1; 
+  pointer-events: none; 
+  overflow: hidden; 
+  transform: translateZ(0); 
+}
 .cyber-ring-huge { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px solid rgba(0, 208, 255, 0.15); opacity: 0; }
 .ring-huge-1 { border-top-color: rgba(0, 208, 255, 0.6); animation: expandHugeRing 9s infinite 0s; }
 .ring-huge-2 { border-bottom-color: rgba(0, 208, 255, 0.5); animation: expandHugeRing 9s infinite 3s; }
@@ -328,9 +335,10 @@ const onModelLoad = (event) => {
 .tech-chevron {
   position: absolute;
   width: 25px; height: 25px;
-  border-top: 3px solid rgba(0, 208, 255, 0.9);
-  border-left: 3px solid rgba(0, 208, 255, 0.9);
+  border-top: 4px solid rgba(0, 208, 255, 1);
+  border-left: 4px solid rgba(0, 208, 255, 1);
   animation: shootChevron 6s infinite;
+  will-change: transform, opacity;
 }
 @keyframes shootChevron { 
   0% { transform: translate(-50%, -120px) rotate(45deg) scale(0.5); opacity: 0; } 
@@ -339,7 +347,12 @@ const onModelLoad = (event) => {
   100% { transform: translate(-50%, -120vmax) rotate(45deg) scale(1.5); opacity: 0; } 
 }
 
-.arrow-container { position: absolute; top: 50%; left: 50%; width: 0; height: 0; z-index: 2; }
+.arrow-container { 
+  position: absolute; 
+  top: 50%; left: 50%; 
+  width: 0; height: 0; 
+  z-index: 3; 
+}
 .arrow-tr { transform: rotate(45deg); } .arrow-br { transform: rotate(135deg); } .arrow-bl { transform: rotate(225deg); } .arrow-tl { transform: rotate(315deg); }
 
 .orb { position: absolute; border-radius: 50%; filter: blur(100px); z-index: 1; pointer-events: none; }
