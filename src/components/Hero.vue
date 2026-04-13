@@ -32,15 +32,9 @@ const onModelLoad = (event) => {
   const modelViewer = event.target;
   if (modelViewer.model && modelViewer.model.materials) {
     modelViewer.model.materials.forEach(material => {
-      // Forzar efecto cromo original
-      material.pbrMetallicRoughness.setBaseColorFactor([0.7, 0.7, 0.7, 1]);
+      // Configuraciones de material equilibradas y compatibles
       material.pbrMetallicRoughness.setMetallicFactor(1.0);
       material.pbrMetallicRoughness.setRoughnessFactor(0.05);
-
-      // Maximizar nitidez de texturas (Anisotropía)
-      if (material.pbrMetallicRoughness.baseColorTexture) {
-        material.pbrMetallicRoughness.baseColorTexture.texture.sampler.setAnisotropy(16);
-      }
     });
   }
 };
@@ -230,13 +224,13 @@ const onModelLoad = (event) => {
   height: 280px;
   background-color: transparent;
   outline: none;
-  image-rendering: -webkit-optimize-contrast;
   animation: float3d 5s ease-in-out infinite;
+  will-change: transform;
 }
 
 @keyframes float3d {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -12px, 0); }
 }
 
 .baul-3d {
@@ -244,8 +238,8 @@ const onModelLoad = (event) => {
   height: 250px;
   background-color: transparent;
   outline: none;
-  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
-  image-rendering: -webkit-optimize-contrast;
+  animation: float3d 6s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* ===== TITLES ===== */
@@ -319,7 +313,7 @@ const onModelLoad = (event) => {
   animation: glowBreathe 4s ease-in-out infinite alternate;
 }
 
-@keyframes glowBreathe { 0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.8); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); } }
+@keyframes glowBreathe { 0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.8); } 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); } }
 
 .hero-bg-hologram { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; pointer-events: none; overflow: hidden; }
 .cyber-ring-huge { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px solid rgba(0, 208, 255, 0.15); opacity: 0; }
@@ -336,7 +330,12 @@ const onModelLoad = (event) => {
   border-left: 3px solid rgba(0, 208, 255, 0.9);
   animation: shootChevron 6s infinite;
 }
-@keyframes shootChevron { 0% { transform: translate(-50%, -120px) rotate(45deg) scale(0.5); opacity: 0; } 100% { transform: translate(-50%, -120vmax) rotate(45deg) scale(1.5); opacity: 0; } }
+@keyframes shootChevron { 
+  0% { transform: translate(-50%, -120px) rotate(45deg) scale(0.5); opacity: 0; } 
+  20% { opacity: 0.8; }
+  80% { opacity: 0.8; }
+  100% { transform: translate(-50%, -120vmax) rotate(45deg) scale(1.5); opacity: 0; } 
+}
 
 .arrow-container { position: absolute; top: 50%; left: 50%; width: 0; height: 0; z-index: 2; }
 .arrow-tr { transform: rotate(45deg); } .arrow-br { transform: rotate(135deg); } .arrow-bl { transform: rotate(225deg); } .arrow-tl { transform: rotate(315deg); }
