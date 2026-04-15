@@ -25,8 +25,10 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // Split vendor libs from app code for better caching
-        manualChunks: {
-          vue: ['vue'],
+        manualChunks(id) {
+          if (id && id.includes('node_modules/vue')) {
+            return 'vue';
+          }
         },
         // Hash-based filenames for long-term cache headers
         chunkFileNames: 'assets/[name]-[hash].js',
