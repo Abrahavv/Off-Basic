@@ -34,6 +34,11 @@ const resetTilt = (el) => {
 const handleMouseMove = (e) => handleTilt(e, mainKeyRef.value);
 const handleMouseLeave = () => resetTilt(mainKeyRef.value);
 
+// Sidebar keys tilt refs
+const sidebarKeyRefs = ref([]);
+const handleSidebarTilt = (e, index) => handleTilt(e, sidebarKeyRefs.value[index]);
+const resetSidebarTilt = (index) => resetTilt(sidebarKeyRefs.value[index]);
+
 const scrollToProducts = () => {
   const target = document.getElementById('baul-content') || document.getElementById('productos');
   if (target) {
@@ -116,13 +121,15 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
           >
             <div class="glow-container">
               <div class="main-glow"></div>
-              <img 
-                ref="mainKeyRef"
-                :src="currentKey.image" 
-                alt="Key Image" 
-                class="main-key-img" 
-                loading="lazy" 
-              />
+              <div class="key-floater-clean">
+                <img 
+                  ref="mainKeyRef"
+                  :src="currentKey.image" 
+                  alt="Key Image" 
+                  class="main-key-img" 
+                  loading="lazy" 
+                />
+              </div>
             </div>
           </div>
 
@@ -150,7 +157,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
         <!-- RIGHT: Sidebar with Other Keys -->
         <div class="keys-sidebar">
           <div 
-            v-for="key in keys" 
+            v-for="(key, index) in keys" 
             :key="key.id" 
             class="sidebar-card"
             :class="{ 
@@ -161,9 +168,18 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
               'key-maestra': key.id === 3
             }"
             @click="key.locked ? null : activeKey = key.id"
+            @mousemove="!key.locked && handleSidebarTilt($event, index)"
+            @mouseleave="resetSidebarTilt(index)"
           >
             <div class="card-visual">
-              <img :src="key.image" class="sidebar-key-img" loading="lazy" />
+              <div class="key-floater-clean-sidebar">
+                <img 
+                  :ref="el => sidebarKeyRefs[index] = el"
+                  :src="key.image" 
+                  class="sidebar-key-img" 
+                  loading="lazy" 
+                />
+              </div>
               <div class="card-glow"></div>
             </div>
             <div class="card-info">
@@ -305,10 +321,14 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
   position: relative;
   z-index: 1;
-  animation: keyFloat 4s ease-in-out infinite;
-  transition: transform 0.1s ease-out;
+  transition: transform 0.15s ease-out;
   transform-origin: center center;
   will-change: transform;
+}
+
+.key-floater-clean,
+.key-floater-clean-sidebar {
+  animation: keyFloat 4s ease-in-out infinite;
 }
 
 .key-info-main {
@@ -493,9 +513,9 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
 
 .sidebar-key-img {
   width: 50px;
-  animation: keyFloat 4s ease-in-out infinite;
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.15s ease-out;
   transform-origin: center center;
+  will-change: transform;
 }
 
 .sidebar-card:nth-child(2) .sidebar-key-img {
@@ -508,7 +528,6 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
 
 .sidebar-card:not(.locked-card):hover .sidebar-key-img {
   animation-play-state: paused;
-  transform: translateY(0px) rotate(-10deg) scale(1.1);
 }
 
 .card-status {

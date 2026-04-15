@@ -71,13 +71,15 @@ const scrollToProducts = () => {
         @touchmove="handleMouseMove"
         @touchend="handleMouseLeave"
       >
-        <img 
-          ref="tiltRef"
-          src="/Off-Basic-Web-Cromado.png" 
-          alt="Off Basic Logo" 
-          class="hero-logo-img"
-          loading="eager"
-        />
+        <div class="logo-floater-clean">
+          <img 
+            ref="tiltRef"
+            src="/Off-Basic-Web-Cromado.png" 
+            alt="Off Basic Logo" 
+            class="hero-logo-img"
+            loading="eager"
+          />
+        </div>
       </div>
 
       <h1 class="hero-title">OFF BASIC</h1>
@@ -93,7 +95,7 @@ const scrollToProducts = () => {
     <!-- ========== ALIADO MODE ========== -->
     <div v-if="isAliado" class="container hero-inner hero-aliado-inner mode-fade-in">
       <div 
-        class="baul-visual baul-floating"
+        class="baul-visual"
         @mousemove="handleMouseMove" 
         @mouseleave="handleMouseLeave"
         @touchstart="handleMouseMove"
@@ -101,7 +103,7 @@ const scrollToProducts = () => {
         @touchend="handleMouseLeave"
       >
         <div class="cyber-glow"></div>
-        <div class="baul-container">
+        <div class="baul-container baul-floating">
           <img 
             ref="tiltBaulRef"
             src="/Baul-Off-Basic.png" 
@@ -221,9 +223,12 @@ const scrollToProducts = () => {
   filter: drop-shadow(0 8px 32px rgba(0, 208, 255, 0.35))
           contrast(1.05)
           brightness(1.05);
-  animation: floatStatic 5s ease-in-out infinite;
-  transition: transform 0.1s ease-out;
+  transition: transform 0.15s ease-out;
   will-change: transform;
+}
+
+.logo-floater-clean {
+  animation: floatStatic 5s ease-in-out infinite;
 }
 
 .baul-img {
