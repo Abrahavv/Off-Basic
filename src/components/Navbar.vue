@@ -130,7 +130,7 @@ const scrollToProducts = () => {
           class="mode-toggle-btn" 
           @click="emit('switch-mode', isAliado ? 'personal' : 'aliado')"
         >
-          {{ isAliado ? 'Cambiar a Personal' : 'Cambiar a Aliado' }}
+          {{ isAliado ? 'Cambiar a Market' : 'Cambiar a Aliado' }}
         </button>
 
         <!-- Social Media -->

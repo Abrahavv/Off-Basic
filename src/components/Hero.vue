@@ -1,76 +1,35 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue';
-import { useDeviceCapability } from '../composables/useDeviceCapability.js';
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
 import { WHATSAPP_NUMBER } from '../config.js';
 
 const props = defineProps({ mode: String });
 const emit = defineEmits(['switch-mode']);
 
 const isAliado = computed(() => props.mode === 'aliado');
-const whatsappNumber = WHATSAPP_NUMBER;
 
-// Device capability detection
-const { canRender3D, isLowEnd, isMidRange } = useDeviceCapability();
+// --- TILT LOGIC ---
+const tiltRef = ref(null);
+const tiltBaulRef = ref(null);
 
-// Track if model-viewer script was loaded by index.html
-const mvEnabled = ref(false);
-onMounted(() => {
-  mvEnabled.value = typeof window !== 'undefined' && window.__MV_ENABLED === true;
-});
-
-// Show 3D only if: device is capable AND model-viewer was loaded
-const show3D = computed(() => canRender3D.value && mvEnabled.value);
-
-// Apply body class for global CSS targeting
-onMounted(() => {
-  if (isLowEnd.value) document.body.classList.add('low-end-device');
-});
-
-// ===== ADAPTIVE QUALITY SETTINGS =====
-// High-end: full ACES tone-mapping, shadows, high pixel ratio
-// Low-end:  no tone-mapping, no shadows, lower pixel ratio = much less GPU work
-const modelQuality = computed(() => {
-  if (isLowEnd.value) {
-    return {
-      toneMapping: 'commerce',   // Cheapest tone-mapping (almost no cost)
-      shadowIntensity: '0',      // No shadow (saves a full render pass)
-      shadowSoftness: '0',
-      exposure: '1',
-      pixelRatio: '0.75',        // Render at 75% resolution — huge GPU saving
-      rotationPerSecond: '8deg', // Slower rotation = fewer frames needed
-    };
-  }
-  if (isMidRange.value) {
-    return {
-      toneMapping: 'neutral',
-      shadowIntensity: '0.5',
-      shadowSoftness: '0.2',
-      exposure: '1',
-      pixelRatio: '1',
-      rotationPerSecond: '12deg',
-    };
-  }
-  // High-end
-  return {
-    toneMapping: 'aces',
-    shadowIntensity: '0.8',
-    shadowSoftness: '0.3',
-    exposure: '1.1',
-    pixelRatio: '1.5',
-    rotationPerSecond: '15deg',
-  };
-});
-
-// Improve material quality on model load
-const onModelLoad = (event) => {
-  const mv = event.target;
-  if (mv?.model?.materials) {
-    mv.model.materials.forEach(material => {
-      material.pbrMetallicRoughness.setMetallicFactor(1.0);
-      material.pbrMetallicRoughness.setRoughnessFactor(0.04);
-    });
-  }
+const handleTilt = (e, el) => {
+  if (!el) return;
+  const rect = el.getBoundingClientRect();
+  const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+  const y = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+  const rotX = (centerY - y) / 10;
+  const rotY = (x - centerX) / 10;
+  el.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.05, 1.05, 1.05)`;
 };
+
+const resetTilt = (el) => {
+  if (!el) return;
+  el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+};
+
+const handleMouseMove = (e) => handleTilt(e, isAliado.value ? tiltBaulRef.value : tiltRef.value);
+const handleMouseLeave = () => resetTilt(isAliado.value ? tiltBaulRef.value : tiltRef.value);
 
 const scrollToProducts = () => {
   const target = document.getElementById('baul-content') || document.getElementById('productos');
@@ -84,15 +43,15 @@ const scrollToProducts = () => {
 </script>
 
 <template>
-  <section class="hero" :class="{ 'hero-aliado': isAliado, 'hero-low-end': isLowEnd }">
+  <section class="hero" :class="{ 'hero-aliado': isAliado }">
 
     <!-- Pearl Background (Personal Mode) -->
     <div v-if="!isAliado" class="hero-bg-elements">
       <div class="pearl-gradient"></div>
     </div>
 
-    <!-- Animated Rings (disabled on low-end) -->
-    <div v-if="!isLowEnd" class="hero-bg-hologram">
+    <!-- Animated Rings -->
+    <div class="hero-bg-hologram">
       <div class="cyber-ring-huge ring-huge-1"></div>
       <div class="cyber-ring-huge ring-huge-2"></div>
       <div class="cyber-ring-huge ring-huge-3"></div>
@@ -102,38 +61,23 @@ const scrollToProducts = () => {
       <div class="arrow-container arrow-tl"><div class="tech-chevron"></div></div>
     </div>
 
-    <!-- Static subtle ring for low-end (no animation cost) -->
-    <div v-if="isLowEnd" class="hero-bg-hologram-static">
-      <div class="static-ring-1"></div>
-      <div class="static-ring-2"></div>
-    </div>
-
     <!-- ========== PERSONAL MODE ========== -->
     <div v-if="!isAliado" class="container hero-inner mode-fade-in">
-
-      <!-- 3D Logo -->
-      <div class="hero-logo-wrap">
-        <model-viewer
-          src="/Logo3d.glb"
+      <div 
+        class="hero-logo-wrap" 
+        @mousemove="handleMouseMove" 
+        @mouseleave="handleMouseLeave"
+        @touchstart="handleMouseMove"
+        @touchmove="handleMouseMove"
+        @touchend="handleMouseLeave"
+      >
+        <img 
+          ref="tiltRef"
+          src="/Off-Basic-Web-Cromado.png" 
+          alt="Off Basic Logo" 
+          class="hero-logo-img"
           loading="eager"
-          reveal="auto"
-          alt="Off Basic 3D Logo"
-          auto-rotate
-          auto-rotate-delay="500"
-          :rotation-per-second="modelQuality.rotationPerSecond"
-          camera-controls
-          interaction-prompt="none"
-          :shadow-intensity="modelQuality.shadowIntensity"
-          :shadow-softness="modelQuality.shadowSoftness"
-          :exposure="modelQuality.exposure"
-          :tone-mapping="modelQuality.toneMapping"
-          environment-image="neutral"
-          class="hero-logo-3d"
-          disable-zoom
-          @load="onModelLoad"
-          power-preference="high-performance"
-          :minimum-pixel-ratio="modelQuality.pixelRatio"
-        ></model-viewer>
+        />
       </div>
 
       <h1 class="hero-title">OFF BASIC</h1>
@@ -148,32 +92,23 @@ const scrollToProducts = () => {
 
     <!-- ========== ALIADO MODE ========== -->
     <div v-if="isAliado" class="container hero-inner hero-aliado-inner mode-fade-in">
-
-      <!-- Baúl 3D Visual -->
-      <div class="baul-visual baul-floating">
-        <div class="cyber-glow" v-if="!isLowEnd"></div>
+      <div 
+        class="baul-visual baul-floating"
+        @mousemove="handleMouseMove" 
+        @mouseleave="handleMouseLeave"
+        @touchstart="handleMouseMove"
+        @touchmove="handleMouseMove"
+        @touchend="handleMouseLeave"
+      >
+        <div class="cyber-glow"></div>
         <div class="baul-container">
-          <model-viewer
-            src="/Baul3d.glb"
-            loading="lazy"
-            reveal="auto"
-            alt="El Baúl 3D"
-            auto-rotate
-            auto-rotate-delay="500"
-            :rotation-per-second="modelQuality.rotationPerSecond"
-            camera-controls
-            interaction-prompt="none"
-            :shadow-intensity="modelQuality.shadowIntensity"
-            :shadow-softness="modelQuality.shadowSoftness"
-            :exposure="modelQuality.exposure"
-            :tone-mapping="modelQuality.toneMapping"
-            environment-image="neutral"
-            class="baul-3d"
-            disable-zoom
-            @load="onModelLoad"
-            power-preference="high-performance"
-            :minimum-pixel-ratio="modelQuality.pixelRatio"
-          ></model-viewer>
+          <img 
+            ref="tiltBaulRef"
+            src="/Baul-Off-Basic.png" 
+            alt="El Baúl de Off Basic" 
+            class="baul-img"
+            loading="eager"
+          />
         </div>
       </div>
 
@@ -203,9 +138,9 @@ const scrollToProducts = () => {
       </div>
     </div>
 
-    <!-- Decorative orbs (simplified on low-end) -->
-    <div class="orb orb-1" :class="{ 'orb-aliado': isAliado, 'orb-simple': isLowEnd }"></div>
-    <div class="orb orb-2" :class="{ 'orb-aliado': isAliado, 'orb-simple': isLowEnd }"></div>
+    <!-- Decorative orbs -->
+    <div class="orb orb-1" :class="{ 'orb-aliado': isAliado }"></div>
+    <div class="orb orb-2" :class="{ 'orb-aliado': isAliado }"></div>
   </section>
 </template>
 
@@ -270,7 +205,7 @@ const scrollToProducts = () => {
   opacity: 0.9;
 }
 
-/* ===== 3D MODELS — HIGH-END ===== */
+/* ===== LOGO & BAUL IMAGES ===== */
 .hero-logo-wrap {
   display: flex;
   justify-content: center;
@@ -278,54 +213,17 @@ const scrollToProducts = () => {
   margin-top: 1.5rem;
 }
 
-.hero-logo-3d {
-  width: 260px;
-  height: 260px;
-  background-color: transparent !important;
-  --poster-color: transparent;
-  outline: none;
-  animation: float3d 5s ease-in-out infinite;
-  will-change: transform;
-}
-
-/* Kill every shadow-DOM part that can have a background */
-.hero-logo-3d::part(default-poster) {
-  display: none !important;
-}
-
-.hero-logo-3d::part(container) {
-  background-color: transparent !important;
-}
-
-/* Hide loading progress bar */
-.hero-logo-3d::part(default-progress-bar) {
-  display: none !important;
-}
-
-.hero-logo-3d::part(default-progress-mask) {
-  display: none !important;
-}
-
-@keyframes float3d {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50%       { transform: translate3d(0, -12px, 0); }
-}
-
-/* ===== PNG FALLBACK — LOW-END ===== */
-.hero-logo-fallback {
-  animation: float3d 5s ease-in-out infinite;
-  will-change: transform;
-}
-
 .hero-logo-img {
   width: 260px;
   height: 260px;
   object-fit: contain;
-  /* Premium filter to simulate chrome effect on static PNG */
+  /* Premium filter to simulate chrome effect */
   filter: drop-shadow(0 8px 32px rgba(0, 208, 255, 0.35))
           contrast(1.05)
           brightness(1.05);
-  border-radius: 50%;
+  animation: floatStatic 5s ease-in-out infinite;
+  transition: transform 0.1s ease-out;
+  will-change: transform;
 }
 
 .baul-img {
@@ -335,32 +233,13 @@ const scrollToProducts = () => {
   filter: drop-shadow(0 8px 32px rgba(0, 208, 255, 0.35))
           contrast(1.05)
           brightness(1.05);
+  transition: transform 0.1s ease-out;
+  will-change: transform;
 }
 
-/* ===== BAUL 3D ===== */
-.baul-3d {
-  width: 250px;
-  height: 250px;
-  background-color: transparent !important;
-  --poster-color: transparent;
-  outline: none;
-}
-
-.baul-3d::part(default-poster) {
-  display: none !important;
-}
-
-.baul-3d::part(container) {
-  background-color: transparent !important;
-}
-
-/* Hide loading progress bar */
-.baul-3d::part(default-progress-bar) {
-  display: none !important;
-}
-
-.baul-3d::part(default-progress-mask) {
-  display: none !important;
+@keyframes floatStatic {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
 }
 
 /* ===== TITLES ===== */
@@ -373,6 +252,7 @@ const scrollToProducts = () => {
 }
 
 .hero-inner:not(.hero-aliado-inner) .hero-title { color: #000; }
+.hero-inner:not(.hero-aliado-inner) .hero-subtitle { color: #333; font-weight: 500; }
 .hero-inner:not(.hero-aliado-inner) .hero-slogan {
   color: #00D0FF;
   font-size: clamp(2rem, 5vw, 2.5rem);
@@ -380,7 +260,12 @@ const scrollToProducts = () => {
   font-weight: 800;
 }
 
-.hero-inner:not(.hero-aliado-inner) .hero-subtitle { color: #555; font-weight: 400; }
+.hero-tagline-wrap {
+  margin: 2rem 0 1.2rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
 
 .mini-badge {
   color: #ffffff;
@@ -388,10 +273,11 @@ const scrollToProducts = () => {
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
-  padding: 0.4rem 1rem;
+  padding: 0.5rem 1.2rem;
   border: 1px solid #00D0FF;
   border-radius: 50px;
   background: rgba(0, 208, 255, 0.18);
+  white-space: nowrap;
 }
 
 .hero-actions {
@@ -591,20 +477,20 @@ const scrollToProducts = () => {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .hero { padding: 100px 0 30px; }
-  .hero-logo-3d,
+  .hero { padding: 110px 0 40px; }
   .hero-logo-img { width: 200px; height: 200px; }
-  .baul-3d,
-  .baul-img { width: 190px; height: 190px; }
-  .hero-video { height: 220px; }
+  .baul-img { width: 220px; height: 220px; }
+  .baul-visual { margin-top: 3.5rem; margin-bottom: 0.5rem; }
+  .hero-tagline-wrap { margin: 1.5rem 0 1rem; }
+  .hero-video { height: 240px; }
   .orb-1 { width: 250px; height: 250px; top: -80px; right: -80px; }
   .orb-2 { width: 250px; height: 250px; bottom: -80px; left: -80px; }
 }
 
 @media (max-width: 480px) {
-  .hero-logo-3d,
   .hero-logo-img { width: 180px; height: 180px; }
-  .baul-3d,
-  .baul-img { width: 170px; height: 170px; }
+  .baul-img { width: 200px; height: 200px; }
+  .baul-visual { margin-top: 2.5rem; }
+  .hero-tagline-wrap { margin: 1.2rem 0 0.8rem; }
 }
 </style>

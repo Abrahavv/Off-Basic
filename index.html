@@ -23,20 +23,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Syne:wght@700;800&family=Bruno+Ace+SC&display=swap" />
   </noscript>
 
-  <!-- Preload the above-the-fold 3D model for fast first paint -->
-  <link rel="preload" href="/Logo3d.glb" as="fetch" crossorigin="anonymous" />
-
-  <!-- Preload logo poster image for instant visual feedback -->
+  <!-- Preload logo image for instant visual feedback -->
   <link rel="preload" href="/Off-Basic-Web-Cromado.png" as="image" />
-
-  <!-- model-viewer: loaded async to never block render -->
-  <script>
-    var s = document.createElement('script');
-    s.type = 'module';
-    s.src = 'https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js';
-    document.head.appendChild(s);
-    window.__MV_ENABLED = true;
-  </script>
 </head>
 
 <body>

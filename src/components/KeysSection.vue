@@ -11,6 +11,29 @@ const revealRef = useScrollReveal();
 
 const activeKey = ref(1);
 
+// --- TILT LOGIC ---
+const mainKeyRef = ref(null);
+
+const handleTilt = (e, el) => {
+  if (!el) return;
+  const rect = el.getBoundingClientRect();
+  const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+  const y = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+  const rotX = (centerY - y) / 10;
+  const rotY = (x - centerX) / 10;
+  el.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.05, 1.05, 1.05)`;
+};
+
+const resetTilt = (el) => {
+  if (!el) return;
+  el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+};
+
+const handleMouseMove = (e) => handleTilt(e, mainKeyRef.value);
+const handleMouseLeave = () => resetTilt(mainKeyRef.value);
+
 const scrollToProducts = () => {
   const target = document.getElementById('baul-content') || document.getElementById('productos');
   if (target) {
@@ -83,10 +106,23 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
             </span>
           </div>
 
-          <div class="key-visual-main">
+          <div 
+            class="key-visual-main"
+            @mousemove="handleMouseMove" 
+            @mouseleave="handleMouseLeave"
+            @touchstart="handleMouseMove"
+            @touchmove="handleMouseMove"
+            @touchend="handleMouseLeave"
+          >
             <div class="glow-container">
               <div class="main-glow"></div>
-              <img :src="currentKey.image" alt="Key Image" class="main-key-img" loading="lazy" />
+              <img 
+                ref="mainKeyRef"
+                :src="currentKey.image" 
+                alt="Key Image" 
+                class="main-key-img" 
+                loading="lazy" 
+              />
             </div>
           </div>
 
@@ -270,13 +306,9 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   position: relative;
   z-index: 1;
   animation: keyFloat 4s ease-in-out infinite;
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.1s ease-out;
   transform-origin: center center;
-}
-
-.active-key-panel:hover .main-key-img {
-  animation-play-state: paused;
-  transform: translateY(0px) rotate(-15deg); /* Tilt down as if opening a door */
+  will-change: transform;
 }
 
 .key-info-main {
@@ -476,7 +508,7 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
 
 .sidebar-card:not(.locked-card):hover .sidebar-key-img {
   animation-play-state: paused;
-  transform: translateY(0px) rotate(-15deg);
+  transform: translateY(0px) rotate(-10deg) scale(1.1);
 }
 
 .card-status {
