@@ -79,10 +79,13 @@ const getWhatsappUrl = (productName, price) => {
 
         <div class="products-grid" :class="{ 'locked-catalog': isAliado && !isCatalogUnlocked }">
           <div 
-            v-for="product in products" 
+            v-for="(product, index) in products" 
             :key="product.id" 
-            class="product-card"
+            class="product-card animate-product"
+            :style="{ animationDelay: `${index * 0.15}s` }"
             @click="isAliado && !isCatalogUnlocked ? unlockCatalog() : selectProduct(product.id)"
+            role="button"
+            :aria-label="'Ver detalles de ' + product.name"
           >
             <div class="card-visual">
               <div v-if="product.tag" class="product-tag">{{ product.tag }}</div>
@@ -242,6 +245,16 @@ const getWhatsappUrl = (productName, price) => {
   cursor: pointer;
   display: flex;
   flex-direction: column;
+}
+
+.animate-product {
+  opacity: 0;
+  animation: cardFadeIn 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (hover: hover) {

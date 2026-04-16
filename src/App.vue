@@ -158,6 +158,43 @@ const products = [
 const isMaintenanceMode = ref(false); // Cambiar a false para desactivar el modo mantenimiento
 const currentMode = ref(localStorage.getItem('offbasic_mode') || 'personal');
 const activeProductId = ref(null);
+const showBackToTop = ref(false);
+
+const handleScroll = () => {
+  showBackToTop.value = window.scrollY > 800;
+};
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// --- SWIPE LOGIC ---
+const touchStartX = ref(0);
+const touchEndX = ref(0);
+
+const handleTouchStart = (e) => {
+  touchStartX.value = e.changedTouches[0].screenX;
+};
+
+const handleTouchEnd = (e) => {
+  touchEndX.value = e.changedTouches[0].screenX;
+  handleSwipe();
+};
+
+const handleSwipe = () => {
+  const diff = touchStartX.value - touchEndX.value;
+  const threshold = 70; // Sensibilidad del swipe
+
+  if (Math.abs(diff) > threshold) {
+    if (diff > 0 && currentMode.value === 'personal') {
+      // Swipe Left -> Aliado
+      setMode('aliado');
+    } else if (diff < 0 && currentMode.value === 'aliado') {
+      // Swipe Right -> Personal
+      setMode('personal');
+    }
+  }
+};
 
 const activeProduct = computed(() => {
   return products.find(p => p.id === activeProductId.value);
@@ -235,11 +272,18 @@ onMounted(() => {
   restoreScrollPosition();
   window.addEventListener('popstate', handleHash);
   window.addEventListener('beforeunload', saveScrollPosition);
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  // Swipes
+  window.addEventListener('touchstart', handleTouchStart, { passive: true });
+  window.addEventListener('touchend', handleTouchEnd, { passive: true });
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener('popstate', handleHash);
   window.removeEventListener('beforeunload', saveScrollPosition);
+  window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener('touchstart', handleTouchStart);
+  window.removeEventListener('touchend', handleTouchEnd);
 });
 
 watch(currentMode, () => {
@@ -303,6 +347,20 @@ watch(currentMode, () => {
         </main>
         <FooterSection :mode="currentMode" />
         <BottomPromoBar :mode="currentMode" />
+
+        <!-- BACK TO TOP BUTTON -->
+        <Transition name="fade">
+          <button 
+            v-if="showBackToTop" 
+            @click="scrollToTop" 
+            class="back-to-top"
+            aria-label="Volver arriba"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 15l-6-6-6 6"/>
+            </svg>
+          </button>
+        </Transition>
       </div>
     </template>
     </template>
@@ -333,5 +391,48 @@ watch(currentMode, () => {
 
 main {
   flex-grow: 1;
+}
+
+/* === BACK TO TOP === */
+.back-to-top {
+  position: fixed;
+  bottom: 100px; /* Above BottomPromoBar */
+  right: 2rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--black);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 99;
+  box-shadow: 0 4px 15px rgba(0, 208, 255, 0.4);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.back-to-top:hover {
+  transform: scale(1.1) translateY(-5px);
+  background: var(--accent-hover);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+  transform: scale(0.5) translateY(20px);
+}
+
+@media (max-width: 480px) {
+  .back-to-top {
+    bottom: 90px;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+  }
 }
 </style>

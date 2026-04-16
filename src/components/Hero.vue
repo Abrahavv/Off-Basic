@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { WHATSAPP_NUMBER } from '../config.js';
 
 const props = defineProps({ mode: String });
@@ -7,12 +7,13 @@ const emit = defineEmits(['switch-mode']);
 
 const isAliado = computed(() => props.mode === 'aliado');
 
-// --- TILT LOGIC ---
+// --- TILT LOGIC (Restored from commit f6f9a29) ---
 const tiltRef = ref(null);
 const tiltBaulRef = ref(null);
 
 const handleTilt = (e, el) => {
   if (!el) return;
+  el.classList.add('is-tilting'); // Remove transition lag
   const rect = el.getBoundingClientRect();
   const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
   const y = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
@@ -20,11 +21,12 @@ const handleTilt = (e, el) => {
   const centerY = rect.height / 2;
   const rotX = (centerY - y) / 10;
   const rotY = (x - centerX) / 10;
-  el.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.05, 1.05, 1.05)`;
+  el.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.08, 1.08, 1.08)`;
 };
 
 const resetTilt = (el) => {
   if (!el) return;
+  el.classList.remove('is-tilting'); // Restore smooth reset
   el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
 };
 
@@ -44,27 +46,29 @@ const scrollToProducts = () => {
 
 <template>
   <section class="hero" :class="{ 'hero-aliado': isAliado }">
-
-    <!-- Pearl Background (Personal Mode) -->
-    <div v-if="!isAliado" class="hero-bg-elements">
-      <div class="pearl-gradient"></div>
-    </div>
-
-    <!-- Animated Rings -->
+    
+    <!-- Futuristic Elements (Blue Arrows & Rings restored from f6f9a29) -->
     <div class="hero-bg-hologram">
       <div class="cyber-ring-huge ring-huge-1"></div>
       <div class="cyber-ring-huge ring-huge-2"></div>
       <div class="cyber-ring-huge ring-huge-3"></div>
+      
+      <!-- Blue Arrows (Tech Chevrons) -->
       <div class="arrow-container arrow-tr"><div class="tech-chevron"></div></div>
       <div class="arrow-container arrow-br"><div class="tech-chevron"></div></div>
       <div class="arrow-container arrow-bl"><div class="tech-chevron"></div></div>
       <div class="arrow-container arrow-tl"><div class="tech-chevron"></div></div>
     </div>
 
+    <!-- Pearl Background (Personal Mode) -->
+    <div v-if="!isAliado" class="hero-bg-elements">
+      <div class="pearl-gradient"></div>
+    </div>
+
     <!-- ========== PERSONAL MODE ========== -->
-    <div v-if="!isAliado" class="container hero-inner mode-fade-in">
+    <div v-if="!isAliado" class="container hero-inner animate-in">
       <div 
-        class="hero-logo-wrap" 
+        class="hero-logo-wrap st-1" 
         @mousemove="handleMouseMove" 
         @mouseleave="handleMouseLeave"
         @touchstart="handleMouseMove"
@@ -82,20 +86,20 @@ const scrollToProducts = () => {
         </div>
       </div>
 
-      <h1 class="hero-title">OFF BASIC</h1>
-      <h2 class="hero-slogan">Fuera de lo básico</h2>
-      <h2 class="hero-subtitle">Productos premium: rendimiento, estilo y eficiencia en uno.</h2>
+      <h1 class="hero-title st-2">OFF BASIC</h1>
+      <h2 class="hero-slogan st-3">Fuera de lo básico</h2>
+      <h2 class="hero-subtitle st-4">Productos premium, rendimiento, estilo y eficiencia en uno.</h2>
 
-      <div class="hero-actions">
-        <button class="btn-primary" @click="scrollToProducts">Comprar</button>
-        <button class="btn-secondary" @click="emit('switch-mode', 'aliado')">Aliado</button>
+      <div class="hero-actions st-5">
+        <button class="btn-primary btn-shimmer" @click="scrollToProducts">Comprar Ahora</button>
+        <button class="btn-secondary" @click="emit('switch-mode', 'aliado')">Modo Aliado</button>
       </div>
     </div>
 
     <!-- ========== ALIADO MODE ========== -->
-    <div v-if="isAliado" class="container hero-inner hero-aliado-inner mode-fade-in">
+    <div v-if="isAliado" class="container hero-inner hero-aliado-inner animate-in">
       <div 
-        class="baul-visual"
+        class="baul-visual st-1"
         @mousemove="handleMouseMove" 
         @mouseleave="handleMouseLeave"
         @touchstart="handleMouseMove"
@@ -114,20 +118,20 @@ const scrollToProducts = () => {
         </div>
       </div>
 
-      <div class="hero-tagline-wrap">
+      <div class="hero-tagline-wrap st-2">
         <span class="mini-badge">LLAVE DE ENTRADA · DISPONIBLE AHORA</span>
       </div>
 
-      <h1 class="hero-title">Baúl De Off Basic</h1>
-      <h2 class="hero-subtitle">
-        El inventario está protegido. Para ver los precios al mayor, necesitas la Llave.
+      <h1 class="hero-title st-3 shine-title">Baúl De Off Basic</h1>
+      <h2 class="hero-subtitle st-4">
+        El inventario está protegido. Para ver los precios al mayor, necesitas la Llave de acceso.
       </h2>
 
-      <div class="hero-actions">
-        <button class="btn-primary" @click="scrollToProducts">ACCEDER</button>
+      <div class="hero-actions st-5">
+        <button class="btn-primary btn-shimmer" @click="scrollToProducts">ACCEDER AHORA</button>
       </div>
 
-      <div class="hero-video-wrapper">
+      <div class="hero-video-wrapper st-6">
         <iframe
           class="hero-video"
           src="https://www.youtube.com/embed/caAWn6xFWkI"
@@ -161,29 +165,65 @@ const scrollToProducts = () => {
   transition: background-color var(--transition) ease;
 }
 
-.hero-aliado::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0, 208, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 208, 255, 0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  z-index: 0;
-  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 70%);
-  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 70%);
-  pointer-events: none;
-}
-
-.hero-aliado {
-  background: radial-gradient(ellipse at center, rgba(0, 208, 255, 0.05) 0%, var(--bg) 70%);
-}
-
 .hero-inner {
   position: relative;
   z-index: 2;
   max-width: 800px;
 }
+
+/* ===== ANIMATED RINGS & ARROWS (From commit f6f9a29) ===== */
+.hero-bg-hologram {
+  position: absolute;
+  inset: 0;
+  z-index: 2; /* Increased to show over Pearl BG */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cyber-ring-huge {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(0, 208, 255, 0.15);
+  opacity: 0;
+}
+
+.ring-huge-1 { border-top-color: rgba(0, 208, 255, 0.6);   animation: expandHugeRing 9s infinite 0s; }
+.ring-huge-2 { border-bottom-color: rgba(0, 208, 255, 0.5); animation: expandHugeRing 9s infinite 3s; }
+.ring-huge-3 { border-style: dashed;                         animation: expandHugeRing 9s infinite 6s; }
+
+@keyframes expandHugeRing {
+  0%   { width: 180px; height: 180px; opacity: 0.9; }
+  100% { width: 160vmax; height: 160vmax; opacity: 0; }
+}
+
+.tech-chevron {
+  position: absolute;
+  width: 25px; height: 25px;
+  border-top: 4px solid rgba(0, 208, 255, 1);
+  border-left: 4px solid rgba(0, 208, 255, 1);
+  animation: shootChevron 6s infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes shootChevron {
+  0%   { transform: translate(-50%, -120px) rotate(45deg) scale(0.5); opacity: 0; }
+  20%  { opacity: 0.8; }
+  80%  { opacity: 0.8; }
+  100% { transform: translate(-50%, -120vmax) rotate(45deg) scale(1.5); opacity: 0; }
+}
+
+.arrow-container {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  z-index: 3;
+}
+.arrow-tr { transform: rotate(45deg); }
+.arrow-br { transform: rotate(135deg); }
+.arrow-bl { transform: rotate(225deg); }
+.arrow-tl { transform: rotate(315deg); }
 
 /* ===== PEARL BG (Personal) ===== */
 .hero-bg-elements {
@@ -192,12 +232,6 @@ const scrollToProducts = () => {
   z-index: 1;
   pointer-events: none;
   overflow: hidden;
-  animation: fadeIn 0.8s ease-out forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .pearl-gradient {
@@ -219,16 +253,19 @@ const scrollToProducts = () => {
   width: 260px;
   height: 260px;
   object-fit: contain;
-  /* Premium filter to simulate chrome effect */
   filter: drop-shadow(0 8px 32px rgba(0, 208, 255, 0.35))
           contrast(1.05)
           brightness(1.05);
-  transition: transform 0.15s ease-out;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
 }
 
+.hero-logo-img.is-tilting {
+  transition: none !important;
+}
+
 .logo-floater-clean {
-  animation: floatStatic 5s ease-in-out infinite;
+  animation: floatStatic 5s ease-in-out infinite, logoPulse 4s ease-in-out infinite;
 }
 
 .baul-img {
@@ -238,8 +275,17 @@ const scrollToProducts = () => {
   filter: drop-shadow(0 8px 32px rgba(0, 208, 255, 0.35))
           contrast(1.05)
           brightness(1.05);
-  transition: transform 0.1s ease-out;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
+}
+
+.baul-img.is-tilting {
+  transition: none !important;
+}
+
+@keyframes logoPulse {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(0, 208, 255, 0.15)) brightness(1.02); }
+  50% { filter: drop-shadow(0 0 25px rgba(0, 208, 255, 0.35)) brightness(1.1); }
 }
 
 @keyframes floatStatic {
@@ -250,19 +296,70 @@ const scrollToProducts = () => {
 /* ===== TITLES ===== */
 .hero-title {
   font-size: clamp(2.4rem, 6vw, 3.8rem);
-  font-weight: 700;
-  letter-spacing: -1px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
   margin-bottom: 0.1rem;
   line-height: 1.05;
+  background-size: 400% auto;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent; /* Required for some browsers to show the gradient */
+  color: transparent !important;
+  animation: textShine 4s linear infinite;
+  /* Ultra-sharp Metallic Shine */
+  background-image: linear-gradient(
+    90deg, 
+    #000 0%, 
+    #000 45%, 
+    #00D0FF 50%, 
+    #000 55%, 
+    #000 100%
+  );
+  display: inline-block;
 }
 
-.hero-inner:not(.hero-aliado-inner) .hero-title { color: #000; }
-.hero-inner:not(.hero-aliado-inner) .hero-subtitle { color: #333; font-weight: 500; }
-.hero-inner:not(.hero-aliado-inner) .hero-slogan {
+.hero-aliado-inner .hero-title {
+  /* Aliado: White with Blue Shine */
+  background-image: linear-gradient(90deg, #fff 0%, #fff 35%, #00D0FF 50%, #fff 65%, #fff 100%);
+}
+
+.hero-inner:not(.hero-aliado-inner) .hero-subtitle { color: #121212; font-weight: 500; }
+.hero-subtitle { color: #121212; font-weight: 500; }
+
+@keyframes textShine {
+  from { background-position: 100% center; }
+  to { background-position: -300% center; }
+}
+.hero-slogan {
   color: #00D0FF;
   font-size: clamp(2rem, 5vw, 2.5rem);
   margin: 0.5rem auto;
   font-weight: 800;
+  text-shadow: 0 0 20px rgba(0, 208, 255, 0.3);
+}
+
+/* Staggered Cinematic Entrance */
+.animate-in .st-1 { animation: cinematicReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both 0.1s; }
+.animate-in .st-2 { animation: cinematicReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both 0.2s; }
+.animate-in .st-3 { animation: cinematicReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both 0.3s; }
+.animate-in .st-4 { animation: cinematicReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both 0.4s; }
+.animate-in .st-5 { animation: cinematicReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both 0.5s; }
+.animate-in .st-6 { animation: cinematicReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both 0.6s; }
+
+@keyframes cinematicReveal {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px) scale(0.95); 
+    filter: blur(15px);
+    letter-spacing: 5px;
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+    filter: blur(0);
+    letter-spacing: inherit;
+  }
 }
 
 .hero-tagline-wrap {
@@ -294,10 +391,32 @@ const scrollToProducts = () => {
 }
 
 .hero-actions .btn-primary {
+  position: relative;
   min-width: 210px;
   color: #000;
   background: #00D0FF;
   box-shadow: 0 10px 22px rgba(0, 208, 255, 0.45);
+  overflow: hidden;
+}
+
+.btn-shimmer::after {
+  content: "";
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transform: rotate(45deg);
+  animation: shimmerLoop 3s infinite;
+}
+
+@keyframes shimmerLoop {
+  0% { transform: translate(-100%, -100%) rotate(45deg); }
+  100% { transform: translate(100%, 100%) rotate(45deg); }
 }
 .hero-actions .btn-secondary {
   border: 2px solid #00D0FF;
@@ -361,11 +480,6 @@ const scrollToProducts = () => {
   z-index: 5;
 }
 
-.baul-img-container {
-  width: auto;
-  height: auto;
-}
-
 /* ===== GLOW ===== */
 .cyber-glow {
   position: absolute;
@@ -384,83 +498,6 @@ const scrollToProducts = () => {
   100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
 }
 
-/* ===== ANIMATED RINGS — HIGH-END ONLY ===== */
-.hero-bg-hologram {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  overflow: hidden;
-  transform: translateZ(0);
-}
-
-.cyber-ring-huge {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  border: 1px solid rgba(0, 208, 255, 0.15);
-  opacity: 0;
-}
-
-.ring-huge-1 { border-top-color: rgba(0, 208, 255, 0.6);   animation: expandHugeRing 9s infinite 0s; }
-.ring-huge-2 { border-bottom-color: rgba(0, 208, 255, 0.5); animation: expandHugeRing 9s infinite 3s; }
-.ring-huge-3 { border-style: dashed;                         animation: expandHugeRing 9s infinite 6s; }
-
-@keyframes expandHugeRing {
-  0%   { width: 180px; height: 180px; opacity: 0.9; }
-  100% { width: 160vmax; height: 160vmax; opacity: 0; }
-}
-
-/* ===== STATIC RINGS — LOW-END (no animation) ===== */
-.hero-bg-hologram-static {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.static-ring-1,
-.static-ring-2 {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  border: 1px solid rgba(0, 208, 255, 0.08);
-}
-
-.static-ring-1 { width: 400px; height: 400px; }
-.static-ring-2 { width: 700px; height: 700px; border-color: rgba(0, 208, 255, 0.05); }
-
-/* ===== CHEVRONS ===== */
-.tech-chevron {
-  position: absolute;
-  width: 25px; height: 25px;
-  border-top: 4px solid rgba(0, 208, 255, 1);
-  border-left: 4px solid rgba(0, 208, 255, 1);
-  animation: shootChevron 6s infinite;
-  will-change: transform, opacity;
-}
-
-@keyframes shootChevron {
-  0%   { transform: translate(-50%, -120px) rotate(45deg) scale(0.5); opacity: 0; }
-  20%  { opacity: 0.8; }
-  80%  { opacity: 0.8; }
-  100% { transform: translate(-50%, -120vmax) rotate(45deg) scale(1.5); opacity: 0; }
-}
-
-.arrow-container {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 0; height: 0;
-  z-index: 3;
-}
-.arrow-tr { transform: rotate(45deg); }
-.arrow-br { transform: rotate(135deg); }
-.arrow-bl { transform: rotate(225deg); }
-.arrow-tl { transform: rotate(315deg); }
-
 /* ===== ORBS ===== */
 .orb {
   position: absolute;
@@ -469,12 +506,6 @@ const scrollToProducts = () => {
   z-index: 1;
   pointer-events: none;
   opacity: 0.25;
-}
-
-/* Lighter blur on low-end */
-.orb.orb-simple {
-  filter: blur(40px) !important;
-  opacity: 0.15 !important;
 }
 
 .orb-1 { width: 400px; height: 400px; background: rgba(0, 208, 255, 0.4); top: -120px; right: -120px; }
