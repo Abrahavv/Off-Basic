@@ -86,7 +86,9 @@ const scrollToProducts = () => {
         </div>
       </div>
 
-      <h1 class="hero-title st-2">OFF BASIC</h1>
+      <h1 class="hero-title st-2">
+        <span class="shine-wrapper">OFF BASIC</span>
+      </h1>
       <h2 class="hero-slogan st-3">Fuera de lo básico</h2>
       <h2 class="hero-subtitle st-4">Productos premium, rendimiento, estilo y eficiencia en uno.</h2>
 
@@ -122,7 +124,9 @@ const scrollToProducts = () => {
         <span class="mini-badge">LLAVE DE ENTRADA · DISPONIBLE AHORA</span>
       </div>
 
-      <h1 class="hero-title st-3 shine-title">Baúl De Off Basic</h1>
+      <h1 class="hero-title st-3">
+        <span class="shine-wrapper">Baúl De Off Basic</span>
+      </h1>
       <h2 class="hero-subtitle st-4">
         El inventario está protegido. Para ver los precios al mayor, necesitas la Llave de acceso.
       </h2>
@@ -253,7 +257,7 @@ const scrollToProducts = () => {
   width: 260px;
   height: 260px;
   object-fit: contain;
-  filter: drop-shadow(0 8px 32px rgba(0, 208, 255, 0.35))
+  filter: drop-shadow(0 4px 12px rgba(0, 208, 255, 0.15))
           contrast(1.05)
           brightness(1.05);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -272,7 +276,7 @@ const scrollToProducts = () => {
   width: 250px;
   height: 250px;
   object-fit: contain;
-  filter: drop-shadow(0 8px 32px rgba(0, 208, 255, 0.35))
+  filter: drop-shadow(0 4px 12px rgba(0, 208, 255, 0.15))
           contrast(1.05)
           brightness(1.05);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -284,8 +288,8 @@ const scrollToProducts = () => {
 }
 
 @keyframes logoPulse {
-  0%, 100% { filter: drop-shadow(0 0 10px rgba(0, 208, 255, 0.15)) brightness(1.02); }
-  50% { filter: drop-shadow(0 0 25px rgba(0, 208, 255, 0.35)) brightness(1.1); }
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(0, 208, 255, 0.12)) brightness(1.01); }
+  50% { filter: drop-shadow(0 0 18px rgba(0, 208, 255, 0.25)) brightness(1.05); }
 }
 
 @keyframes floatStatic {
@@ -300,36 +304,48 @@ const scrollToProducts = () => {
   letter-spacing: -1.5px;
   margin-bottom: 0.1rem;
   line-height: 1.05;
-  background-size: 400% auto;
-  background-repeat: no-repeat;
+}
+
+.shine-wrapper {
+  display: inline-block;
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent; /* Required for some browsers to show the gradient */
-  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+  background-size: 300% auto;
   animation: textShine 4s linear infinite;
-  /* Ultra-sharp Metallic Shine */
+  /* Personal Shine: Black base with Blue beam */
   background-image: linear-gradient(
     90deg, 
     #000 0%, 
-    #000 45%, 
-    #00D0FF 50%, 
-    #000 55%, 
+    #000 35%, 
+    #00D0FF 48%, 
+    #FFF 50%, 
+    #00D0FF 52%, 
+    #000 65%, 
     #000 100%
   );
-  display: inline-block;
 }
 
-.hero-aliado-inner .hero-title {
-  /* Aliado: White with Blue Shine */
-  background-image: linear-gradient(90deg, #fff 0%, #fff 35%, #00D0FF 50%, #fff 65%, #fff 100%);
+.hero-aliado-inner .shine-wrapper {
+  /* Aliado Shine: White base with Blue beam */
+  background-image: linear-gradient(
+    90deg, 
+    #fff 0%, 
+    #fff 35%, 
+    #00D0FF 48%, 
+    #FFF 50%, 
+    #00D0FF 52%, 
+    #fff 65%, 
+    #fff 100%
+  );
 }
 
 .hero-inner:not(.hero-aliado-inner) .hero-subtitle { color: #121212; font-weight: 500; }
 .hero-subtitle { color: #121212; font-weight: 500; }
 
 @keyframes textShine {
-  from { background-position: 100% center; }
-  to { background-position: -300% center; }
+  0% { background-position: 100% center; }
+  100% { background-position: -200% center; }
 }
 .hero-slogan {
   color: #00D0FF;
@@ -485,10 +501,10 @@ const scrollToProducts = () => {
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 150px;
-  height: 150px;
-  background: rgba(0, 208, 255, 0.4);
-  filter: blur(50px);
+  width: 120px;
+  height: 120px;
+  background: rgba(0, 208, 255, 0.1);
+  filter: blur(35px);
   z-index: 1;
   animation: glowBreathe 4s ease-in-out infinite alternate;
 }
