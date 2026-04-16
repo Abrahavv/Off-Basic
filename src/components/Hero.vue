@@ -328,17 +328,18 @@ const scrollToProducts = () => {
 }
 
 .hero-aliado-inner .shine-wrapper {
-  /* Aliado Shine: White base with Blue beam */
+  /* Aliado Shine: White base with Blue beam and gray center */
   background-image: linear-gradient(
-    120deg, 
-    #fff 0%, 
-    #fff 35%, 
-    #00D0FF 48%, 
-    #FFF 50%, 
-    #00D0FF 52%, 
-    #fff 65%, 
+    120deg,
+    #fff 0%,
+    #fff 35%,
+    #00D0FF 48%,
+    #444 50%,
+    #00D0FF 52%,
+    #fff 65%,
     #fff 100%
   );
+  color: #fff;
 }
 
 .hero-inner:not(.hero-aliado-inner) .hero-subtitle { color: #121212; font-weight: 500; }
