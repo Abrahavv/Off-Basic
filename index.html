@@ -33,7 +33,7 @@
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Structured Data (JSON-LD) -->
+  <!-- Structured Data (JSON-LD) — Store -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -41,16 +41,113 @@
       "name": "Off Basic",
       "description": "Relojes, Audífonos y Cargadores Premium en Venezuela",
       "image": "https://offbasic.com/Off-Basic-Web-Cromado.png",
+      "url": "https://offbasic.com",
+      "telephone": "+584227867935",
+      "priceRange": "$20-$25",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Caracas",
         "addressCountry": "VE"
-      }
+      },
+      "sameAs": [
+        "https://instagram.com/offbasic",
+        "https://tiktok.com/@offbasic",
+        "https://youtube.com/@offbasic"
+      ]
     }
+  </script>
+
+  <!-- Structured Data (JSON-LD) — Products -->
+  <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Smartwatch Off Basic",
+        "description": "Smartwatch premium con monitoreo avanzado de salud, notificaciones inteligentes, pantalla AMOLED 1.9 pulgadas y batería de 7-10 días. Resistencia IP68.",
+        "image": "https://offbasic.com/product-smartwatch.svg",
+        "brand": { "@type": "Brand", "name": "Off Basic" },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://offbasic.com/#p-1",
+          "priceCurrency": "USD",
+          "price": "25.00",
+          "priceValidUntil": "2027-04-16",
+          "availability": "https://schema.org/InStock",
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "USD" },
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "VE" }
+          }
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "reviewCount": "124",
+          "bestRating": "5"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Audífonos ANC Off Basic",
+        "description": "Audífonos con cancelación activa de ruido hasta 40dB, Bluetooth 5.3, 30 horas de autonomía con estuche de carga.",
+        "image": "https://offbasic.com/product-audifonos.svg",
+        "brand": { "@type": "Brand", "name": "Off Basic" },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://offbasic.com/#p-2",
+          "priceCurrency": "USD",
+          "price": "20.00",
+          "priceValidUntil": "2027-04-16",
+          "availability": "https://schema.org/InStock",
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "USD" },
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "VE" }
+          }
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "reviewCount": "89",
+          "bestRating": "5"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Dock Magnético Off Basic",
+        "description": "Cargador magnético con tecnología de inducción, capacidad de 10,000 mAh, carga rápida MagSafe 15W y puerto USB-C bidireccional.",
+        "image": "https://offbasic.com/product-dock.svg",
+        "brand": { "@type": "Brand", "name": "Off Basic" },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://offbasic.com/#p-3",
+          "priceCurrency": "USD",
+          "price": "22.00",
+          "priceValidUntil": "2027-04-16",
+          "availability": "https://schema.org/InStock",
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "USD" },
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "VE" }
+          }
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.7",
+          "reviewCount": "56",
+          "bestRating": "5"
+        }
+      }
+    ]
   </script>
 </head>
 
 <body>
+  <!-- Skip to content: Accessibility (WCAG 2.1 AA) -->
+  <a href="#app" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem 2rem;background:#00D0FF;color:#000;font-weight:700;font-size:1rem;border-radius:0 0 8px 0;text-decoration:none;transition:all 0.2s;" onfocus="this.style.cssText='position:fixed;left:0;top:0;z-index:10000;padding:1rem 2rem;background:#00D0FF;color:#000;font-weight:700;font-size:1rem;border-radius:0 0 8px 0;text-decoration:none;'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;'">Saltar al contenido</a>
   <div id="app"></div>
   <script type="module" src="/src/main.js"></script>
 </body>

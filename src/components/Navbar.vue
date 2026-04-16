@@ -105,7 +105,7 @@ const scrollToProducts = () => {
 <template>
   <header class="navbar-wrapper">
     <!-- Countdown Bar (Both Modes) -->
-    <div class="top-countdown-bar" :class="isAliado ? 'timer-bg-aliado' : 'timer-bg-personal'">
+    <div class="top-countdown-bar" :class="isAliado ? 'timer-bg-aliado' : 'timer-bg-personal'" role="timer" aria-label="Cuenta regresiva de oferta de lanzamiento">
       <div class="countdown-center">
         <span class="countdown-text">
           <span class="live-dot"></span>
@@ -157,6 +157,7 @@ const scrollToProducts = () => {
         <button 
           class="mode-toggle-btn" 
           @click="emit('switch-mode', isAliado ? 'personal' : 'aliado')"
+          :aria-label="isAliado ? 'Cambiar a modo Market personal' : 'Cambiar a modo Aliado mayorista'"
         >
           {{ isAliado ? 'Cambiar a Market' : 'Cambiar a Aliado' }}
         </button>

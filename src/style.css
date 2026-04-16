@@ -342,3 +342,27 @@ section, header:not(.navbar-wrapper), footer {
 .hero-logo-fallback {
   transform: translateZ(0);
 }
+
+/* ===== ACCESSIBILITY: FOCUS-VISIBLE RINGS (WCAG 2.1 AA) ===== */
+:focus-visible {
+  outline: 2px solid var(--accent, #00D0FF);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Remove default outlines only when :focus-visible is supported */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Ensure interactive elements have proper focus indicators */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent, #00D0FF);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(0, 208, 255, 0.15);
+}
+

@@ -93,8 +93,8 @@ const scrollToProducts = () => {
       <h2 class="hero-subtitle st-4">Productos premium, rendimiento, estilo y eficiencia en uno.</h2>
 
       <div class="hero-actions st-5">
-        <button class="btn-primary btn-shimmer" @click="scrollToProducts">Comprar Ahora</button>
-        <button class="btn-secondary" @click="emit('switch-mode', 'aliado')">Modo Aliado</button>
+        <button class="btn-primary btn-shimmer" @click="scrollToProducts" aria-label="Ver productos y comprar ahora">Comprar Ahora</button>
+        <button class="btn-secondary" @click="emit('switch-mode', 'aliado')" aria-label="Cambiar a modo Aliado para ventas al mayor">Modo Aliado</button>
       </div>
     </div>
 
@@ -133,7 +133,7 @@ const scrollToProducts = () => {
       </h2>
 
       <div class="hero-actions st-5">
-        <button class="btn-primary btn-shimmer" @click="scrollToProducts">ACCEDER AHORA</button>
+        <button class="btn-primary btn-shimmer" @click="scrollToProducts" aria-label="Acceder al catálogo de inversión del Baúl">ACCEDER AHORA</button>
       </div>
 
       <div class="hero-video-wrapper st-6">
