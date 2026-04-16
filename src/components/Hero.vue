@@ -199,8 +199,15 @@ const scrollToProducts = () => {
 .ring-huge-3 { border-style: dashed;                         animation: expandHugeRing 9s infinite 6s; }
 
 @keyframes expandHugeRing {
-  0%   { width: 180px; height: 180px; opacity: 0.9; }
-  100% { width: 160vmax; height: 160vmax; opacity: 0; }
+  0%   { width: 120px; height: 120px; opacity: 0.9; }
+  100% { width: 100vmax; height: 100vmax; opacity: 0; }
+}
+
+@media (max-width: 768px) {
+  @keyframes expandHugeRing {
+    0%   { width: 80px; height: 80px; opacity: 0.8; }
+    100% { width: 120%; height: 120%; opacity: 0; }
+  }
 }
 
 .tech-chevron {
@@ -213,10 +220,17 @@ const scrollToProducts = () => {
 }
 
 @keyframes shootChevron {
-  0%   { transform: translate(-50%, -120px) rotate(45deg) scale(0.5); opacity: 0; }
+  0%   { transform: translate(-50%, -80px) rotate(45deg) scale(0.5); opacity: 0; }
   20%  { opacity: 0.8; }
   80%  { opacity: 0.8; }
-  100% { transform: translate(-50%, -120vmax) rotate(45deg) scale(1.5); opacity: 0; }
+  100% { transform: translate(-50%, -100vmax) rotate(45deg) scale(1.2); opacity: 0; }
+}
+
+@media (max-width: 768px) {
+  @keyframes shootChevron {
+    0%   { transform: translate(-50%, -40px) rotate(45deg) scale(0.5); opacity: 0; }
+    100% { transform: translate(-50%, -100%) rotate(45deg) scale(1); opacity: 0; }
+  }
 }
 
 .arrow-container {
@@ -263,6 +277,7 @@ const scrollToProducts = () => {
           brightness(1.05);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
+  transform: translateZ(0);
 }
 
 .hero-logo-img.is-tilting {
@@ -282,6 +297,7 @@ const scrollToProducts = () => {
           brightness(1.05);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
+  transform: translateZ(0);
 }
 
 .baul-img.is-tilting {

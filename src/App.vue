@@ -188,12 +188,19 @@ const activeProductData = computed(() => {
 });
 
 const setMode = (mode) => {
+  if (currentMode.value === mode) return;
+  
   currentMode.value = mode;
   localStorage.setItem('offbasic_mode', mode);
-  // Add scroll to top on mode change
-  setTimeout(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, 50);
+
+  // Instant scroll on mobile to avoid jank during DOM updates
+  const isMobile = window.innerWidth <= 768;
+  const scrollBehavior = isMobile ? 'auto' : 'smooth';
+
+  // Use requestAnimationFrame for smoother state transition before scrolling
+  requestAnimationFrame(() => {
+    window.scrollTo({ top: 0, behavior: scrollBehavior });
+  });
 };
 
 const applyThemeClass = () => {
@@ -285,29 +292,36 @@ watch(currentMode, () => {
         <main>
           <Hero :mode="currentMode" @switch-mode="setMode" />
 
-          <!-- Personal Mode Sections -->
-          <div v-if="currentMode === 'personal'" class="mode-fade-in">
-            <ProductList mode="personal" :products="products" />
-            <ObjectivesSection mode="personal" />
-            <FounderSection mode="personal" />
-            <PaymentMethods mode="personal" />
-            <TestimonialsSection mode="personal" />
-          </div>
+          <!-- High-Octane Transition Layer -->
+          <div class="mode-fade-in" :key="currentMode">
+            
+            <!-- Aliado Unique Intro -->
+            <template v-if="currentMode === 'aliado'">
+              <BaulExplainer mode="aliado" />
+              <BenefitsSection />
+              <ComparisonSection mode="aliado" />
+            </template>
 
-          <!-- Aliado Mode Sections -->
-          <div v-if="currentMode === 'aliado'" class="mode-fade-in">
-            <!-- Video integrado en Hero para modo aliado -->
-            <BaulExplainer mode="aliado" />
-            <BenefitsSection />
-            <ComparisonSection mode="aliado" />
-            <ProductList mode="aliado" :products="displayProducts" />
-            <KeysSection mode="aliado" />
-            <BonusSection mode="aliado" />
-            <ObjectivesSection mode="aliado" />
-            <FounderSection mode="aliado" />
-            <PaymentMethods mode="aliado" />
-            <TestimonialsSection mode="aliado" />
-            <ClosingSection />
+            <!-- Common Section: Products -->
+            <ProductList 
+              :mode="currentMode" 
+              :products="currentMode === 'aliado' ? displayProducts : products" 
+            />
+
+            <!-- Aliado Unique Perks -->
+            <template v-if="currentMode === 'aliado'">
+              <KeysSection mode="aliado" />
+              <BonusSection mode="aliado" />
+            </template>
+
+            <!-- Common Sections -->
+            <ObjectivesSection :mode="currentMode" />
+            <FounderSection :mode="currentMode" />
+            <PaymentMethods :mode="currentMode" />
+            <TestimonialsSection :mode="currentMode" />
+
+            <!-- Aliado Closing -->
+            <ClosingSection v-if="currentMode === 'aliado'" />
           </div>
 
           <FaqSection :mode="currentMode" />
