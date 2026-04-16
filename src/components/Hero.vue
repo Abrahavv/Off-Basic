@@ -120,13 +120,14 @@ const scrollToProducts = () => {
         </div>
       </div>
 
-      <div class="hero-tagline-wrap st-2">
+      <h1 class="hero-title st-2">
+        <span class="shine-wrapper">Baúl De Off Basic</span>
+      </h1>
+
+      <div class="hero-tagline-wrap st-3">
         <span class="mini-badge">LLAVE DE ENTRADA · DISPONIBLE AHORA</span>
       </div>
 
-      <h1 class="hero-title st-3">
-        <span class="shine-wrapper">Baúl De Off Basic</span>
-      </h1>
       <h2 class="hero-subtitle st-4">
         El inventario está protegido. Para ver los precios al mayor, necesitas la Llave de acceso.
       </h2>
@@ -315,7 +316,7 @@ const scrollToProducts = () => {
   animation: textShine 4s linear infinite;
   /* Personal Shine: Black base with Blue beam */
   background-image: linear-gradient(
-    90deg, 
+    120deg, 
     #000 0%, 
     #000 35%, 
     #00D0FF 48%, 
@@ -329,7 +330,7 @@ const scrollToProducts = () => {
 .hero-aliado-inner .shine-wrapper {
   /* Aliado Shine: White base with Blue beam */
   background-image: linear-gradient(
-    90deg, 
+    120deg, 
     #fff 0%, 
     #fff 35%, 
     #00D0FF 48%, 

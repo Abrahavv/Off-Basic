@@ -168,34 +168,6 @@ const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-// --- SWIPE LOGIC ---
-const touchStartX = ref(0);
-const touchEndX = ref(0);
-
-const handleTouchStart = (e) => {
-  touchStartX.value = e.changedTouches[0].screenX;
-};
-
-const handleTouchEnd = (e) => {
-  touchEndX.value = e.changedTouches[0].screenX;
-  handleSwipe();
-};
-
-const handleSwipe = () => {
-  const diff = touchStartX.value - touchEndX.value;
-  const threshold = 70; // Sensibilidad del swipe
-
-  if (Math.abs(diff) > threshold) {
-    if (diff > 0 && currentMode.value === 'personal') {
-      // Swipe Left -> Aliado
-      setMode('aliado');
-    } else if (diff < 0 && currentMode.value === 'aliado') {
-      // Swipe Right -> Personal
-      setMode('personal');
-    }
-  }
-};
-
 const activeProduct = computed(() => {
   return products.find(p => p.id === activeProductId.value);
 });
@@ -273,17 +245,12 @@ onMounted(() => {
   window.addEventListener('popstate', handleHash);
   window.addEventListener('beforeunload', saveScrollPosition);
   window.addEventListener('scroll', handleScroll, { passive: true });
-  // Swipes
-  window.addEventListener('touchstart', handleTouchStart, { passive: true });
-  window.addEventListener('touchend', handleTouchEnd, { passive: true });
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener('popstate', handleHash);
   window.removeEventListener('beforeunload', saveScrollPosition);
   window.removeEventListener('scroll', handleScroll);
-  window.removeEventListener('touchstart', handleTouchStart);
-  window.removeEventListener('touchend', handleTouchEnd);
 });
 
 watch(currentMode, () => {

@@ -156,7 +156,7 @@ const getWhatsappUrl = (productName, price) => {
                       <path d="M16 10a4 4 0 01-8 0"/>
                     </svg>
                   </span>
-                  <span class="btn-text">{{ isAliado ? 'Agregar al Pedido' : 'Agregar' }}</span>
+                  <span class="btn-text">Agregar</span>
                 </button>
 
                 <button 
