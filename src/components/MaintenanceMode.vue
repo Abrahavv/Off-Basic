@@ -35,7 +35,7 @@
   align-items: center;
   text-align: center;
   max-width: 800px;
-  animation: fadeIn 0.8s ease-out;
+  animation: fadeIn 0.4s ease-out;
 }
 
 .logo {

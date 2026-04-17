@@ -14,16 +14,14 @@ const activeKey = ref(1);
 // --- TILT LOGIC ---
 const mainKeyRef = ref(null);
 
+// Simplified tilt for performance
 const handleTilt = (e, el) => {
-  if (!el) return;
+  if (!el || window.innerWidth < 768) return;
   const rect = el.getBoundingClientRect();
   const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
-  const y = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
   const centerX = rect.width / 2;
-  const centerY = rect.height / 2;
-  const rotX = (centerY - y) / 10;
-  const rotY = (x - centerX) / 10;
-  el.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.05, 1.05, 1.05)`;
+  const rotY = (x - centerX) / 15;
+  el.style.transform = `perspective(1000px) rotateY(${rotY}deg) scale3d(1.02, 1.02, 1.02)`;
 };
 
 const resetTilt = (el) => {
@@ -321,14 +319,14 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
   position: relative;
   z-index: 1;
-  transition: transform 0.15s ease-out;
+  transition: transform 0.3s ease-out;
   transform-origin: center center;
   will-change: transform;
 }
 
 .key-floater-clean,
 .key-floater-clean-sidebar {
-  animation: keyFloat 4s ease-in-out infinite;
+  animation: keyFloat 6s ease-in-out infinite;
 }
 
 .key-info-main {
@@ -617,8 +615,8 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
     width: 200px;
   }
   /* ANIM-07: Disable sidebar float animation on mobile */
-  .sidebar-key-img {
-    animation: none;
+  .sidebar-key-img, .key-floater-clean, .key-floater-clean-sidebar {
+    animation: none !important;
   }
 }
 

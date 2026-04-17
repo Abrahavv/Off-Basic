@@ -112,13 +112,13 @@ img {
     padding: 0 1rem;
   }
   .scroll-reveal.slide-left {
-    transform: translateX(-20px);
+    transform: translateX(-10px);
   }
   .scroll-reveal.slide-right {
-    transform: translateX(20px);
+    transform: translateX(10px);
   }
   .scroll-reveal.slide-up {
-    transform: translateY(20px);
+    transform: translateY(10px);
   }
 }
 
@@ -208,7 +208,7 @@ img {
 
 /* ===== ANIMATIONS ===== */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
+  from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -234,7 +234,7 @@ img {
 /* ===== SCROLL REVEAL ANIMATIONS ===== */
 .scroll-reveal {
   opacity: 0;
-  transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .scroll-reveal:not(.revealed) {
@@ -242,15 +242,15 @@ img {
 }
 
 .scroll-reveal.slide-left {
-  transform: translateX(-60px);
+  transform: translateX(-30px);
 }
 
 .scroll-reveal.slide-right {
-  transform: translateX(60px);
+  transform: translateX(30px);
 }
 
 .scroll-reveal.slide-up {
-  transform: translateY(50px);
+  transform: translateY(25px);
 }
 
 .scroll-reveal.revealed {

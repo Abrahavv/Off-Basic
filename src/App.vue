@@ -146,14 +146,8 @@ const products = [
 const isMaintenanceMode = ref(false); // Cambiar a false para desactivar el modo mantenimiento
 const currentMode = ref(localStorage.getItem('offbasic_mode') || 'personal');
 const activeProductId = ref(null);
-const showBackToTop = ref(false);
-
 const handleScroll = () => {
-  showBackToTop.value = window.scrollY > 800;
-};
-
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Logic for other scroll-dependent elements if any
 };
 
 const activeProduct = computed(() => {
@@ -185,14 +179,8 @@ const setMode = (mode) => {
   currentMode.value = mode;
   localStorage.setItem('offbasic_mode', mode);
 
-  // Instant scroll on mobile to avoid jank during DOM updates
-  const isMobile = window.innerWidth <= 768;
-  const scrollBehavior = isMobile ? 'auto' : 'smooth';
-
-  // Use requestAnimationFrame for smoother state transition before scrolling
-  requestAnimationFrame(() => {
-    window.scrollTo({ top: 0, behavior: scrollBehavior });
-  });
+  // Forzamos scroll instantáneo al cambiar de modo para evitar sensación de "pegado"
+  window.scrollTo({ top: 0, behavior: 'instant' });
 };
 
 const applyThemeClass = () => {
@@ -298,21 +286,9 @@ watch(currentMode, () => {
         <FooterSection :mode="currentMode" />
         <BottomPromoBar :mode="currentMode" />
 
-        <!-- BACK TO TOP BUTTON -->
-        <Transition name="fade">
-          <button 
-            v-if="showBackToTop" 
-            @click="scrollToTop" 
-            class="back-to-top"
-            aria-label="Volver arriba"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 15l-6-6-6 6"/>
-            </svg>
-          </button>
-        </Transition>
       </div>
     </template>
+    
     </template>
   </div>
 </template>
@@ -343,55 +319,20 @@ main {
   flex-grow: 1;
 }
 
-/* === BACK TO TOP === */
-.back-to-top {
-  position: fixed;
-  bottom: 100px; /* Above BottomPromoBar */
-  right: 2rem;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--black);
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 99;
-  box-shadow: 0 4px 15px rgba(0, 208, 255, 0.4);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.back-to-top:hover {
-  transform: scale(1.1) translateY(-5px);
-  background: var(--accent-hover);
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-  transform: scale(0.5) translateY(20px);
-}
-
 .page-enter-active, .page-leave-active {
-  transition: opacity 0.32s ease, transform 0.32s ease;
+  transition: opacity 0.1s ease;
 }
 
 .page-enter-from, .page-leave-to {
   opacity: 0;
-  transform: translateY(16px);
 }
 
 @media (max-width: 480px) {
   .back-to-top {
-    bottom: 90px;
-    right: 1rem;
-    width: 40px;
-    height: 40px;
+    bottom: 120px; /* Aún más arriba en móvil para no tapar el CTA de la barra */
+    right: 20px;
+    width: 46px;
+    height: 46px;
   }
 }
 </style>

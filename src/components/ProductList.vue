@@ -249,11 +249,11 @@ const getWhatsappUrl = (productName, price) => {
 
 .animate-product {
   opacity: 0;
-  animation: cardFadeIn 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  animation: cardFadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes cardFadeIn {
-  from { opacity: 0; transform: translateY(30px); }
+  from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 

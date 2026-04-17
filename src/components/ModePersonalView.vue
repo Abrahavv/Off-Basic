@@ -31,11 +31,11 @@ const emit = defineEmits(['switch-mode']);
 
 <style scoped>
 .mode-page-inner {
-  animation: fadeInUp 0.3s ease-out both;
+  animation: fadeInFast 0.15s ease-out both;
 }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
+@keyframes fadeInFast {
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 </style>
