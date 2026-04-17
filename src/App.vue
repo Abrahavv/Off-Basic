@@ -240,7 +240,10 @@ const handleHash = () => {
 onMounted(() => {
   applyThemeClass();
   handleHash();
-  restoreScrollPosition();
+  // Always start at the top (hero section) instead of restoring scroll position
+  setTimeout(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, 50);
   window.addEventListener('popstate', handleHash);
   window.addEventListener('beforeunload', saveScrollPosition);
   window.addEventListener('scroll', handleScroll, { passive: true });
