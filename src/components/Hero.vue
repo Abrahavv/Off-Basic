@@ -1,37 +1,11 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { WHATSAPP_NUMBER } from '../config.js';
 
 const props = defineProps({ mode: String });
 const emit = defineEmits(['switch-mode']);
 
 const isAliado = computed(() => props.mode === 'aliado');
-
-// --- TILT LOGIC (Restored from commit f6f9a29) ---
-const tiltRef = ref(null);
-const tiltBaulRef = ref(null);
-
-const handleTilt = (e, el) => {
-  if (!el) return;
-  el.classList.add('is-tilting'); // Remove transition lag
-  const rect = el.getBoundingClientRect();
-  const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
-  const y = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 2;
-  const rotX = (centerY - y) / 10;
-  const rotY = (x - centerX) / 10;
-  el.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.08, 1.08, 1.08)`;
-};
-
-const resetTilt = (el) => {
-  if (!el) return;
-  el.classList.remove('is-tilting'); // Restore smooth reset
-  el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-};
-
-const handleMouseMove = (e) => handleTilt(e, isAliado.value ? tiltBaulRef.value : tiltRef.value);
-const handleMouseLeave = () => resetTilt(isAliado.value ? tiltBaulRef.value : tiltRef.value);
 
 const scrollToProducts = () => {
   const target = document.getElementById('baul-content') || document.getElementById('productos');
@@ -67,17 +41,9 @@ const scrollToProducts = () => {
 
     <!-- ========== PERSONAL MODE ========== -->
     <div v-if="!isAliado" class="container hero-inner animate-in">
-      <div 
-        class="hero-logo-wrap st-1" 
-        @mousemove="handleMouseMove" 
-        @mouseleave="handleMouseLeave"
-        @touchstart="handleMouseMove"
-        @touchmove="handleMouseMove"
-        @touchend="handleMouseLeave"
-      >
+      <div class="hero-logo-wrap st-1">
         <div class="logo-floater-clean">
           <img 
-            ref="tiltRef"
             src="/Off-Basic-Web-Cromado.png" 
             alt="Off Basic Logo" 
             class="hero-logo-img"
@@ -100,18 +66,10 @@ const scrollToProducts = () => {
 
     <!-- ========== ALIADO MODE ========== -->
     <div v-if="isAliado" class="container hero-inner hero-aliado-inner animate-in">
-      <div 
-        class="baul-visual st-1"
-        @mousemove="handleMouseMove" 
-        @mouseleave="handleMouseLeave"
-        @touchstart="handleMouseMove"
-        @touchmove="handleMouseMove"
-        @touchend="handleMouseLeave"
-      >
+      <div class="baul-visual st-1">
         <div class="cyber-glow"></div>
         <div class="baul-container baul-floating">
           <img 
-            ref="tiltBaulRef"
             src="/Baul-Off-Basic.png" 
             alt="El Baúl de Off Basic" 
             class="baul-img"

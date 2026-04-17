@@ -67,26 +67,6 @@ onUnmounted(() => {
   document.removeEventListener('visibilitychange', handleVisibilityChange);
 });
 
-// --- TILT LOGIC ---
-const logoRef = ref(null);
-
-const handleTilt = (e, el) => {
-  if (!el) return;
-  const rect = el.getBoundingClientRect();
-  const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
-  const y = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 2;
-  const rotX = (centerY - y) / 10;
-  const rotY = (x - centerX) / 10;
-  el.style.transform = `perspective(500px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.1, 1.1, 1.1)`;
-};
-
-const resetTilt = (el) => {
-  if (!el) return;
-  el.style.transform = `perspective(500px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-};
-
 const scrollToProducts = () => {
   const target = document.getElementById('baul-content') || document.getElementById('productos');
   if (target) {
@@ -135,16 +115,8 @@ const scrollToProducts = () => {
 
     <div class="navbar">
       <div class="container nav-content">
-      <div 
-        class="logo"
-        @mousemove="handleTilt($event, logoRef)"
-        @mouseleave="resetTilt(logoRef)"
-        @touchstart="handleTilt($event, logoRef)"
-        @touchmove="handleTilt($event, logoRef)"
-        @touchend="resetTilt(logoRef)"
-      >
+      <div class="logo">
         <img 
-          ref="logoRef"
           :src="isAliado ? '/Icono-web-Oscuro.png' : '/Icono-web-Claro.png'" 
           alt="Off Basic" 
           class="logo-img"
