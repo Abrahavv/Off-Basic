@@ -1,25 +1,13 @@
 <script setup>
 import { ref, onMounted, watch, computed, onBeforeUnmount } from 'vue';
 import Navbar from './components/Navbar.vue';
-import Hero from './components/Hero.vue';
-import ProductList from './components/ProductList.vue';
 import ProductDetailView from './components/ProductDetailView.vue';
-import TestimonialsSection from './components/TestimonialsSection.vue';
-import FounderSection from './components/FounderSection.vue';
-import BenefitsSection from './components/BenefitsSection.vue';
-import ClosingSection from './components/ClosingSection.vue';
-import PaymentMethods from './components/PaymentMethods.vue';
-import ObjectivesSection from './components/ObjectivesSection.vue';
-import FaqSection from './components/FaqSection.vue';
 import FooterSection from './components/FooterSection.vue';
-import ComparisonSection from './components/ComparisonSection.vue';
-import KeysSection from './components/KeysSection.vue';
-import BaulExplainer from './components/BaulExplainer.vue';
-import AffiliateVideoSection from './components/AffiliateVideoSection.vue';
 import ShoppingCart from './components/ShoppingCart.vue';
 import BottomPromoBar from './components/BottomPromoBar.vue';
-import BonusSection from './components/BonusSection.vue';
 import MaintenanceMode from './components/MaintenanceMode.vue';
+import ModePersonalView from './components/ModePersonalView.vue';
+import ModeAliadoView from './components/ModeAliadoView.vue';
 
 // --- DATA ---
 const products = [
@@ -179,6 +167,10 @@ const displayProducts = computed(() => {
   return products;
 });
 
+const modeViewComponent = computed(() => {
+  return currentMode.value === 'aliado' ? ModeAliadoView : ModePersonalView;
+});
+
 const activeProductData = computed(() => {
   if (!activeProduct.value) return null;
   if (currentMode.value === 'aliado') {
@@ -290,41 +282,15 @@ watch(currentMode, () => {
       <div class="app-wrapper">
         <Navbar :mode="currentMode" @switch-mode="setMode" />
         <main>
-          <Hero :mode="currentMode" @switch-mode="setMode" />
-
-          <!-- High-Octane Transition Layer -->
-          <div class="mode-fade-in" :key="currentMode">
-            
-            <!-- Aliado Unique Intro -->
-            <template v-if="currentMode === 'aliado'">
-              <BaulExplainer mode="aliado" />
-              <BenefitsSection />
-              <ComparisonSection mode="aliado" />
-            </template>
-
-            <!-- Common Section: Products -->
-            <ProductList 
-              :mode="currentMode" 
-              :products="currentMode === 'aliado' ? displayProducts : products" 
+          <transition name="page" mode="out-in">
+            <component
+              :is="modeViewComponent"
+              :key="currentMode"
+              :mode="currentMode"
+              :products="currentMode === 'aliado' ? displayProducts : products"
+              @switch-mode="setMode"
             />
-
-            <!-- Aliado Unique Perks -->
-            <template v-if="currentMode === 'aliado'">
-              <KeysSection mode="aliado" />
-              <BonusSection mode="aliado" />
-            </template>
-
-            <!-- Common Sections -->
-            <ObjectivesSection :mode="currentMode" />
-            <FounderSection :mode="currentMode" />
-            <PaymentMethods :mode="currentMode" />
-            <TestimonialsSection :mode="currentMode" />
-
-            <!-- Aliado Closing -->
-            <ClosingSection v-if="currentMode === 'aliado'" />
-          </div>
-
-          <FaqSection :mode="currentMode" />
+          </transition>
         </main>
         <FooterSection :mode="currentMode" />
         <BottomPromoBar :mode="currentMode" />
@@ -406,6 +372,15 @@ main {
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
   transform: scale(0.5) translateY(20px);
+}
+
+.page-enter-active, .page-leave-active {
+  transition: opacity 0.32s ease, transform 0.32s ease;
+}
+
+.page-enter-from, .page-leave-to {
+  opacity: 0;
+  transform: translateY(16px);
 }
 
 @media (max-width: 480px) {
