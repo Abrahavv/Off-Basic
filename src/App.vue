@@ -190,21 +190,30 @@ const applyThemeClass = () => {
 const closeProduct = () => {
   window.history.pushState(null, null, window.location.pathname);
   activeProductId.value = null;
-  // Small delay to ensure the re-render happens before scrolling
+  // Increased delay to 150ms to ensure the main catalog has re-rendered and animations are stable
   setTimeout(() => {
+    // Determine the correct section based on the mode
     const targetId = currentMode.value === 'aliado' ? 'baul-content' : 'productos';
-    const target = document.getElementById(targetId) || document.getElementById('productos');
+    const target = document.getElementById(targetId);
+    
     if (target) {
       const nav = document.querySelector('.navbar-wrapper');
-      const offset = nav ? nav.offsetHeight + 20 : 100;
+      // Calculate offset based on navbar height, which can vary between modes and devices
+      const offset = nav ? nav.offsetHeight + 15 : 100;
       const pos = target.getBoundingClientRect().top + window.scrollY - offset;
 
       window.scrollTo({
         top: pos,
         behavior: 'smooth'
       });
+    } else {
+      // Fallback scroll to top of products if specific target is not found
+      const fallbackTarget = document.getElementById('productos');
+      if (fallbackTarget) {
+        fallbackTarget.scrollIntoView({ behavior: 'smooth' });
+      }
     }
-  }, 50);
+  }, 150);
 };
 
 // Scroll position persistence
