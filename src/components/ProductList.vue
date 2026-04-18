@@ -177,7 +177,7 @@ const getWhatsappUrl = (productName, price) => {
                           <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                       </div>
-                      <span class="c-toast-msg">Añadido al carrito de compra</span>
+                      <span class="c-toast-msg">Añadido al carrito</span>
                     </div>
                   </Transition>
                 </div>
