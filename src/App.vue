@@ -35,14 +35,12 @@ const products = [
       profitPerUnit: 11.25,
       avgDailySales: 8,
       restockDays: 3,
-      satisfaction: 96,
-      competitionLevel: 22,
-      monthlyRevenue: 6000,
-      categories: [
-        { name: 'Salud & Fitness', percent: 40 },
-        { name: 'Moda & Estilo', percent: 30 },
-        { name: 'Productividad', percent: 20 },
-        { name: 'Regalos', percent: 10 }
+      radarStats: [
+        { label: 'Demanda', value: 90 },
+        { label: 'Rentabilidad', value: 85 },
+        { label: 'Escalabilidad', value: 95 },
+        { label: 'Estabilidad', value: 80 },
+        { label: 'Retención', value: 75 }
       ]
     },
     histogram: [
@@ -81,11 +79,12 @@ const products = [
       satisfaction: 98,
       competitionLevel: 30,
       monthlyRevenue: 3600,
-      categories: [
-        { name: 'Trabajo Remoto', percent: 35 },
-        { name: 'Deportes', percent: 25 },
-        { name: 'Viajes', percent: 25 },
-        { name: 'Gaming', percent: 15 }
+      radarStats: [
+        { label: 'Demanda', value: 85 },
+        { label: 'Rentabilidad', value: 92 },
+        { label: 'Escalabilidad', value: 80 },
+        { label: 'Estabilidad', value: 95 },
+        { label: 'Retención', value: 88 }
       ]
     },
     histogram: [
@@ -124,11 +123,12 @@ const products = [
       satisfaction: 94,
       competitionLevel: 15,
       monthlyRevenue: 2640,
-      categories: [
-        { name: 'Oficina & Escritorio', percent: 45 },
-        { name: 'Hogar', percent: 30 },
-        { name: 'Regalos Corp.', percent: 15 },
-        { name: 'Viajes', percent: 10 }
+      radarStats: [
+        { label: 'Demanda', value: 70 },
+        { label: 'Rentabilidad', value: 78 },
+        { label: 'Escalabilidad', value: 96 },
+        { label: 'Estabilidad', value: 85 },
+        { label: 'Retención', value: 92 }
       ]
     },
     histogram: [
@@ -192,7 +192,18 @@ const closeProduct = () => {
   activeProductId.value = null;
   // Small delay to ensure the re-render happens before scrolling
   setTimeout(() => {
-    document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth' });
+    const targetId = currentMode.value === 'aliado' ? 'baul-content' : 'productos';
+    const target = document.getElementById(targetId) || document.getElementById('productos');
+    if (target) {
+      const nav = document.querySelector('.navbar-wrapper');
+      const offset = nav ? nav.offsetHeight + 20 : 100;
+      const pos = target.getBoundingClientRect().top + window.scrollY - offset;
+
+      window.scrollTo({
+        top: pos,
+        behavior: 'smooth'
+      });
+    }
   }, 50);
 };
 

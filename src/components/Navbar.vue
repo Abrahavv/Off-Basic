@@ -386,24 +386,26 @@ const scrollToProducts = () => {
 }
 
 .mode-toggle-btn {
-  background: transparent;
-  border: 1px solid var(--accent);
+  background: var(--bg);
+  border: 2px solid var(--accent);
   color: var(--text);
   font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
-  font-weight: 600;
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
+  font-weight: 700;
+  padding: 0.4rem 1.2rem;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-right: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 208, 255, 0.1);
 }
 
 .mode-toggle-btn:hover {
-  background: var(--accent);
-  color: var(--black);
+  background: var(--bg);
+  color: var(--accent);
   border-color: var(--accent);
-  box-shadow: 0 0 10px rgba(0, 208, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 208, 255, 0.25);
+  transform: translateY(-1px);
 }
 
 @media (max-width: 768px) {
@@ -462,10 +464,11 @@ const scrollToProducts = () => {
     margin-left: 0;
   }
   .mode-toggle-btn {
-    font-size: 0.65rem;
-    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
     margin-right: 0;
     white-space: nowrap;
+    border-width: 1.5px; /* Slightly thinner border for small screens but still blue */
   }
   .nav-controls {
     gap: 0.35rem;

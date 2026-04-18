@@ -138,7 +138,7 @@ const scrollToProducts = () => {
 .hero-bg-hologram {
   position: absolute;
   inset: 0;
-  z-index: 2; /* Increased to show over Pearl BG */
+  z-index: 5; /* Higher than Pearl BG and Orbs */
   pointer-events: none;
   overflow: hidden;
 }
@@ -178,6 +178,7 @@ const scrollToProducts = () => {
   border-left: 4px solid rgba(0, 208, 255, 1);
   animation: shootChevron 6s infinite;
   will-change: transform, opacity;
+  filter: drop-shadow(0 0 12px rgba(0, 208, 255, 0.6));
 }
 
 @keyframes shootChevron {
@@ -190,7 +191,12 @@ const scrollToProducts = () => {
 @media (max-width: 768px) {
   @keyframes shootChevron {
     0%   { transform: translate(-50%, -40px) rotate(45deg) scale(0.5); opacity: 0; }
-    100% { transform: translate(-50%, -100%) rotate(45deg) scale(1); opacity: 0; }
+    50%  { opacity: 1; }
+    100% { transform: translate(-50%, -80vh) rotate(45deg) scale(1.1); opacity: 0; }
+  }
+  .tech-chevron {
+    width: 30px; height: 30px;
+    border-width: 5px;
   }
 }
 

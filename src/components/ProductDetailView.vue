@@ -3,7 +3,16 @@ import { ref, computed, onMounted } from 'vue';
 import { useCart } from '../composables/useCart';
 import { WHATSAPP_NUMBER } from '../config.js';
 
-const { addToCart, openCart, cartCount } = useCart();
+const { addToCart: cartAdd, openCart, cartCount } = useCart();
+const showToast = ref(false);
+
+const handleAddToCart = (product, qty) => {
+  cartAdd(product, qty, false); // Do not open cart automatically
+  showToast.value = true;
+  setTimeout(() => {
+    showToast.value = false;
+  }, 3000);
+};
 
 const props = defineProps({
   product: Object,
@@ -38,6 +47,39 @@ const compColor = computed(() => {
   if (pct <= 73) return '#f97316'; // Naranja (>66)
   return '#ef4444'; // Rojo (>73)
 });
+
+// Radar Chart Methods
+const getPoint = (i, value) => {
+  const angle = (Math.PI * 2) / 5 * i - Math.PI / 2;
+  const radius = value; // value is 0-100
+  return {
+    x: 150 + radius * Math.cos(angle),
+    y: 150 + radius * Math.sin(angle)
+  };
+};
+
+const getPentagonPoints = (radius) => {
+  return Array.from({ length: 5 }, (_, i) => {
+    const p = getPoint(i, radius);
+    return `${p.x},${p.y}`;
+  }).join(' ');
+};
+
+const getDataPoints = (stats) => {
+  return stats.map((s, i) => {
+    const p = getPoint(i, s.value);
+    return `${p.x},${p.y}`;
+  }).join(' ');
+};
+
+const getLabelPos = (i) => {
+  const angle = (Math.PI * 2) / 5 * i - Math.PI / 2;
+  const radius = 135; // Better spacing for labels
+  return {
+    x: 150 + radius * Math.cos(angle),
+    y: 150 + radius * Math.sin(angle)
+  };
+};
 </script>
 
 <template>
@@ -101,30 +143,29 @@ const compColor = computed(() => {
           </div>
 
           <!-- Stats Row (Aliado) -->
-          <div v-if="isAliado && product.stats" class="quick-stats">
-            <div class="q-stat">
-              <span class="q-icon">⚡</span>
-              <span>Alta Rotación</span>
+          <div v-if="isAliado" class="terminal-header-stats">
+            <div class="t-stat-pill">
+              <span class="pulse-dot"></span>
+              <span class="t-stat-label">ALTA ROTACIÓN</span>
             </div>
-            <div class="q-stat">
-              <span class="q-icon">📈</span>
-              <span>Rentabilidad</span>
+            <div class="t-stat-pill highlight">
+              <span class="t-stat-label">RENTABILIDAD PREMIUM</span>
             </div>
           </div>
 
-          <!-- Charts: Desktop Version (Hidden on Mobile) -->
+          <!-- Charts: Desktop Version (Visible only on Desktop > 1000px) -->
           <div v-if="isAliado" class="visual-side-charts desktop-charts">
-            <!-- Category Distribution -->
-            <div class="chart-box" v-if="product.stats?.categories">
-              <h4 class="chart-lbl">Distribución por Segmento de Mercado</h4>
-              <div class="category-bars">
-                <div v-for="cat in product.stats.categories" :key="cat.name" class="cat-row">
-                  <span class="cat-name">{{ cat.name }}</span>
-                  <div class="cat-track">
-                    <div class="cat-fill" :style="{ width: cat.percent + '%' }"></div>
-                  </div>
-                  <span class="cat-pct">{{ cat.percent }}%</span>
-                </div>
+            <!-- Product Profile Radar -->
+            <div class="chart-box" v-if="product.stats?.radarStats">
+              <h4 class="chart-lbl">Perfil Táctico del Producto</h4>
+              <div class="radar-container">
+                <svg viewBox="0 0 300 300" class="radar-svg">
+                  <polygon v-for="i in 5" :key="i" :points="getPentagonPoints(i * 20)" class="radar-grid-line" />
+                  <line v-for="(p, i) in product.stats.radarStats" :key="'ml-'+i" x1="150" y1="150" :x2="getPoint(i, 100).x" :y2="getPoint(i, 100).y" class="radar-axis" />
+                  <polygon :points="getDataPoints(product.stats.radarStats)" class="radar-area" />
+                  <circle v-for="(p, i) in product.stats.radarStats" :key="'mc-'+i" :cx="getPoint(i, p.value).x" :cy="getPoint(i, p.value).y" r="3" class="radar-point" />
+                  <text v-for="(p, i) in product.stats.radarStats" :key="'mt-'+i" :x="getLabelPos(i).x" :y="getLabelPos(i).y" class="radar-label" text-anchor="middle" dominant-baseline="middle">{{ p.label }}</text>
+                </svg>
               </div>
             </div>
 
@@ -178,53 +219,54 @@ const compColor = computed(() => {
 
           </div>
 
-          <!-- MODE: ALIADO — Enhanced Analytics Dashboard -->
-          <div v-if="isAliado" class="aliado-controls">
+          <!-- MODE: ALIADO — High-Ticket Analytics Dashboard -->
+          <div v-if="isAliado" class="aliado-premium-dashboard">
             
-            <!-- Primary Metrics Grid (2 rows of 3) -->
-            <div class="metrics-grid">
-              <div class="m-card highlight-card">
-                <span class="m-title">ROI</span>
-                <span class="m-val accent">{{ product.stats.roi }}</span>
-                <span class="m-trend up">↑ Creciente</span>
+            <div class="dashboard-section-label">Métricas de Rendimiento</div>
+
+            <!-- Primary Metrics: Investment View -->
+            <div class="investment-grid">
+              <div class="invest-card highlight">
+                <div class="invest-inner">
+                  <span class="i-label">ROI ESTIMADO</span>
+                  <span class="i-value neon-glow">{{ product.stats.roi }}</span>
+                  <div class="i-trend up">RENDIMIENTO POSITIVO</div>
+                </div>
               </div>
-              <div class="m-card">
-                <span class="m-title">Demanda</span>
-                <span class="m-val">{{ product.stats.demand }}</span>
-                <span class="m-trend up">⚡ Activa</span>
-              </div>
-              <div class="m-card">
-                <span class="m-title">Mínimo</span>
-                <span class="m-val">{{ product.stats.minOrder }} ud.</span>
-              </div>
-              <div class="m-card">
-                <span class="m-title">Ganancia/ud.</span>
-                <span class="m-val accent">${{ product.stats.profitPerUnit?.toFixed(2) }}</span>
-              </div>
-              <div class="m-card">
-                <span class="m-title">Venta Diaria</span>
-                <span class="m-val">{{ product.stats.avgDailySales }} ud.</span>
-                <span class="m-trend up">📈 Promedio</span>
-              </div>
-              <div class="m-card">
-                <span class="m-title">Restock</span>
-                <span class="m-val">{{ product.stats.restockDays }} días</span>
+              
+              <div class="invest-group">
+                <div class="invest-card small">
+                  <span class="i-label">DEMANDA</span>
+                  <span class="i-value">{{ product.stats.demand }}</span>
+                </div>
+                <div class="invest-card small">
+                  <span class="i-label">PEDIDO MÍN.</span>
+                  <span class="i-value">{{ product.stats.minOrder }} ud.</span>
+                </div>
+                <div class="invest-card small">
+                  <span class="i-label">GANANCIA/UD</span>
+                  <span class="i-value accent">${{ product.stats.profitPerUnit?.toFixed(2) }}</span>
+                </div>
+                <div class="invest-card small">
+                  <span class="i-label">VENTA DIARIA</span>
+                  <span class="i-value">{{ product.stats.avgDailySales }} ud.</span>
+                </div>
               </div>
             </div>
 
-            <!-- Charts: Mobile Version (Hidden on Desktop) -->
+            <!-- Charts: Mobile Version (Visible only on Screens < 1000px) -->
             <div class="visual-side-charts mobile-charts">
-              <!-- Category Distribution -->
-              <div class="chart-box" v-if="product.stats?.categories">
-                <h4 class="chart-lbl">Distribución por Segmento de Mercado</h4>
-                <div class="category-bars">
-                  <div v-for="cat in product.stats.categories" :key="cat.name" class="cat-row">
-                    <span class="cat-name">{{ cat.name }}</span>
-                    <div class="cat-track">
-                      <div class="cat-fill" :style="{ width: cat.percent + '%' }"></div>
-                    </div>
-                    <span class="cat-pct">{{ cat.percent }}%</span>
-                  </div>
+              <!-- Product Profile Radar -->
+              <div class="chart-box" v-if="product.stats?.radarStats">
+                <h4 class="chart-lbl">Perfil Táctico del Producto</h4>
+                <div class="radar-container mobile-radar">
+                  <svg viewBox="0 0 300 300" class="radar-svg">
+                    <polygon v-for="i in 5" :key="i" :points="getPentagonPoints(i * 20)" class="radar-grid-line" />
+                    <line v-for="(p, i) in product.stats.radarStats" :key="'ml-'+i" x1="150" y1="150" :x2="getPoint(i, 100).x" :y2="getPoint(i, 100).y" class="radar-axis" />
+                    <polygon :points="getDataPoints(product.stats.radarStats)" class="radar-area" />
+                    <circle v-for="(p, i) in product.stats.radarStats" :key="'mc-'+i" :cx="getPoint(i, p.value).x" :cy="getPoint(i, p.value).y" r="3" class="radar-point" />
+                    <text v-for="(p, i) in product.stats.radarStats" :key="'mt-'+i" :x="getLabelPos(i).x" :y="getLabelPos(i).y" class="radar-label" text-anchor="middle" dominant-baseline="middle">{{ p.label }}</text>
+                  </svg>
                 </div>
               </div>
 
@@ -242,80 +284,58 @@ const compColor = computed(() => {
               </div>
             </div>
 
+            <div class="dashboard-section-label">Vectores de Éxito</div>
+
             <!-- Gauges Row: Satisfaction + Competition + Revenue -->
-            <div class="gauges-row">
-              <!-- Circular Satisfaction Gauge -->
-              <div class="gauge-card">
-                <h4 class="gauge-label">Satisfacción del Cliente</h4>
-                <div class="circular-gauge">
-                  <svg viewBox="0 0 120 120" class="gauge-svg">
-                    <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8"/>
-                    <circle cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="8"
-                      stroke-linecap="round"
-                      :stroke-dasharray="(product.stats.satisfaction / 100) * 327 + ' 327'"
-                      stroke-dashoffset="0"
-                      transform="rotate(-90, 60, 60)"
-                      class="gauge-arc"
-                    />
-                  </svg>
-                  <div class="gauge-center">
-                    <span class="gauge-value">{{ product.stats.satisfaction }}%</span>
-                    <span class="gauge-sub">Clientes satisfechos</span>
+            <div class="performance-vectors">
+              <!-- Circular Satisfaction -->
+              <div class="vector-card">
+                <span class="v-label">SATISFACCIÓN</span>
+                <div class="v-visual">
+                  <div class="circular-gauge mini">
+                    <svg viewBox="0 0 100 100" class="gauge-svg">
+                      <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="6"/>
+                      <circle cx="50" cy="50" r="45" fill="none" stroke="var(--accent)" stroke-width="6"
+                        stroke-linecap="round"
+                        :stroke-dasharray="(product.stats.satisfaction / 100) * 283 + ' 283'"
+                        transform="rotate(-90, 50, 50)"
+                        class="gauge-arc"
+                      />
+                    </svg>
+                    <div class="gauge-center">
+                      <span class="v-value">{{ product.stats.satisfaction }}%</span>
+                    </div>
                   </div>
                 </div>
+                <span class="v-sub">CLIENTES FELICES</span>
               </div>
 
-              <!-- Competition Level -->
-              <div class="gauge-card">
-                <h4 class="gauge-label">Nivel de Competencia</h4>
-                <div class="competition-meter">
-                  <div class="comp-visual">
-                    <div class="comp-bar-track">
-                      <div class="comp-bar-fill" :style="{ width: product.stats.competitionLevel + '%', background: compColor }">
-                        <span class="comp-percent">{{ product.stats.competitionLevel }}%</span>
-                      </div>
+              <!-- Competition Meter -->
+              <div class="vector-card">
+                <span class="v-label">COMPETENCIA</span>
+                <div class="v-visual centering">
+                  <div class="h-meter">
+                    <div class="h-track">
+                      <div class="h-fill" :style="{ width: product.stats.competitionLevel + '%', background: compColor }"></div>
                     </div>
-                    <div class="comp-labels">
+                    <div class="h-labels">
                       <span>Baja</span>
-                      <span>Media</span>
                       <span>Alta</span>
                     </div>
                   </div>
-                  <p class="comp-insight" v-if="product.stats.competitionLevel < 30">
-                    🟢 Competencia Baja — ventaja competitiva alta
-                  </p>
-                  <p class="comp-insight" v-else-if="product.stats.competitionLevel <= 66">
-                    🟡 Competencia Media — diferenciación es clave
-                  </p>
-                  <p class="comp-insight" v-else-if="product.stats.competitionLevel <= 73">
-                    🟠 Competencia Moderada-Alta — estrategia requerida
-                  </p>
-                  <p class="comp-insight" v-else>
-                    🔴 Competencia Muy Alta — mercado saturado
-                  </p>
                 </div>
+                <span class="v-sub">{{ product.stats.competitionLevel }}% - CONTROLADO</span>
               </div>
 
               <!-- Monthly Revenue -->
-              <div class="gauge-card revenue-card">
-                <h4 class="gauge-label">Proyección Mensual</h4>
-                <div class="revenue-display">
-                  <span class="revenue-currency">$</span>
-                  <span class="revenue-amount">{{ product.stats.monthlyRevenue?.toLocaleString() }}</span>
+              <div class="vector-card revenue-v">
+                <span class="v-label">PROYECCIÓN MENSUAL</span>
+                <div class="v-visual centering">
+                  <span class="v-amount neon-text">${{ product.stats.monthlyRevenue?.toLocaleString() }}</span>
                 </div>
-                <div class="revenue-breakdown">
-                  <div class="rev-item">
-                    <span class="rev-label">Margen Bruto</span>
-                    <span class="rev-val accent">{{ product.stats.margin }}%</span>
-                  </div>
-                  <div class="rev-item">
-                    <span class="rev-label">Unidades/mes</span>
-                    <span class="rev-val">{{ product.stats.avgDailySales * 30 }}</span>
-                  </div>
-                  <div class="rev-item">
-                    <span class="rev-label">Ganancia neta</span>
-                    <span class="rev-val accent">${{ (product.stats.profitPerUnit * product.stats.avgDailySales * 30).toFixed(0) }}</span>
-                  </div>
+                <div class="v-mini-table">
+                  <span>MARGEN: {{ product.stats.margin }}%</span>
+                  <span>PREV: {{ product.stats.avgDailySales * 30 }} UD</span>
                 </div>
               </div>
             </div>
@@ -327,19 +347,34 @@ const compColor = computed(() => {
               <span>{{ quantity }}</span>
               <button @click="incrementQty" :disabled="quantity >= 10">+</button>
             </div>
-            <button 
-              @click="addToCart(product, quantity, !isAliado)" 
-              class="btn-primary main-cta"
-              :aria-label="isAliado ? 'Agregar al pedido' : 'Agregar al carrito'"
-              :title="isAliado ? 'Agregar al pedido' : 'Agregar al carrito'"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M16 10a4 4 0 01-8 0"/>
-              </svg>
-              {{ isAliado ? 'Agregar' : 'Agregar' }}
-            </button>
+            
+            <div class="btn-group-toast">
+              <button 
+                @click="handleAddToCart(product, quantity)" 
+                class="btn-primary main-cta"
+                :aria-label="isAliado ? 'Agregar al pedido' : 'Agregar al carrito'"
+                :title="isAliado ? 'Agregar al pedido' : 'Agregar al carrito'"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                  <line x1="3" y1="6" x2="21" y2="6"/>
+                  <path d="M16 10a4 4 0 01-8 0"/>
+                </svg>
+                {{ isAliado ? 'Agregar' : 'Agregar' }}
+              </button>
+
+              <!-- Contextual Notification Bubble (Luxury Style) -->
+              <Transition name="toast-float">
+                <div v-if="showToast" class="contextual-toast">
+                  <div class="c-toast-icon">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </div>
+                  <span class="c-toast-msg">Añadido al carrito de compra</span>
+                </div>
+              </Transition>
+            </div>
           </div>
 
           <!-- Trust Badges -->
@@ -350,6 +385,7 @@ const compColor = computed(() => {
           </div>
         </div>
       </div>
+      <!-- (Removed Fixed Notification) -->
     </div>
   </div>
 </template>
@@ -443,12 +479,12 @@ const compColor = computed(() => {
 .quick-stats {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: 3rem;
   margin-top: 1.5rem;
-  background: rgba(255,255,255,0.03);
-  padding: 0.75rem;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.025);
+  padding: 1.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .q-stat {
@@ -667,64 +703,313 @@ const compColor = computed(() => {
 .mobile-charts { display: none; }
 .desktop-charts { display: flex; }
 
-/* ALIADO SPECIFIC */
-.metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
-.m-card { padding: 1.25rem; background: rgba(255,255,255,0.03); border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: border-color 0.3s ease, transform 0.3s ease; display: flex; flex-direction: column; gap: 0.35rem; }
-@media (hover: hover) {
-  .m-card:hover { border-color: rgba(0, 208, 255, 0.2); transform: translateY(-2px); }
+.aliado-premium-dashboard {
+  margin-top: 2rem;
+  margin-bottom: 4rem; /* More space before action buttons */
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
 }
-.highlight-card { border-color: rgba(0, 208, 255, 0.15); background: rgba(0, 208, 255, 0.04); }
-.m-title { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; display: block; letter-spacing: 0.5px; }
-.m-val { font-size: 1.6rem; font-weight: 800; }
-.m-val.accent { color: var(--accent); }
-.m-trend { font-size: 0.7rem; color: #4ade80; font-weight: 600; }
-.m-trend.up { color: #4ade80; }
 
-/* Gauges Row */
-.gauges-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
-.gauge-card { padding: 1.5rem; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-.gauge-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; text-align: center; margin: 0; }
+.dashboard-section-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: -1.5rem;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
 
-/* Circular Gauge */
-.circular-gauge { position: relative; width: 130px; height: 130px; display: flex; align-items: center; justify-content: center; }
+.dashboard-section-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  opacity: 0.2;
+}
+
+/* Investment Grid */
+.investment-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 1.5rem;
+}
+
+.invest-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.invest-card.highlight {
+  background: linear-gradient(135deg, rgba(0, 208, 255, 0.08) 0%, rgba(0, 208, 255, 0.02) 100%);
+  border-color: rgba(0, 208, 255, 0.2);
+}
+
+.invest-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.invest-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.2rem;
+}
+
+.invest-card.small {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.i-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.i-value {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+.i-value.neon-glow {
+  color: var(--accent);
+  text-shadow: 0 0 15px rgba(0, 208, 255, 0.4);
+  font-size: 2.4rem;
+}
+
+.i-trend {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+  padding: 4px 10px;
+  border-radius: 4px;
+  align-self: flex-start;
+  margin-top: 0.5rem;
+}
+
+/* Performance Vectors */
+.performance-vectors {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.vector-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  min-height: 240px;
+}
+
+.v-label {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+}
+
+.v-visual {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.v-visual.centering { align-items: center; }
+
+.v-value { font-size: 1.5rem; font-weight: 900; color: var(--text); }
+.v-sub { 
+  font-size: 0.6rem; 
+  font-weight: 700; 
+  color: var(--text-muted); 
+  opacity: 0.6; 
+  white-space: nowrap;
+}
+
+.v-amount {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: -1px;
+}
+
+.neon-text { text-shadow: 0 0 15px rgba(0, 208, 255, 0.3); }
+
+.v-mini-table {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 1rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* Gauge Centering & Styles */
+.circular-gauge.mini { 
+  position: relative; 
+  width: 120px; 
+  height: 120px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
 .gauge-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.gauge-center { 
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  z-index: 2; 
+  text-align: center;
+}
 .gauge-arc { transition: stroke-dasharray 1.5s cubic-bezier(0.4, 0, 0.2, 1); filter: drop-shadow(0 0 6px rgba(0, 208, 255, 0.3)); }
-.gauge-center { display: flex; flex-direction: column; align-items: center; z-index: 2; }
-.gauge-value { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
-.gauge-sub { font-size: 0.6rem; color: var(--text-muted); text-align: center; max-width: 80px; line-height: 1.2; }
 
-/* Competition Meter */
-.competition-meter { width: 100%; display: flex; flex-direction: column; gap: 0.75rem; }
-.comp-visual { width: 100%; }
-.comp-bar-track { width: 100%; height: 28px; background: rgba(255,255,255,0.05); border-radius: 14px; overflow: hidden; position: relative; }
-.comp-bar-fill { height: 100%; border-radius: 14px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1); min-width: 50px; }
-.comp-percent { font-size: 0.75rem; font-weight: 800; color: #000; }
-.comp-labels { display: flex; justify-content: space-between; margin-top: 0.4rem; }
-.comp-labels span { font-size: 0.65rem; color: var(--text-muted); }
-.comp-insight { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; text-align: center; margin: 0; }
+/* Horizontal Meter */
+.h-meter { width: 100%; display: flex; flex-direction: column; gap: 0.8rem; }
+.h-track { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
+.h-fill { height: 100%; border-radius: 3px; }
+.h-labels { display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
 
-/* Revenue Card */
-.revenue-card { align-items: center; }
-.revenue-display { display: flex; align-items: baseline; gap: 0.25rem; }
-.revenue-currency { font-size: 1.4rem; font-weight: 700; color: var(--accent); opacity: 0.7; }
-.revenue-amount { font-size: 2.4rem; font-weight: 900; color: var(--accent); letter-spacing: -1px; }
-.revenue-breakdown { width: 100%; display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; }
-.rev-item { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.rev-item:last-child { border-bottom: none; }
-.rev-label { font-size: 0.75rem; color: var(--text-muted); }
-.rev-val { font-size: 0.9rem; font-weight: 700; color: var(--text); }
-.rev-val.accent { color: var(--accent); }
+/* Terminal Header Stats */
+.terminal-header-stats {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
 
-/* Category Distribution Bars */
-.category-bars { display: flex; flex-direction: column; gap: 0.9rem; }
-.cat-row { display: grid; grid-template-columns: 120px 1fr 45px; gap: 0.75rem; align-items: center; }
-.cat-name { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cat-track { height: 10px; background: rgba(255,255,255,0.05); border-radius: 5px; overflow: hidden; }
-.cat-fill { height: 100%; background: linear-gradient(90deg, var(--accent), rgba(0, 208, 255, 0.5)); border-radius: 5px; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
-.cat-pct { font-size: 0.8rem; font-weight: 700; color: var(--accent); text-align: right; }
+.t-stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(255,255,255,0.03);
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.t-stat-pill.highlight {
+  border-color: rgba(0, 208, 255, 0.3);
+  background: rgba(0, 208, 255, 0.05);
+}
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: heartRate 1.5s infinite;
+}
+
+@keyframes heartRate {
+  0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(0, 208, 255, 0.7); }
+  70% { transform: scale(1.2); opacity: 0.5; box-shadow: 0 0 0 6px rgba(0, 208, 255, 0); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.t-stat-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--text);
+}
+
+/* Radar Chart Styles */
+.radar-container {
+  width: 100%;
+  max-width: 250px; /* More elegant profile size */
+  margin: 1rem auto;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.radar-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.radar-grid-line {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.radar-axis {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1;
+}
+
+.radar-area {
+  fill: rgba(0, 208, 255, 0.25);
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  transition: all 0.5s ease;
+}
+
+.radar-point {
+  fill: #fff;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 3px var(--accent));
+}
+
+.radar-label {
+  fill: var(--text-muted);
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+}
+
+.mobile-radar {
+  max-width: 240px;
+  margin: 2rem auto;
+}
+
+.mobile-radar .radar-label {
+  font-size: 10px;
+}
 
 /* Chart boxes */
-.chart-box { padding: 1.5rem; background: rgba(255,255,255,0.02); border-radius: 20px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.05); }
+.chart-box { 
+  padding: 1.5rem; 
+  background: rgba(255,255,255,0.025); 
+  border-radius: 20px; 
+  margin-bottom: 2rem; 
+  border: 1px solid rgba(255,255,255,0.05); 
+}
 .chart-lbl { text-align: center; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--text-muted); margin-top: 0; }
 .bars { height: 150px; display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
 .bar-col { flex: 1; display: flex; flex-direction: column; gap: 0.75rem; align-items: center; }
@@ -773,5 +1058,107 @@ const compColor = computed(() => {
   .circular-gauge { width: 110px; height: 110px; }
   .gauge-value { font-size: 1.5rem; }
   .visual-side-charts { margin-top: 1.5rem; gap: 1rem; }
+}
+/* RESPONSIVE FIXES — HIGH-TICKET DASHBOARD */
+@media (max-width: 992px) {
+  .detail-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .product-name { font-size: 2.8rem; }
+  .investment-grid { grid-template-columns: 1fr; }
+  .performance-vectors { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+}
+
+@media (max-width: 640px) {
+  .product-name { font-size: 2.2rem; }
+  .performance-vectors { grid-template-columns: 1fr; }
+  /* Forced 2x2 grid as requested */
+  .invest-group { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .invest-card.small .i-value { font-size: 1.1rem; }
+  .invest-card.small .i-label { font-size: 0.55rem; }
+  
+  .i-value.neon-glow { font-size: 2rem; }
+  .v-amount { font-size: 1.8rem; }
+  
+  .terminal-header-stats {
+    flex-wrap: wrap;
+  }
+  
+  .t-stat-pill {
+    flex: 1;
+    min-width: 140px;
+    justify-content: center;
+  }
+
+  .vector-card {
+    min-height: auto;
+    padding: 1.25rem;
+  }
+
+  .circular-gauge.mini {
+    width: 100px;
+    height: 100px;
+  }
+}
+/* Contextual Notification Bubble */
+.btn-group-toast {
+  position: relative;
+  flex: 1;
+  display: flex;
+}
+
+.contextual-toast {
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.c-toast-icon {
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Arrow Fix for Dark Style */
+.contextual-toast::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+}
+
+.toast-float-enter-active, .toast-float-leave-active {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast-float-enter-from {
+  opacity: 0;
+  transform: translateX(-50%) translateY(10px) scale(0.8);
+}
+
+.toast-float-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-10px) scale(0.9);
 }
 </style>

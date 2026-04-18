@@ -614,10 +614,6 @@ const currentKey = computed(() => keys.find(k => k.id === activeKey.value));
   .main-key-img {
     width: 200px;
   }
-  /* ANIM-07: Disable sidebar float animation on mobile */
-  .sidebar-key-img, .key-floater-clean, .key-floater-clean-sidebar {
-    animation: none !important;
-  }
 }
 
 @media (max-width: 480px) {

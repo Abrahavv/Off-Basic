@@ -4,7 +4,16 @@ import { useScrollReveal } from '../composables/useScrollReveal';
 import { useCart } from '../composables/useCart';
 import { WHATSAPP_NUMBER, validateCatalogKey, CATALOG_UNLOCK_TTL } from '../config.js';
 
-const { addToCart } = useCart();
+const { addToCart: cartAdd } = useCart();
+const activeToastId = ref(null);
+
+const handleAddToCart = (product, isPersonal) => {
+  cartAdd(product, 1, false); // Do not open cart automatically
+  activeToastId.value = product.id;
+  setTimeout(() => {
+    activeToastId.value = null;
+  }, 3000);
+};
 
 const props = defineProps({
   mode: {
@@ -144,20 +153,34 @@ const getWhatsappUrl = (productName, price) => {
                   </span>
                 </div>
 
-                <button
-                  v-if="!isAliado || isCatalogUnlocked"
-                  @click.stop="addToCart(product, 1, !isAliado)"
-                  class="btn-primary product-btn"
-                >
-                  <span class="btn-icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-                      <line x1="3" y1="6" x2="21" y2="6"/>
-                      <path d="M16 10a4 4 0 01-8 0"/>
-                    </svg>
-                  </span>
-                  <span class="btn-text">Agregar</span>
-                </button>
+                <div class="btn-group-toast">
+                  <button
+                    v-if="!isAliado || isCatalogUnlocked"
+                    @click.stop="handleAddToCart(product, !isAliado)"
+                    class="btn-primary product-btn"
+                  >
+                    <span class="btn-icon">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M16 10a4 4 0 01-8 0"/>
+                      </svg>
+                    </span>
+                    <span class="btn-text">Agregar</span>
+                  </button>
+
+                  <!-- Contextual Notification Bubble (Luxury Style) -->
+                  <Transition name="toast-float">
+                    <div v-if="activeToastId === product.id" class="contextual-toast">
+                      <div class="c-toast-icon">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      </div>
+                      <span class="c-toast-msg">Añadido al carrito de compra</span>
+                    </div>
+                  </Transition>
+                </div>
 
                 <button 
                   v-if="isAliado && !isCatalogUnlocked"
@@ -182,15 +205,19 @@ const getWhatsappUrl = (productName, price) => {
 .products-wrapper {
   min-height: 40vh;
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* Prevent notification clipping */
 }
 
 .products-section {
   padding: 2rem 0;
   background-color: var(--bg);
   transition: background-color 0.3s ease;
-  overflow: hidden;
+  overflow: visible; /* Prevent notification clipping */
   position: relative;
+}
+
+.products-section .container {
+  max-width: 1400px; /* Widened to fit 3 large cards */
 }
 
 .aliado-theme {
@@ -230,21 +257,35 @@ const getWhatsappUrl = (productName, price) => {
 /* Card Styling */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2.5rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
   position: relative;
   z-index: 1;
+}
+
+@media (min-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 1.5rem;
+  }
 }
 
 .product-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 20px;
-  overflow: hidden;
+  overflow: visible; /* CRITICAL: Allows notifications to superimpose */
   transition: all 0.4s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure the card with the notification is always on top */
+.product-card:has(.contextual-toast) {
+  z-index: 9999;
 }
 
 .animate-product {
@@ -539,5 +580,68 @@ const getWhatsappUrl = (productName, price) => {
     padding: 0.6rem 0.8rem;
     font-size: 0.8rem;
   }
+}
+/* Contextual Notification Bubble */
+.btn-group-toast {
+  position: relative;
+  display: flex;
+}
+
+.contextual-toast {
+  position: absolute;
+  bottom: 135%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  width: max-content; /* Force single line */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.c-toast-icon {
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contextual-toast::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+}
+
+.toast-float-enter-active, .toast-float-leave-active {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast-float-enter-from {
+  opacity: 0;
+  transform: translateX(-50%) translateY(5px) scale(0.8);
+}
+
+.toast-float-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-5px) scale(0.9);
 }
 </style>
