@@ -86,9 +86,7 @@ const scrollToProducts = () => {
         <span class="mini-badge">LLAVE DE ENTRADA · DISPONIBLE AHORA</span>
       </div>
 
-      <h2 class="hero-subtitle st-4">
-        El inventario está protegido. Para ver los precios al mayor, necesitas la Llave de acceso.
-      </h2>
+      <h2 class="hero-subtitle st-4 single-line-web">El inventario está protegido. Para ver los precios al mayor, necesitas la Llave de acceso.</h2>
 
       <div class="hero-actions st-5">
         <button class="btn-primary btn-shimmer" @click="scrollToProducts" aria-label="Acceder al catálogo de inversión del Baúl">ACCEDER AHORA</button>
@@ -430,6 +428,17 @@ const scrollToProducts = () => {
   max-width: 1000px;
   margin: 0.2rem auto 1rem;
   line-height: 1.35;
+}
+
+.single-line-web {
+  white-space: normal;
+}
+
+@media (min-width: 1024px) {
+  .single-line-web {
+    white-space: nowrap;
+    max-width: none;
+  }
 }
 
 /* ===== VIDEO ===== */
