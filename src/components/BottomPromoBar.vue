@@ -11,13 +11,9 @@ const isVisible = ref(false);
 const scrollToProducts = () => {
   const target = document.getElementById('baul-content') || document.getElementById('productos');
   if (target) {
-    const nav = document.querySelector('.navbar-wrapper');
-    const offset = nav ? nav.offsetHeight + 20 : 100;
-    const pos = target.getBoundingClientRect().top + window.scrollY - offset;
-
-    window.scrollTo({
-      top: pos,
-      behavior: 'smooth'
+    target.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
     });
   }
 };

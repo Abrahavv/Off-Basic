@@ -263,7 +263,11 @@ img {
 /* ===== SCROLL SMOOTH & PADDING ===== */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 110px; /* Accounts for fixed navbar + countdown bar */
+  scroll-padding-top: 130px; /* Accounts for fixed navbar + countdown bar */
+}
+
+#productos, #baul-content {
+  scroll-margin-top: 130px;
 }
 
 .app-container {

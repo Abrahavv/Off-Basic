@@ -190,30 +190,27 @@ const applyThemeClass = () => {
 const closeProduct = () => {
   window.history.pushState(null, null, window.location.pathname);
   activeProductId.value = null;
-  // Increased delay to 150ms to ensure the main catalog has re-rendered and animations are stable
+  // Increased delay even further (350ms) to ensure the DOM is fully stable and previous overlay is gone
   setTimeout(() => {
-    // Determine the correct section based on the mode
     const targetId = currentMode.value === 'aliado' ? 'baul-content' : 'productos';
     const target = document.getElementById(targetId);
     
     if (target) {
-      const nav = document.querySelector('.navbar-wrapper');
-      // Calculate offset based on navbar height, which can vary between modes and devices
-      const offset = nav ? nav.offsetHeight + 15 : 100;
-      const pos = target.getBoundingClientRect().top + window.scrollY - offset;
-
-      window.scrollTo({
-        top: pos,
-        behavior: 'smooth'
+      // 1. Instant scroll to the approximate position to "break" any sticky scroll from the previous view
+      const topPos = target.getBoundingClientRect().top + window.scrollY - 130;
+      window.scrollTo({ top: topPos, behavior: 'auto' });
+      
+      // 2. Smooth scroll to the exact target (using scrollIntoView to respect scroll-padding-top)
+      requestAnimationFrame(() => {
+        target.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
       });
     } else {
-      // Fallback scroll to top of products if specific target is not found
-      const fallbackTarget = document.getElementById('productos');
-      if (fallbackTarget) {
-        fallbackTarget.scrollIntoView({ behavior: 'smooth' });
-      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, 150);
+  }, 350);
 };
 
 // Scroll position persistence
