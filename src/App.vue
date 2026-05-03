@@ -243,12 +243,24 @@ const handleHash = () => {
 };
 
 onMounted(() => {
+  // Disable browser automatic scroll restoration to ensure we start at the top
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+
   applyThemeClass();
-  handleHash();
-  // Always start at the top (hero section) instead of restoring scroll position
+  
+  // Clear any existing hash on initial load to ensure we start at "inicio" (home)
+  // as requested by the user, instead of opening a product detail view.
+  if (window.location.hash) {
+    window.history.replaceState(null, null, window.location.pathname);
+  }
+  
+  // Always start at the top (hero section)
   setTimeout(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, 50);
+  }, 100);
+  
   window.addEventListener('popstate', handleHash);
   window.addEventListener('beforeunload', saveScrollPosition);
   window.addEventListener('scroll', handleScroll, { passive: true });
