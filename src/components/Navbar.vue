@@ -348,10 +348,6 @@ const scrollToProducts = () => {
   margin-top: 2px;
 }
 
-.logo:hover .logo-img {
-  /* Dynamic tilt handles this now */
-}
-
 .nav-controls {
   display: flex;
   align-items: center;

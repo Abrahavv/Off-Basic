@@ -2,7 +2,7 @@
 import { computed, ref, onMounted } from 'vue';
 import { useScrollReveal } from '../composables/useScrollReveal';
 import { useCart } from '../composables/useCart';
-import { WHATSAPP_NUMBER, validateCatalogKey, CATALOG_UNLOCK_TTL } from '../config.js';
+import { WHATSAPP_NUMBER } from '../config.js';
 
 const { addToCart: cartAdd } = useCart();
 const activeToastId = ref(null);
@@ -29,36 +29,7 @@ const props = defineProps({
 const isAliado = computed(() => props.mode === 'aliado');
 const revealRef = useScrollReveal();
 
-const isCatalogUnlocked = ref(false);
-
-onMounted(() => {
-  const unlockData = localStorage.getItem('offbasic_catalog_unlocked');
-  if (unlockData) {
-    try {
-      const { timestamp } = JSON.parse(unlockData);
-      if (Date.now() - timestamp < CATALOG_UNLOCK_TTL) {
-        isCatalogUnlocked.value = true;
-      } else {
-        localStorage.removeItem('offbasic_catalog_unlocked');
-      }
-    } catch {
-      // Legacy format or corrupt — clear it
-      localStorage.removeItem('offbasic_catalog_unlocked');
-    }
-  }
-});
-
-const unlockCatalog = () => {
-  if (isCatalogUnlocked.value) return;
-  const password = prompt('Ingrese la Llave de Acceso para desbloquear el catálogo:');
-  if (password === null) return;
-  if (validateCatalogKey(password)) {
-    isCatalogUnlocked.value = true;
-    localStorage.setItem('offbasic_catalog_unlocked', JSON.stringify({ timestamp: Date.now() }));
-  } else {
-    alert('Llave incorrecta. Por favor, intente de nuevo.');
-  }
-};
+// Catalog unlocked by default
 
 const selectProduct = (id) => {
   window.location.hash = `#p-${id}`;
@@ -86,28 +57,21 @@ const getWhatsappUrl = (productName, price) => {
           </h2>
         </header>
 
-        <div class="products-grid" :class="{ 'locked-catalog': isAliado && !isCatalogUnlocked }">
+        <div class="products-grid">
           <div 
             v-for="(product, index) in products" 
             :key="product.id" 
             class="product-card animate-product"
             :style="{ animationDelay: `${index * 0.15}s` }"
-            @click="isAliado && !isCatalogUnlocked ? unlockCatalog() : selectProduct(product.id)"
+            @click="selectProduct(product.id)"
             role="button"
             :aria-label="'Ver detalles de ' + product.name"
           >
             <div class="card-visual">
               <div v-if="product.tag" class="product-tag">{{ product.tag }}</div>
               <img :src="product.image" :alt="product.name" class="product-image" loading="lazy" />
-              
-              <!-- Lock Overlay for Aliado Mode -->
-              <div v-if="isAliado && !isCatalogUnlocked" class="lock-overlay">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="lock-icon">
-                  <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
-                </svg>
-              </div>
 
-              <div class="card-overlay" v-if="!isAliado || isCatalogUnlocked">
+              <div class="card-overlay">
                 <span class="overlay-btn">Ver Detalles</span>
               </div>
             </div>
@@ -148,14 +112,13 @@ const getWhatsappUrl = (productName, price) => {
               <!-- Card Footer Actions: Symmetric layout -->
               <div class="footer-actions" @click.stop>
                 <div class="info-link-wrapper">
-                  <span class="more-info-link" @click.stop="isAliado && !isCatalogUnlocked ? unlockCatalog() : selectProduct(product.id)">
+                  <span class="more-info-link" @click.stop="selectProduct(product.id)">
                     ¿Mas info del producto?
                   </span>
                 </div>
 
                 <div class="btn-group-toast">
                   <button
-                    v-if="!isAliado || isCatalogUnlocked"
                     @click.stop="handleAddToCart(product, !isAliado)"
                     class="btn-primary product-btn"
                   >
@@ -181,17 +144,6 @@ const getWhatsappUrl = (productName, price) => {
                     </div>
                   </Transition>
                 </div>
-
-                <button 
-                  v-if="isAliado && !isCatalogUnlocked"
-                  @click.stop="unlockCatalog" 
-                  class="btn-primary product-btn-locked"
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-lock-icon">
-                    <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
-                  </svg>
-                  Obtener Llave
-                </button>
               </div>
             </div>
           </div>
@@ -322,28 +274,7 @@ const getWhatsappUrl = (productName, price) => {
   transition: filter 0.3s ease;
 }
 
-/* Locked Catalog Styles */
-.locked-catalog .product-image {
-  filter: blur(10px) brightness(0.85);
-}
-
-.lock-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lock-icon {
-  width: 44px;
-  height: 44px;
-  color: #00d0ff;
-  fill: #00d0ff; /* Solid fill for the lock body to match reference */
-}
+/* Catalog Styles (unlocked) */
 
 .product-tag {
   position: absolute;
@@ -507,32 +438,7 @@ const getWhatsappUrl = (productName, price) => {
   justify-content: center;
 }
 
-.product-btn-locked {
-  background-color: #00d0ff;
-  color: var(--black);
-  border: none;
-  padding: 0.8rem 1.2rem;
-  border-radius: 12px;
-  font-weight: 800;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  white-space: nowrap;
-}
-
-.product-btn-locked:hover {
-  background-color: #00b8e6;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 208, 255, 0.4);
-}
-
-.btn-lock-icon {
-  width: 1.1rem;
-  height: 1.1rem;
-}
+/* Removed locked button styles */
 
 /* === Mobile: iPhone-safe === */
 @media (max-width: 480px) {
@@ -576,10 +482,7 @@ const getWhatsappUrl = (productName, price) => {
   .footer-actions {
     gap: 0.75rem;
   }
-  .product-btn-locked {
-    padding: 0.6rem 0.8rem;
-    font-size: 0.8rem;
-  }
+  /* Removed mobile locked button styles */
 }
 /* Contextual Notification Bubble */
 .btn-group-toast {

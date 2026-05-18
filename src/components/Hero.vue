@@ -103,6 +103,21 @@ const scrollToProducts = () => {
           allowfullscreen
         ></iframe>
       </div>
+
+      <div class="hero-pdf-wrapper st-6">
+        <a 
+          href="/Presentacion_Off_Basic.pdf" 
+          download="Presentacion_Off_Basic.pdf"
+          class="btn-primary btn-shimmer"
+        >
+          <svg class="pdf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Descargar PDF
+        </a>
+      </div>
     </div>
 
     <!-- Decorative orbs -->
@@ -455,6 +470,42 @@ const scrollToProducts = () => {
   border: 2px solid rgba(56, 139, 255, 0.3);
   border-radius: 16px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== PDF DOWNLOAD BUTTON ===== */
+.hero-pdf-wrapper {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+.hero-pdf-wrapper .btn-primary {
+  position: relative;
+  min-width: 210px;
+  color: #000 !important;
+  background: #FFCC00;
+  box-shadow: 0 10px 22px rgba(255, 204, 0, 0.45);
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.hero-pdf-wrapper .btn-primary:hover {
+  background: #FFD700 !important;
+  box-shadow: 0 15px 30px rgba(255, 204, 0, 0.6) !important;
+  transform: translateY(-2px);
+}
+
+.hero-pdf-wrapper .pdf-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.hero-pdf-wrapper .btn-primary:hover .pdf-icon {
+  transform: translateY(2px);
 }
 
 /* ===== BAUL WRAPPER ===== */
