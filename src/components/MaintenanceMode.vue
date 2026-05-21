@@ -1,11 +1,12 @@
 <script setup>
+import logo from '../assets/Off-Basic-Web-Cromado.png';
 // Pantalla de mantenimiento
 </script>
-
+ 
 <template>
   <div class="maintenance-container">
     <div class="content">
-      <img src="/Off-Basic-Web-Cromado.png" alt="Off Basic Logo" class="logo" />
+      <img :src="logo" alt="Off Basic Logo" class="logo" />
       <h1 class="title">SITIO EN MANTENIMIENTO</h1>
       <p class="subtitle">Estamos realizando mejoras en el sistema para ofrecerte una experiencia superior en breves.</p>
       <div class="accent-text">VOLVEREMOS PRONTO</div>

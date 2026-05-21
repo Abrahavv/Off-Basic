@@ -14,6 +14,11 @@ const handleAddToCart = (product, qty) => {
   }, 3000);
 };
 
+const handleGetKey = () => {
+  const msg = "Hola team Off Basic, estoy interesado en ser Aliado quiero obtener la llave";
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+};
+
 const props = defineProps({
   product: Object,
   isAliado: Boolean
@@ -342,29 +347,42 @@ const getLabelPos = (i) => {
           </div>
 
           <div class="buy-section">
-            <div class="qty">
+            <div class="qty" v-if="!isAliado">
               <button @click="decrementQty" :disabled="quantity <= 1">−</button>
               <span>{{ quantity }}</span>
               <button @click="incrementQty" :disabled="quantity >= 10">+</button>
             </div>
             
-            <div class="btn-group-toast">
+            <div class="btn-group-toast" :class="{ 'full-width': isAliado }">
               <button 
+                v-if="isAliado"
+                @click="handleGetKey" 
+                class="btn-primary main-cta"
+                aria-label="Obtener Llave"
+                title="Obtener Llave"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                </svg>
+                Obtener Llave
+              </button>
+              <button 
+                v-else
                 @click="handleAddToCart(product, quantity)" 
                 class="btn-primary main-cta"
-                :aria-label="isAliado ? 'Agregar al pedido' : 'Agregar al carrito'"
-                :title="isAliado ? 'Agregar al pedido' : 'Agregar al carrito'"
+                aria-label="Agregar al carrito"
+                title="Agregar al carrito"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
                   <line x1="3" y1="6" x2="21" y2="6"/>
                   <path d="M16 10a4 4 0 01-8 0"/>
                 </svg>
-                {{ isAliado ? 'Agregar' : 'Agregar' }}
+                Agregar
               </button>
 
               <!-- Contextual Notification Bubble (Luxury Style) -->
-              <Transition name="toast-float">
+              <Transition name="toast-float" v-if="!isAliado">
                 <div v-if="showToast" class="contextual-toast">
                   <div class="c-toast-icon">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">

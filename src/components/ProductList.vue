@@ -15,6 +15,11 @@ const handleAddToCart = (product, isPersonal) => {
   }, 3000);
 };
 
+const handleGetKey = () => {
+  const msg = "Hola team Off Basic, estoy interesado en ser Aliado quiero obtener la llave";
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+};
+
 const props = defineProps({
   mode: {
     type: String,
@@ -119,6 +124,19 @@ const getWhatsappUrl = (productName, price) => {
 
                 <div class="btn-group-toast">
                   <button
+                    v-if="isAliado"
+                    @click.stop="handleGetKey"
+                    class="btn-primary product-btn"
+                  >
+                    <span class="btn-icon">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                      </svg>
+                    </span>
+                    <span class="btn-text">Obtener Llave</span>
+                  </button>
+                  <button
+                    v-else
                     @click.stop="handleAddToCart(product, !isAliado)"
                     class="btn-primary product-btn"
                   >

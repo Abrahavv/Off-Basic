@@ -1,6 +1,8 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { WHATSAPP_NUMBER } from '../config.js';
+import offBasicLogo from '../assets/Off-Basic-Web-Cromado.png';
+import baulImg from '../assets/Baul-Off-Basic.png';
 
 const props = defineProps({ mode: String });
 const emit = defineEmits(['switch-mode']);
@@ -44,7 +46,7 @@ const scrollToProducts = () => {
       <div class="hero-logo-wrap st-1">
         <div class="logo-floater-clean">
           <img 
-            src="/Off-Basic-Web-Cromado.png" 
+            :src="offBasicLogo" 
             alt="Off Basic Logo" 
             class="hero-logo-img"
             loading="eager"
@@ -70,29 +72,25 @@ const scrollToProducts = () => {
         <div class="cyber-glow"></div>
         <div class="baul-container baul-floating">
           <img 
-            src="/Baul-Off-Basic.png" 
+            :src="baulImg" 
             alt="El Baúl de Off Basic" 
             class="baul-img"
             loading="eager"
           />
         </div>
       </div>
-
+ 
       <h1 class="hero-title st-2">
         <span class="shine-wrapper">Baúl De Off Basic</span>
       </h1>
-
+ 
       <div class="hero-tagline-wrap st-3">
         <span class="mini-badge">LLAVE DE ENTRADA · DISPONIBLE AHORA</span>
       </div>
-
+ 
       <h2 class="hero-subtitle st-4 single-line-web">El inventario está protegido. Para ver los precios al mayor, necesitas la Llave de acceso.</h2>
-
-      <div class="hero-actions st-5">
-        <button class="btn-primary btn-shimmer" @click="scrollToProducts" aria-label="Acceder al catálogo de inversión del Baúl">ACCEDER AHORA</button>
-      </div>
-
-      <div class="hero-video-wrapper st-6">
+ 
+      <div class="hero-video-wrapper st-5">
         <iframe
           class="hero-video"
           src="https://www.youtube.com/embed/caAWn6xFWkI"
@@ -103,12 +101,14 @@ const scrollToProducts = () => {
           allowfullscreen
         ></iframe>
       </div>
-
-      <div class="hero-pdf-wrapper st-6">
+ 
+      <div class="hero-actions st-6">
+        <button class="btn-primary btn-shimmer" @click="scrollToProducts" aria-label="Acceder al catálogo de inversión del Baúl">ACCEDER AHORA</button>
         <a 
           href="/Presentacion_Off_Basic.pdf" 
           download="Presentacion_Off_Basic.pdf"
-          class="btn-primary btn-shimmer"
+          class="btn-primary btn-shimmer btn-pdf"
+          aria-label="Descargar presentación en formato PDF"
         >
           <svg class="pdf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -473,39 +473,32 @@ const scrollToProducts = () => {
 }
 
 /* ===== PDF DOWNLOAD BUTTON ===== */
-.hero-pdf-wrapper {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: center;
-  position: relative;
-  z-index: 10;
-}
-
-.hero-pdf-wrapper .btn-primary {
-  position: relative;
-  min-width: 210px;
+.hero-actions .btn-pdf {
+  background: #EAFF00;
+  box-shadow: 0 10px 22px rgba(234, 255, 0, 0.35);
   color: #000 !important;
-  background: #FFCC00;
-  box-shadow: 0 10px 22px rgba(255, 204, 0, 0.45);
-  overflow: hidden;
   text-decoration: none;
 }
 
-.hero-pdf-wrapper .btn-primary:hover {
-  background: #FFD700 !important;
-  box-shadow: 0 15px 30px rgba(255, 204, 0, 0.6) !important;
-  transform: translateY(-2px);
+.hero-actions .btn-pdf:hover {
+  background: #D4EC00;
+  box-shadow: 0 15px 30px rgba(234, 255, 0, 0.5);
 }
 
-.hero-pdf-wrapper .pdf-icon {
+.pdf-icon {
   width: 1.2rem;
   height: 1.2rem;
   transition: transform 0.3s ease;
   flex-shrink: 0;
 }
 
-.hero-pdf-wrapper .btn-primary:hover .pdf-icon {
+.hero-actions .btn-pdf:hover .pdf-icon {
   transform: translateY(2px);
+}
+
+/* Margin adjustment for Aliado actions below video */
+.hero-aliado-inner .hero-actions {
+  margin-top: 2.5rem;
 }
 
 /* ===== BAUL WRAPPER ===== */
