@@ -135,7 +135,7 @@ const getLabelPos = (i) => {
           </div>
 
           <!-- Thumbnails (Personal) -->
-          <div v-if="!isAliado && product.extraImages" class="thumbs">
+          <div v-if="product.extraImages" class="thumbs">
             <div 
               v-for="(img, idx) in product.extraImages" 
               :key="idx"
@@ -579,19 +579,28 @@ const getLabelPos = (i) => {
   width: 80px;
   height: 80px;
   border-radius: 12px;
-  border: 2px solid transparent;
-  background: var(--white);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
   cursor: pointer;
   overflow: hidden;
   transition: all 0.3s ease;
 }
 
-.thumb-item.active {
-  border-color: var(--accent);
-  box-shadow: 0 0 15px rgba(0,208,255,0.3);
+.thumb-item:hover {
+  border-color: rgba(0, 208, 255, 0.4);
 }
 
-.thumb-item img { width: 100%; height: 100%; object-fit: contain; }
+.thumb-item.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 15px rgba(0, 208, 255, 0.35);
+  background: rgba(0, 208, 255, 0.05);
+}
+
+.thumb-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 .profit-badge {
   position: absolute;
