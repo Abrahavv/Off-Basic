@@ -213,7 +213,7 @@ const getLabelPos = (i) => {
             <div class="tab-body">
               <div v-if="activeTab === 'features'" class="features">
                 <div class="f-item">✓ Garantía oficial Off Basic</div>
-                <div class="f-item">✓ Envío gratis a toda Venezuela</div>
+                <div class="f-item">✓ Envío a toda Venezuela</div>
                 <div class="f-item">✓ Soporte técnico premium</div>
               </div>
               <div v-if="activeTab === 'specs'" class="specs">
@@ -413,7 +413,7 @@ const getLabelPos = (i) => {
                 <circle cx="7" cy="18" r="2" />
                 <circle cx="17" cy="18" r="2" />
               </svg>
-              <span>Envío Gratis</span>
+              <span>Envío 100% seguro</span>
             </div>
             <div class="t-badge">
               <svg class="t-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">

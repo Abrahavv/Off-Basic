@@ -108,7 +108,7 @@ const getWhatsappUrl = (productName, price) => {
                   <circle cx="7" cy="18" r="2" />
                   <circle cx="17" cy="18" r="2" />
                 </svg>
-                <span>Envío Gratis</span>
+                <span>Envío 100% seguro</span>
               </div>
 
               <!-- Card Footer Actions: Symmetric layout -->
