@@ -55,5 +55,9 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    { "source": "/aliado", "destination": "/index.html" },
+    { "source": "/aliado/", "destination": "/index.html" }
   ]
 }

@@ -37,7 +37,8 @@ const revealRef = useScrollReveal();
 // Catalog unlocked by default
 
 const selectProduct = (id) => {
-  window.location.hash = `#p-${id}`;
+  const cleanId = typeof id === 'string' ? id.replace('aliado-', '') : id;
+  window.location.hash = `#producto-${cleanId}`;
 };
 
 const getWhatsappUrl = (productName, price) => {

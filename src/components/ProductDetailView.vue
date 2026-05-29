@@ -88,7 +88,7 @@ const getLabelPos = (i) => {
 </script>
 
 <template>
-  <div class="product-detail-view" :id="'p-' + product.id">
+  <div class="product-detail-view" :id="'producto-' + (product.id.toString().replace('aliado-', ''))">
     <div class="container">
       <div class="detail-header">
         <!-- Back Button -->

@@ -13,19 +13,20 @@ import ModeAliadoView from './components/ModeAliadoView.vue';
 const products = [
   {
     id: 1,
-    name: 'Apple Watch Nike',
+    name: 'Apple Watch Serie Nike',
     tag: 'MÁS VENDIDO',
-    price: 25.00,
+    price: 35.00,
     originalPrice: 45.00,
+    aliadoPrice: 25.00,
     rating: 4.8,
     reviewCount: 124,
     image: '/Apple-Watch-Nike-1.jpg',
     description: 'Experimenta el rendimiento máximo en tu muñeca. Incluye monitoreo avanzado de salud en tiempo real, notificaciones inteligentes...',
     extraImages: ['/Apple-Watch-Nike-1.jpg', '/Apple-Watch-Nike-2.jpg', '/Apple-Watch-Nike-3.jpg', '/Apple-Watch-Nike-4.jpg'],
     specs: [
-      { label: 'Batería', value: '7-10 días' },
-      { label: 'Resistencia', value: 'IP68 Sumergible' },
-      { label: 'Pantalla', value: '1.9" AMOLED' }
+      { label: 'Batería', value: 'Hasta 18 horas de autonomía normal (y hasta 36 horas en Modo Ahorro de Batería)' },
+      { label: 'Resistencia', value: 'Sumergible hasta 50 metros (WR50) y certificado IP6X resistente al polvo' },
+      { label: 'Pantalla', value: 'Retina siempre activa (Always-On) con hasta 2,000 nits de brillo para una visibilidad perfecta bajo el sol' }
     ],
     stats: {
       margin: 34.7,
@@ -57,37 +58,38 @@ const products = [
   },
   {
     id: 2,
-    name: 'AirPods Pro 2 ',
+    name: 'AirPods Pro 2',
     tag: 'NUEVO',
-    price: 20.00,
+    price: 25.00,
     originalPrice: 35.00,
+    aliadoPrice: 13.50,
     rating: 4.9,
     reviewCount: 89,
     image: '/AirPods-Pro-2-1.jpg',
     description: 'Aísla el ruido exterior y domina tu entorno con tecnología de cancelación activa. Disfruta de un sonido de alta fidelidad con bajos...',
     extraImages: ['/AirPods-Pro-2-1.jpg', '/AirPods-Pro-2-2.jpg', '/AirPods-Pro-2-3.jpg', '/AirPods-Pro-2-4.jpg'],
     specs: [
-      { label: 'ANC', value: 'Hasta 40dB' },
-      { label: 'Autonomía', value: '30h con estuche' },
-      { label: 'Bluetooth', value: '5.3 Estable' }
+      { label: 'Bluetooth', value: 'Versión 5.3 (conexión más estable y eficiente con chip H2)' },
+      { label: 'Autonomía', value: 'Hasta 6 horas por carga (y hasta 30 horas en total con el estuche)' },
+      { label: 'Cancelación de Ruido', value: 'El doble de potente que en la generación anterior' }
     ],
     stats: {
-      margin: 52,
-      roi: '280%',
-      demand: 'Alta',
-      minOrder: 5,
-      profitPerUnit: 10.40,
-      avgDailySales: 6,
+      margin: 55.9,
+      roi: '55.9%',
+      demand: 'Muy Alta',
+      minOrder: 3,
+      profitPerUnit: 7.55,
+      avgDailySales: 3,
       restockDays: 5,
-      satisfaction: 98,
-      competitionLevel: 30,
-      monthlyRevenue: 3600,
+      satisfaction: 99,
+      competitionLevel: 15,
+      monthlyRevenue: 679.50,
       radarStats: [
-        { label: 'Demanda', value: 85 },
-        { label: 'Rentabilidad', value: 92 },
+        { label: 'Demanda', value: 95 },
+        { label: 'Rentabilidad', value: 85 },
         { label: 'Escalabilidad', value: 80 },
         { label: 'Estabilidad', value: 95 },
-        { label: 'Retención', value: 88 }
+        { label: 'Retención', value: 90 }
       ]
     },
     histogram: [
@@ -101,34 +103,38 @@ const products = [
   },
   {
     id: 3,
-    name: 'Cargador Completo',
+    name: 'Cargador Completo 20W (Cubo Tipo C + Cable)',
     tag: 'LIMITADO',
-    price: 22.00,
-    originalPrice: 40.00,
+    price: 15.00,
+    originalPrice: 20.00,
+    aliadoPrice: 6.50,
     rating: 4.7,
     reviewCount: 56,
     image: '/Cargador-Completo-1.jpg',
-    description: 'Simplifica tu carga con tecnología de inducción magnética. Un solo lugar elegante para cargar simultáneamente tu reloj...',
+    description: 'Carga tu dispositivo a la máxima velocidad con nuestro adaptador USB-C de 20W (Calidad 1:1 / OEM). Ofrece el mismo diseño estético, peso y rendimiento que el original, garantizando una carga rápida, segura y eficiente.',
     extraImages: ['/Cargador-Completo-1.jpg', '/Cargador-Completo-2.jpg', '/Cargador-Completo-3.jpg', '/Cargador-Completo-4.jpg'],
     specs: [
-      { label: 'Capacidad', value: '10,000 mAh' },
-      { label: 'MagSafe', value: '15W Carga rápida' },
-      { label: 'Puertos', value: 'USB-C Bi-direccional' }
+      { label: 'Cubo: Potencia', value: '20W con carga rápida Power Delivery (0% a 50% en ~30 min)' },
+      { label: 'Cubo: Seguridad', value: 'Chip inteligente contra sobrecalentamiento y cortocircuitos' },
+      { label: 'Cubo: Compatibilidad', value: 'Universal USB-C, optimizado para iPhone 8 en adelante (100-240V)' },
+      { label: 'Cable: Compatibilidad', value: 'Chip interno sin errores de iOS (Calidad 1:1 / OEM)' },
+      { label: 'Cable: Construcción', value: 'Longitud de 1 metro en material TPE flexible y reforzado' },
+      { label: 'Cable: Velocidad', value: 'Soporta carga rápida de 20W y transferencia de datos de 480 Mbps' }
     ],
     stats: {
-      margin: 38,
-      roi: '180%',
-      demand: 'Media-Alta',
-      minOrder: 20,
-      profitPerUnit: 8.36,
-      avgDailySales: 4,
+      margin: 55.4,
+      roi: '55.4%',
+      demand: 'Muy Alta',
+      minOrder: 4,
+      profitPerUnit: 3.60,
+      avgDailySales: 3,
       restockDays: 7,
-      satisfaction: 94,
+      satisfaction: 99,
       competitionLevel: 15,
-      monthlyRevenue: 2640,
+      monthlyRevenue: 324.00,
       radarStats: [
-        { label: 'Demanda', value: 70 },
-        { label: 'Rentabilidad', value: 78 },
+        { label: 'Demanda', value: 95 },
+        { label: 'Rentabilidad', value: 85 },
         { label: 'Escalabilidad', value: 96 },
         { label: 'Estabilidad', value: 85 },
         { label: 'Retención', value: 92 }
@@ -147,7 +153,16 @@ const products = [
 
 // --- APP STATE ---
 const isMaintenanceMode = ref(false); // Cambiar a false para desactivar el modo mantenimiento
-const currentMode = ref(localStorage.getItem('offbasic_mode') || 'personal');
+
+const getInitialMode = () => {
+  const path = window.location.pathname;
+  if (path === '/aliado' || path === '/aliado/') {
+    return 'aliado';
+  }
+  return localStorage.getItem('offbasic_mode') || 'personal';
+};
+
+const currentMode = ref(getInitialMode());
 const activeProductId = ref(null);
 const handleScroll = () => {
   // Logic for other scroll-dependent elements if any
@@ -159,7 +174,13 @@ const activeProduct = computed(() => {
 
 const displayProducts = computed(() => {
   if (currentMode.value === 'aliado') {
-    return products.map(p => ({ ...p, id: `aliado-${p.id}`, name: `Pack de ${p.name}` }));
+    return products.map(p => ({
+      ...p,
+      id: `aliado-${p.id}`,
+      name: `Pack de ${p.name}`,
+      price: p.aliadoPrice,
+      originalPrice: p.price
+    }));
   }
   return products;
 });
@@ -171,7 +192,13 @@ const modeViewComponent = computed(() => {
 const activeProductData = computed(() => {
   if (!activeProduct.value) return null;
   if (currentMode.value === 'aliado') {
-    return { ...activeProduct.value, id: `aliado-${activeProduct.value.id}`, name: `Pack de ${activeProduct.value.name}` };
+    return {
+      ...activeProduct.value,
+      id: `aliado-${activeProduct.value.id}`,
+      name: `Pack de ${activeProduct.value.name}`,
+      price: activeProduct.value.aliadoPrice,
+      originalPrice: activeProduct.value.price
+    };
   }
   return activeProduct.value;
 });
@@ -181,6 +208,12 @@ const setMode = (mode) => {
   
   currentMode.value = mode;
   localStorage.setItem('offbasic_mode', mode);
+
+  if (mode === 'aliado') {
+    window.history.pushState(null, '', '/aliado');
+  } else {
+    window.history.pushState(null, '', '/');
+  }
 
   // Forzamos scroll instantáneo al cambiar de modo para evitar sensación de "pegado"
   window.scrollTo({ top: 0, behavior: 'instant' });
@@ -233,11 +266,24 @@ const restoreScrollPosition = () => {
 };
 
 const handleHash = () => {
+  // Sync mode based on pathname
+  const path = window.location.pathname;
+  if (path === '/aliado' || path === '/aliado/') {
+    if (currentMode.value !== 'aliado') {
+      currentMode.value = 'aliado';
+      localStorage.setItem('offbasic_mode', 'aliado');
+    }
+  } else {
+    if (currentMode.value !== 'personal') {
+      currentMode.value = 'personal';
+      localStorage.setItem('offbasic_mode', 'personal');
+    }
+  }
+
   const hash = window.location.hash;
-  if (hash.startsWith('#p-')) {
-    const rawId = hash.replace('#p-', '');
-    // Handle both numeric IDs and 'aliado-X' IDs
-    const id = parseInt(rawId.replace('aliado-', ''));
+  if (hash.startsWith('#producto-')) {
+    const rawId = hash.replace('#producto-', '');
+    const id = parseInt(rawId);
     activeProductId.value = id;
     window.scrollTo({ top: 0, behavior: 'instant' });
   } else {
@@ -253,16 +299,21 @@ onMounted(() => {
 
   applyThemeClass();
   
-  // Clear any existing hash on initial load to ensure we start at "inicio" (home)
-  // as requested by the user, instead of opening a product detail view.
+  // If there's a hash and it starts with #producto-, sync/open it, otherwise clear it to start at home
   if (window.location.hash) {
-    window.history.replaceState(null, null, window.location.pathname);
+    if (window.location.hash.startsWith('#producto-')) {
+      handleHash();
+    } else {
+      window.history.replaceState(null, null, window.location.pathname);
+    }
   }
   
-  // Always start at the top (hero section)
-  setTimeout(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, 100);
+  // Always start at the top (hero section) if not opening a product deep link
+  if (!window.location.hash.startsWith('#producto-')) {
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }, 100);
+  }
   
   window.addEventListener('popstate', handleHash);
   window.addEventListener('beforeunload', saveScrollPosition);
