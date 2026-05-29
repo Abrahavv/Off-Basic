@@ -16,7 +16,7 @@ const handleAddToCart = (product, isPersonal) => {
 };
 
 const handleGetKey = () => {
-  const msg = "Hola team Off Basic, estoy interesado en ser Aliado quiero obtener la llave";
+  const msg = "Hola, team Off Basic. Estoy interesado en ser aliado; quiero obtener la llave.";
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
 };
 

@@ -15,7 +15,7 @@ const handleAddToCart = (product, qty) => {
 };
 
 const handleGetKey = () => {
-  const msg = "Hola team Off Basic, estoy interesado en ser Aliado quiero obtener la llave";
+  const msg = "Hola, team Off Basic. Estoy interesado en ser aliado; quiero obtener la llave.";
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
 };
 
@@ -79,7 +79,7 @@ const getDataPoints = (stats) => {
 
 const getLabelPos = (i) => {
   const angle = (Math.PI * 2) / 5 * i - Math.PI / 2;
-  const radius = 135; // Better spacing for labels
+  const radius = 120; // Safe spacing for labels to avoid SVG bounds clipping
   return {
     x: 150 + radius * Math.cos(angle),
     y: 150 + radius * Math.sin(angle)
@@ -435,6 +435,7 @@ const getLabelPos = (i) => {
   background: var(--bg);
   padding: 4rem 1.5rem;
   animation: fadeIn 0.5s ease both;
+  overflow-x: hidden;
 }
 
 @keyframes fadeIn {
@@ -573,6 +574,7 @@ const getLabelPos = (i) => {
   display: flex;
   gap: 1rem;
   margin-top: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .thumb-item {
@@ -1109,79 +1111,198 @@ const getLabelPos = (i) => {
 }
 
 /* RESPONSIVE */
-@media (max-width: 1000px) {
-  .detail-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .product-name { font-size: 2.8rem; }
-  .gauges-row { grid-template-columns: 1fr; }
-  .mobile-charts { display: flex; }
-  .desktop-charts { display: none; }
+@media (max-width: 1024px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .product-name {
+    font-size: 2.8rem;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+  .gauges-row {
+    grid-template-columns: 1fr;
+  }
+  .mobile-charts {
+    display: flex;
+  }
+  .desktop-charts {
+    display: none;
+  }
+  .investment-grid {
+    grid-template-columns: 1fr;
+  }
+  .performance-vectors {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-detail-view {
+    padding: 3rem 1.25rem;
+  }
+  .product-name {
+    font-size: 2.4rem;
+  }
+  .price-current {
+    font-size: 2.2rem;
+  }
+  .price-original {
+    font-size: 1.3rem;
+  }
 }
 
 @media (max-width: 600px) {
   .product-detail-view {
     padding: 2rem 1rem;
   }
-  .buy-section { flex-direction: column; align-items: stretch; }
-  .qty { justify-content: center; }
-  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
-  .gauges-row { grid-template-columns: 1fr; gap: 1rem; }
-  .trust-footer { flex-wrap: wrap; gap: 1.5rem; }
-  .detail-grid { gap: 2rem; }
-  .product-name { font-size: 2.2rem; }
-  .main-image-card { padding: 1.5rem; }
-  .description { font-size: 1rem; line-height: 1.6; margin-bottom: 2rem; }
-  .tabs-nav { gap: 1.5rem; }
-  .price-current { font-size: 2rem; }
-  .price-original { font-size: 1.2rem; }
-  .category-badge { font-size: 0.7rem; }
-  .specs { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-  .s-row { padding: 0.8rem; }
-  .chart-box { padding: 1.25rem; }
-  .comparison-title { font-size: 1.8rem; }
-  .cat-row { grid-template-columns: 90px 1fr 40px; }
-  .cat-name { font-size: 0.7rem; }
-  .revenue-amount { font-size: 2rem; }
-  .circular-gauge { width: 110px; height: 110px; }
-  .gauge-value { font-size: 1.5rem; }
-  .visual-side-charts { margin-top: 1.5rem; gap: 1rem; }
-}
-/* RESPONSIVE FIXES — HIGH-TICKET DASHBOARD */
-@media (max-width: 992px) {
-  .detail-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .product-name { font-size: 2.8rem; }
-  .investment-grid { grid-template-columns: 1fr; }
-  .performance-vectors { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-}
-
-@media (max-width: 640px) {
-  .product-name { font-size: 2.2rem; }
-  .performance-vectors { grid-template-columns: 1fr; }
-  /* Forced 2x2 grid as requested */
-  .invest-group { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
-  .invest-card.small .i-value { font-size: 1.1rem; }
-  .invest-card.small .i-label { font-size: 0.55rem; }
-  
-  .i-value.neon-glow { font-size: 2rem; }
-  .v-amount { font-size: 1.8rem; }
-  
+  .buy-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.25rem;
+  }
+  .qty {
+    justify-content: center;
+  }
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .gauges-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .trust-footer {
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+  .t-badge {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+  .detail-grid {
+    gap: 2rem;
+  }
+  .product-name {
+    font-size: 2rem;
+  }
+  .main-image-card {
+    padding: 1.5rem;
+  }
+  .description {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+  .tabs-nav {
+    gap: 1.5rem;
+  }
+  .price-current {
+    font-size: 1.8rem;
+  }
+  .price-original {
+    font-size: 1.1rem;
+  }
+  .category-badge {
+    font-size: 0.7rem;
+  }
+  .specs {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .s-row {
+    padding: 0.8rem;
+  }
+  .chart-box {
+    padding: 1.25rem;
+  }
+  .comparison-title {
+    font-size: 1.6rem;
+  }
+  .cat-row {
+    grid-template-columns: 90px 1fr 40px;
+  }
+  .cat-name {
+    font-size: 0.7rem;
+  }
+  .revenue-amount {
+    font-size: 1.8rem;
+  }
+  .circular-gauge {
+    width: 100px;
+    height: 100px;
+  }
+  .gauge-value {
+    font-size: 1.4rem;
+  }
+  .visual-side-charts {
+    margin-top: 1.5rem;
+    gap: 1rem;
+  }
+  .performance-vectors {
+    grid-template-columns: 1fr;
+  }
+  .invest-group {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .invest-card.small .i-value {
+    font-size: 1.1rem;
+  }
+  .invest-card.small .i-label {
+    font-size: 0.55rem;
+  }
+  .i-value.neon-glow {
+    font-size: 2rem;
+  }
+  .v-amount {
+    font-size: 1.8rem;
+  }
   .terminal-header-stats {
     flex-wrap: wrap;
   }
-  
   .t-stat-pill {
     flex: 1;
-    min-width: 140px;
+    min-width: 130px;
     justify-content: center;
   }
-
   .vector-card {
     min-height: auto;
     padding: 1.25rem;
   }
-
   .circular-gauge.mini {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
+  }
+}
+
+@media (max-width: 400px) {
+  .product-name {
+    font-size: 1.7rem;
+  }
+  .price-row {
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .price-current {
+    font-size: 1.6rem;
+  }
+  .price-original {
+    font-size: 1rem;
+  }
+  .thumbs {
+    gap: 0.5rem;
+  }
+  .thumb-item {
+    width: 65px;
+    height: 65px;
+    border-radius: 8px;
+  }
+  .t-stat-pill {
+    font-size: 0.6rem;
+    padding: 4px 8px;
   }
 }
 /* Contextual Notification Bubble */
