@@ -19,7 +19,7 @@ const revealRef = useScrollReveal();
       <div class="founder-grid">
         <div class="founder-image-wrap">
           <div class="founder-image-container">
-            <img src="/founder.svg" alt="Fundador de Off Basic" class="founder-img" loading="lazy" />
+            <img src="/fundador-Off-Basic.jpg" alt="Fundador de Off Basic" class="founder-img" loading="lazy" />
           </div>
           <div class="accent-line"></div>
         </div>
@@ -77,7 +77,6 @@ const revealRef = useScrollReveal();
 
 .founder-image-container {
   width: 100%;
-  aspect-ratio: 3/4;
   border-radius: var(--radius);
   overflow: hidden;
   background-color: var(--card-bg);
@@ -89,8 +88,9 @@ const revealRef = useScrollReveal();
 
 .founder-img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  display: block;
+  object-fit: contain;
 }
 
 .accent-line {
