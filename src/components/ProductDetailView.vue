@@ -342,7 +342,7 @@ const getLabelPos = (i) => {
                 </div>
                 <div class="v-mini-table">
                   <span>MARGEN: {{ product.stats.margin }}%</span>
-                  <span>PREV: {{ product.stats.avgDailySales * 30 }} UD</span>
+                  <span>PREV: {{ product.stats.monthlyForecast || (product.stats.avgDailySales * 30) }} UD</span>
                 </div>
               </div>
             </div>
