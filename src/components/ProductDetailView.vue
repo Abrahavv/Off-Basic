@@ -114,7 +114,7 @@ const getLabelPos = (i) => {
         
         <!-- VISUAL SIDE -->
         <div class="visual-side">
-          <div class="main-image-card">
+          <div class="main-image-card" :class="{ 'full-cover': product.image.endsWith('.jpg') || product.image.endsWith('.png') }">
             <img 
               :src="product.extraImages ? product.extraImages[activeImageIndex] : product.image" 
               :alt="product.name" 
@@ -194,10 +194,12 @@ const getLabelPos = (i) => {
           <div class="category-badge">{{ isAliado ? 'Oportunidad de Negocio' : 'Producto Premium' }}</div>
           <h1 class="product-name">{{ product.name }}</h1>
           
-          <div class="price-row" v-if="!isAliado">
-            <span class="price-current">${{ product.price }}</span>
-            <span class="price-original">${{ product.originalPrice }}</span>
+          <div class="price-row">
+            <span class="price-current">${{ product.price.toFixed(2) }}</span>
+            <span class="price-original">${{ product.originalPrice.toFixed(2) }}</span>
           </div>
+
+
 
           <p class="description">{{ product.description }}</p>
 
@@ -397,9 +399,28 @@ const getLabelPos = (i) => {
 
           <!-- Trust Badges -->
           <div class="trust-footer">
-            <div class="t-badge">🛡️ Garantía</div>
-            <div class="t-badge">🚚 Envío Gratis</div>
-            <div class="t-badge">💬 Soporte 24/7</div>
+            <div class="t-badge">
+              <svg class="t-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Garantía</span>
+            </div>
+            <div class="t-badge">
+              <svg class="t-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
+                <path d="M15 18H9" />
+                <path d="M19 18h2a1 1 0 0 0 1-1v-5l-4-4h-3v10" />
+                <circle cx="7" cy="18" r="2" />
+                <circle cx="17" cy="18" r="2" />
+              </svg>
+              <span>Envío Gratis</span>
+            </div>
+            <div class="t-badge">
+              <svg class="t-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span>Soporte 24/7</span>
+            </div>
           </div>
         </div>
       </div>
@@ -529,6 +550,11 @@ const getLabelPos = (i) => {
   justify-content: center;
   position: relative;
   box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  overflow: hidden; /* Ensure image corners are clipped by the card border radius */
+}
+
+.main-image-card.full-cover {
+  padding: 0;
 }
 
 .main-img {
@@ -536,6 +562,11 @@ const getLabelPos = (i) => {
   height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1));
+}
+
+.main-image-card.full-cover .main-img {
+  object-fit: cover;
+  filter: none; /* No drop-shadow needed when covered */
 }
 
 .thumbs {
@@ -1037,8 +1068,36 @@ const getLabelPos = (i) => {
 
 .key-icon { width: 24px; height: 24px; filter: brightness(0); }
 
-.trust-footer { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4rem; padding-top: 2rem; display: flex; justify-content: center; gap: 3rem; }
-.t-badge { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+.trust-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 4rem;
+  padding-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.t-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.1rem;
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.15);
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #22c55e;
+  transition: all 0.3s ease;
+}
+
+.t-icon {
+  width: 1.05rem;
+  height: 1.05rem;
+  stroke: currentColor;
+  display: inline-block;
+  flex-shrink: 0;
+}
 
 /* RESPONSIVE */
 @media (max-width: 1000px) {
@@ -1178,5 +1237,25 @@ const getLabelPos = (i) => {
 .toast-float-leave-to {
   opacity: 0;
   transform: translateX(-50%) translateY(-10px) scale(0.9);
+}
+
+.shipping-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  width: fit-content;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.ship-icon {
+  width: 1.1rem;
+  height: 1.1rem;
 }
 </style>

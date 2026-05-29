@@ -72,13 +72,9 @@ const getWhatsappUrl = (productName, price) => {
             role="button"
             :aria-label="'Ver detalles de ' + product.name"
           >
-            <div class="card-visual">
+            <div class="card-visual" :class="{ 'full-cover': product.image.endsWith('.jpg') || product.image.endsWith('.png') }">
               <div v-if="product.tag" class="product-tag">{{ product.tag }}</div>
               <img :src="product.image" :alt="product.name" class="product-image" loading="lazy" />
-
-              <div class="card-overlay">
-                <span class="overlay-btn">Ver Detalles</span>
-              </div>
             </div>
 
             <div class="card-content">
@@ -285,11 +281,21 @@ const getWhatsappUrl = (productName, price) => {
   overflow: hidden;
 }
 
+.card-visual.full-cover {
+  padding: 0;
+  border-top-left-radius: 19px;
+  border-top-right-radius: 19px;
+}
+
 .product-image {
   width: 100%;
   height: 100%;
   object-fit: contain;
   transition: filter 0.3s ease;
+}
+
+.card-visual.full-cover .product-image {
+  object-fit: cover;
 }
 
 /* Catalog Styles (unlocked) */
