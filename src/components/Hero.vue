@@ -752,13 +752,49 @@ const scrollToProducts = () => {
   .hero-video { height: 280px; }
   .video-placeholder-card { height: 280px; }
   .hero-video-wrapper { height: 280px; }
-  .play-btn-pulse { width: 60px; height: 60px; }
-  .play-icon { font-size: 1.4rem; }
-  .placeholder-title { font-size: 1.1rem; }
-  .placeholder-desc { font-size: 0.75rem; }
   .orb-1 { width: 250px; height: 250px; top: -80px; right: -80px; }
   .orb-2 { width: 250px; height: 250px; bottom: -80px; left: -80px; }
+
+  /* Adjustments to make the placeholder content fit perfectly within 280px height */
+  .placeholder-content {
+    padding: 0.8rem;
+    gap: 0.4rem;
+  }
+  .lock-shield-icon {
+    margin-bottom: 0.2rem;
+    display: block !important;
+  }
+  .lock-shield-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+  .play-btn-pulse {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 0.4rem;
+    box-shadow: 0 0 12px rgba(0, 208, 255, 0.35);
+  }
+  .play-icon {
+    font-size: 1rem;
+    margin-left: 2px;
+  }
+  .placeholder-title {
+    font-size: 0.85rem;
+    margin-bottom: 0.2rem;
+    letter-spacing: 1px;
+  }
+  .placeholder-desc {
+    display: none; /* Hide description on mobile to free up vertical space and show the lock & badge */
+  }
+  .secure-badge {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.55rem;
+    letter-spacing: 0.5px;
+    margin-top: 0.2rem;
+  }
 }
+
+
 
 @media (max-width: 480px) {
   .hero-logo-img { width: 180px; height: 180px; }
