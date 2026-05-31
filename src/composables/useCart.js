@@ -1,5 +1,6 @@
 import { ref, computed, watch } from 'vue';
 import { WHATSAPP_NUMBER } from '../config.js';
+import { safeStorage } from '../utils/storage.js';
 
 const STORAGE_KEY = 'offbasic_cart';
 
@@ -10,13 +11,13 @@ const isCheckoutOpen = ref(false);
 
 // Load from localStorage on init
 try {
-  const saved = localStorage.getItem(STORAGE_KEY);
+  const saved = safeStorage.getItem(STORAGE_KEY);
   if (saved) cartItems.value = JSON.parse(saved);
 } catch { /* ignore corrupt data */ }
 
 // Persist on change
 watch(cartItems, (val) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(val));
+  safeStorage.setItem(STORAGE_KEY, JSON.stringify(val));
 }, { deep: true });
 
 export function useCart() {

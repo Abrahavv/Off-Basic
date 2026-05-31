@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useCart } from '../composables/useCart';
+import { safeStorage } from '../utils/storage';
 
 const { cartCount, openCart } = useCart();
 
@@ -17,12 +18,12 @@ const TIMER_KEY = 'offbasic_timer_end';
 const HOURS_45_MS = 45 * 60 * 60 * 1000;
 
 const getTargetDate = () => {
-  let endTime = localStorage.getItem(TIMER_KEY);
+  let endTime = safeStorage.getItem(TIMER_KEY);
   const now = Date.now();
   
   if (!endTime || parseInt(endTime) <= now) {
     endTime = now + HOURS_45_MS;
-    localStorage.setItem(TIMER_KEY, endTime.toString());
+    safeStorage.setItem(TIMER_KEY, endTime.toString());
   }
   return parseInt(endTime);
 };
@@ -35,7 +36,7 @@ const updateCountdown = () => {
   const diff = target - Date.now();
   
   if (diff <= 0) {
-    localStorage.removeItem(TIMER_KEY);
+    safeStorage.removeItem(TIMER_KEY);
     countdown.value = { hours: 0, minutes: 0, seconds: 0 };
     return;
   }

@@ -8,6 +8,7 @@ import BottomPromoBar from './components/BottomPromoBar.vue';
 import MaintenanceMode from './components/MaintenanceMode.vue';
 import ModePersonalView from './components/ModePersonalView.vue';
 import ModeAliadoView from './components/ModeAliadoView.vue';
+import { safeStorage } from './utils/storage';
 
 
 // --- DATA ---
@@ -162,7 +163,7 @@ const getInitialMode = () => {
   if (path === '/aliado' || path === '/aliado/') {
     return 'aliado';
   }
-  return localStorage.getItem('offbasic_mode') || 'personal';
+  return safeStorage.getItem('offbasic_mode') || 'personal';
 };
 
 const currentMode = ref(getInitialMode());
@@ -212,7 +213,7 @@ const setMode = (mode) => {
   if (currentMode.value === mode) return;
   
   currentMode.value = mode;
-  localStorage.setItem('offbasic_mode', mode);
+  safeStorage.setItem('offbasic_mode', mode);
 
   if (mode === 'aliado') {
     window.history.pushState(null, '', '/aliado');
@@ -257,11 +258,11 @@ const closeProduct = () => {
 // Scroll position persistence
 const saveScrollPosition = () => {
   const scrollY = window.scrollY;
-  localStorage.setItem('scrollPosition', scrollY.toString());
+  safeStorage.setItem('scrollPosition', scrollY.toString());
 };
 
 const restoreScrollPosition = () => {
-  const savedPosition = localStorage.getItem('scrollPosition');
+  const savedPosition = safeStorage.getItem('scrollPosition');
   if (savedPosition) {
     const scrollY = parseInt(savedPosition, 10);
     setTimeout(() => {
@@ -276,12 +277,12 @@ const handleHash = () => {
   if (path === '/aliado' || path === '/aliado/') {
     if (currentMode.value !== 'aliado') {
       currentMode.value = 'aliado';
-      localStorage.setItem('offbasic_mode', 'aliado');
+      safeStorage.setItem('offbasic_mode', 'aliado');
     }
   } else {
     if (currentMode.value !== 'personal') {
       currentMode.value = 'personal';
-      localStorage.setItem('offbasic_mode', 'personal');
+      safeStorage.setItem('offbasic_mode', 'personal');
     }
   }
 
