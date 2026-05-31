@@ -1,13 +1,28 @@
 <script setup>
-import { computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { WHATSAPP_NUMBER } from '../config.js';
 import offBasicLogo from '../assets/Off-Basic-Web-Cromado.png';
 import baulImg from '../assets/Baul-Off-Basic.png';
+import AliadoLoader from './AliadoLoader.vue';
 
-const props = defineProps({ mode: String });
+const props = defineProps({ 
+  mode: String
+});
 const emit = defineEmits(['switch-mode']);
 
 const isAliado = computed(() => props.mode === 'aliado');
+
+const vslLoading = ref(false);
+const vslUnlocked = ref(false);
+
+const startVslLoading = () => {
+  vslLoading.value = true;
+};
+
+const onVslLoaderFinished = () => {
+  vslLoading.value = false;
+  vslUnlocked.value = true;
+};
 
 const scrollToProducts = () => {
   const target = document.getElementById('baul-content') || document.getElementById('productos');
@@ -91,15 +106,46 @@ const scrollToProducts = () => {
       <h2 class="hero-subtitle st-4 single-line-web">El inventario está protegido. Para ver los precios al mayor, necesitas la Llave de acceso.</h2>
  
       <div class="hero-video-wrapper st-5">
+        <!-- VSL Inline Loader -->
+        <AliadoLoader v-if="vslLoading" inline @finished="onVslLoaderFinished" />
+
+        <!-- Unlocked Video -->
         <iframe
+          v-else-if="vslUnlocked"
           class="hero-video"
           src="https://www.youtube.com/embed/caAWn6xFWkI"
           title="Baúl de Off Basic"
           frameborder="0"
-          loading="lazy"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
         ></iframe>
+
+        <!-- Locked Video Placeholder Card (Glass-Neomorphism) -->
+        <div 
+          v-else 
+          class="video-placeholder-card" 
+          @click="startVslLoading"
+          role="button"
+          aria-label="Desbloquear información exclusiva"
+        >
+          <div class="placeholder-overlay"></div>
+          <div class="placeholder-content">
+            <div class="lock-shield-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+              </svg>
+            </div>
+            <div class="play-btn-pulse">
+              <div class="play-icon">▶</div>
+            </div>
+            <h3 class="placeholder-title">DESBLOQUEAR INFORMACIÓN EXCLUSIVA</h3>
+            <p class="placeholder-desc">Pulse para iniciar la autenticación de credenciales y acceder al contenido exclusivo.</p>
+            <div class="secure-badge">
+              <span class="secure-dot"></span>
+              CONEXIÓN SEGURA VERIFICADA
+            </div>
+          </div>
+        </div>
       </div>
  
       <div class="hero-actions st-6">
@@ -461,6 +507,12 @@ const scrollToProducts = () => {
   margin-top: 3rem;
   display: flex;
   justify-content: center;
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  height: 480px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero-video {
@@ -563,6 +615,133 @@ const scrollToProducts = () => {
 .orb-1 { width: 400px; height: 400px; background: rgba(0, 208, 255, 0.4); top: -120px; right: -120px; }
 .orb-2 { width: 400px; height: 400px; background: rgba(0, 208, 255, 0.4); bottom: -120px; left: -120px; }
 
+/* ===== VIDEO PLACEHOLDER GLASS-NEOMORPHISM ===== */
+.video-placeholder-card {
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  height: 480px;
+  border: 1px solid rgba(0, 208, 255, 0.25);
+  border-radius: 16px;
+  background: radial-gradient(135deg, rgba(0, 208, 255, 0.08) 0%, rgba(0, 0, 0, 0.6) 100%);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 10px 20px rgba(0, 208, 255, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.video-placeholder-card:hover {
+  transform: scale(1.01);
+  border-color: rgba(0, 208, 255, 0.5);
+  box-shadow: 
+    0 20px 45px rgba(0, 208, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.placeholder-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 208, 255, 0.15) 0%, transparent 70%);
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+}
+
+.video-placeholder-card:hover .placeholder-overlay {
+  opacity: 0.8;
+}
+
+.placeholder-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  max-width: 500px;
+}
+
+.lock-shield-icon {
+  color: var(--accent, #00D0FF);
+  filter: drop-shadow(0 0 10px rgba(0, 208, 255, 0.4));
+  margin-bottom: 1rem;
+  opacity: 0.85;
+}
+
+.play-btn-pulse {
+  position: relative;
+  width: 75px;
+  height: 75px;
+  background: var(--accent, #00D0FF);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0 25px rgba(0, 208, 255, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-placeholder-card:hover .play-btn-pulse {
+  transform: scale(1.1);
+  box-shadow: 0 0 35px rgba(0, 208, 255, 0.7);
+}
+
+.play-icon {
+  color: #000000;
+  font-size: 1.8rem;
+  margin-left: 5px; /* Alignment offset for center visual balance */
+}
+
+.placeholder-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ffffff;
+  margin: 0 0 0.75rem 0;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.placeholder-desc {
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+
+.secure-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--accent, #00D0FF);
+  background: rgba(0, 208, 255, 0.1);
+  border: 1px solid rgba(0, 208, 255, 0.25);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+}
+
+.secure-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent, #00D0FF);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent, #00D0FF);
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .hero { padding: 110px 0 40px; }
@@ -570,7 +749,13 @@ const scrollToProducts = () => {
   .baul-img { width: 220px; height: 220px; }
   .baul-visual { margin-top: 3.5rem; margin-bottom: 0.5rem; }
   .hero-tagline-wrap { margin: 1.5rem 0 1rem; }
-  .hero-video { height: 240px; }
+  .hero-video { height: 280px; }
+  .video-placeholder-card { height: 280px; }
+  .hero-video-wrapper { height: 280px; }
+  .play-btn-pulse { width: 60px; height: 60px; }
+  .play-icon { font-size: 1.4rem; }
+  .placeholder-title { font-size: 1.1rem; }
+  .placeholder-desc { font-size: 0.75rem; }
   .orb-1 { width: 250px; height: 250px; top: -80px; right: -80px; }
   .orb-2 { width: 250px; height: 250px; bottom: -80px; left: -80px; }
 }

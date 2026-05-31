@@ -8,7 +8,6 @@ import BottomPromoBar from './components/BottomPromoBar.vue';
 import MaintenanceMode from './components/MaintenanceMode.vue';
 import ModePersonalView from './components/ModePersonalView.vue';
 import ModeAliadoView from './components/ModeAliadoView.vue';
-import AliadoLoader from './components/AliadoLoader.vue';
 
 
 // --- DATA ---
@@ -168,19 +167,7 @@ const getInitialMode = () => {
 
 const currentMode = ref(getInitialMode());
 const activeProductId = ref(null);
-
-const showAliadoLoader = ref(false);
-
-const checkAndTriggerLoader = (mode) => {
-  if (mode === 'aliado' && localStorage.getItem('offbasic_first_aliado_loader') === null) {
-    showAliadoLoader.value = true;
-  }
-};
-
-const onLoaderFinished = () => {
-  showAliadoLoader.value = false;
-  localStorage.setItem('offbasic_first_aliado_loader', 'true');
-};
+// --- SCROLLPERSIST ---
 
 const handleScroll = () => {
   // Logic for other scroll-dependent elements if any
@@ -224,10 +211,6 @@ const activeProductData = computed(() => {
 const setMode = (mode) => {
   if (currentMode.value === mode) return;
   
-  if (mode === 'aliado') {
-    checkAndTriggerLoader(mode);
-  }
-
   currentMode.value = mode;
   localStorage.setItem('offbasic_mode', mode);
 
@@ -337,8 +320,6 @@ onMounted(() => {
     }, 100);
   }
   
-  checkAndTriggerLoader(currentMode.value);
-  
   window.addEventListener('popstate', handleHash);
   window.addEventListener('beforeunload', saveScrollPosition);
   window.addEventListener('scroll', handleScroll, { passive: true });
@@ -357,9 +338,6 @@ watch(currentMode, () => {
 
 <template>
   <div class="app-container">
-    <!-- PREMIUM ALIADO COUNTDOWN LOADER -->
-    <AliadoLoader v-if="showAliadoLoader" @finished="onLoaderFinished" />
-
     <!-- MAINTENANCE MODE -->
     <MaintenanceMode v-if="isMaintenanceMode" />
 

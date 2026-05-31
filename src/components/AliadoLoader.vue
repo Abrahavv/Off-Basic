@@ -1,18 +1,22 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
+const props = defineProps({
+  inline: Boolean
+});
+
 const emit = defineEmits(['finished']);
 
 const count = ref(5);
 const progress = ref(100);
-const currentPhrase = ref('AUTENTICANDO CREDENCIALES DE SOCIO...');
+const currentPhrase = ref('AUTENTICANDO CREDENCIALES DE ALIADO...');
 
 const phrases = [
-  'ESTABLECIENDO ENLACE SEGURO CON CARACAS...',
-  'DESBLOQUEANDO BAÚL DE ALTO INVENTARIO...',
-  'PREPARANDO VIDEO DE VENTA EXCLUSIVO (VSL)...',
-  'CARGANDO ACCESO PRIVADO A OFF BASIC...',
-  'CONEXIÓN EXITOSA. BIENVENIDO A OFF BASIC ALIANZAS.'
+  'ESTABLECIENDO ENLACE SEGURO...',
+  'ACCEDIENDO...',
+  'DESBLOQUEANDO BAÚL DE ALTO INVENTARIO DE ALIADOS...',
+  'INICIALIZANDO PORTAL...',
+  'CONEXIÓN EXITOSA. BIENVENIDO A OFF BASIC ALIADOS.'
 ];
 
 let timer = null;
@@ -26,11 +30,11 @@ const startCountdown = () => {
     } else {
       count.value = 0;
       progress.value = 0;
-      currentPhrase.value = 'ACCEDIENDO...';
+      currentPhrase.value = 'ACCEDIENDO AL PORTAL...';
       clearInterval(timer);
       setTimeout(() => {
         emit('finished');
-      }, 800); // smooth exit transition
+      }, 1000); // smooth exit transition
     }
   }, 1000);
 };
@@ -41,43 +45,46 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="loader-overlay">
-    <!-- Futuristic cyber rings backdrop -->
-    <div class="tech-bg">
-      <div class="ring ring-outer"></div>
-      <div class="ring ring-middle"></div>
-      <div class="ring ring-inner"></div>
-      <div class="laser-line"></div>
-    </div>
+  <div class="loader-overlay" :class="{ 'is-inline': props.inline }">
+    <!-- Premium luxury ambient lighting -->
+    <div class="ambient-glow gold-glow"></div>
+    <div class="ambient-glow bronze-glow"></div>
 
-    <div class="loader-content">
-      <!-- Golden/Cyan badge -->
+    <div class="loader-container">
+      <!-- Premium Badge with Neumorphic + Glass look -->
       <div class="premium-badge">
-        <span class="lock-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-          </svg>
-        </span>
-        ACCESO EXCLUSIVO PARA SOCIOS
+        <span class="pulse-dot"></span>
+        <span class="badge-text">ACCESO A ALIADOS</span>
       </div>
 
-      <!-- Main Pulsing Countdown -->
-      <div class="countdown-display" :key="count">
-        <span class="count-number">{{ count }}</span>
-        <div class="glow-ring"></div>
+      <!-- Main Neumorphic/Glass Globe for Countdown -->
+      <div class="countdown-globe-wrapper">
+        <div class="countdown-globe" :key="count">
+          <span class="count-number">{{ count }}</span>
+          <div class="globe-inner-ring"></div>
+        </div>
       </div>
 
-      <!-- Linear visual status bar -->
-      <div class="progress-container">
-        <div class="progress-bar" :style="{ width: progress + '%' }"></div>
-      </div>
+      <!-- Premium High Ticket Label -->
+      <p class="premium-subtitle">PORTAL EXCLUSIVO DE NEGOCIOS</p>
 
-      <!-- Tech descriptions -->
-      <div class="phrases-wrapper">
-        <p class="status-phrase animate-text">{{ currentPhrase }}</p>
-        <div class="encryption-key">
-          <span>KEY SHA-256 ID: 0x9f88a...</span>
-          <span class="blink">● SECURE PORT</span>
+      <!-- Glassmorphic Status Section -->
+      <div class="status-box">
+        <!-- Progress Bar inside glass slot -->
+        <div class="progress-container">
+          <div class="progress-bar" :style="{ width: progress + '%' }"></div>
+        </div>
+
+        <!-- Dynamic status phrases -->
+        <div class="phrases-wrapper">
+          <p class="status-phrase animate-text">{{ currentPhrase }}</p>
+          <div class="encryption-key">
+            <span>SECURE KEY: ALIANZAS-0x{{ count }}B7F</span>
+            <span class="secure-badge">
+              <span class="secure-icon">🛡️</span>
+              ENCRIPTACIÓN SSL-256
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -91,186 +98,221 @@ onMounted(() => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #000000;
+  background-color: #0b0c10;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 99999;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font);
   overflow: hidden;
 }
 
-/* Background Cyberpunk Hologram styling */
-.tech-bg {
+.loader-overlay.is-inline {
   position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  opacity: 0.15;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  background-color: rgba(11, 12, 16, 0.95);
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-.ring {
+/* Luxury ambient background glows */
+.ambient-glow {
   position: absolute;
   border-radius: 50%;
-  border: 1px dashed #00D0FF;
-  will-change: transform;
+  filter: blur(120px);
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: 1;
 }
 
-.ring-outer {
-  width: 80vmax;
-  height: 80vmax;
-  animation: rotateClockwise 25s linear infinite;
+.gold-glow {
+  width: 50vw;
+  height: 50vw;
+  top: -10vw;
+  right: -10vw;
+  background: radial-gradient(circle, var(--accent, #00D0FF), rgba(0, 208, 255, 0.3));
 }
 
-.ring-middle {
-  width: 55vmax;
-  height: 55vmax;
-  border-style: double;
-  border-width: 3px;
-  border-color: rgba(0, 208, 255, 0.4);
-  animation: rotateCounterClockwise 18s linear infinite;
+.bronze-glow {
+  width: 60vw;
+  height: 60vw;
+  bottom: -15vw;
+  left: -15vw;
+  background: radial-gradient(circle, rgba(0, 208, 255, 0.4), #000000);
 }
 
-.ring-inner {
-  width: 30vmax;
-  height: 30vmax;
-  border-style: dotted;
-  animation: rotateClockwise 12s linear infinite;
-}
-
-.laser-line {
-  position: absolute;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #00D0FF, transparent);
-  animation: scanVertical 4s ease-in-out infinite;
-}
-
-@keyframes rotateClockwise {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes rotateCounterClockwise {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
-}
-
-@keyframes scanVertical {
-  0% { transform: translateY(-50vh); }
-  50% { transform: translateY(50vh); }
-  100% { transform: translateY(-50vh); }
-}
-
-/* Main Content elements */
-.loader-content {
+/* Neumorphic + Glassmorphic Premium Container */
+.loader-container {
   position: relative;
   z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
-  max-width: 450px;
+  padding: 3.5rem 2.5rem;
+  max-width: 480px;
   width: 90%;
   text-align: center;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(0, 208, 255, 0.2);
+  border-radius: 30px;
+  /* Dual layer shadow for Neumorphism feel over dark space */
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 10px 20px rgba(0, 208, 255, 0.05);
 }
 
+/* Premium Badge */
 .premium-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
+  gap: 0.6rem;
   font-size: 0.75rem;
-  letter-spacing: 2px;
-  color: #00D0FF;
-  background: rgba(0, 208, 255, 0.08);
-  border: 1px solid rgba(0, 208, 255, 0.3);
-  padding: 0.6rem 1.2rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: var(--accent, #00D0FF);
+  background: linear-gradient(135deg, rgba(0, 208, 255, 0.12) 0%, rgba(0, 0, 0, 0.4) 100%);
+  border: 1px solid rgba(0, 208, 255, 0.35);
+  padding: 0.7rem 1.5rem;
   border-radius: 50px;
-  box-shadow: 0 4px 20px rgba(0, 208, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 208, 255, 0.15);
   margin-bottom: 2rem;
-  animation: pulseBadge 2s infinite alternate;
 }
 
-.lock-icon {
-  display: flex;
-  align-items: center;
-  animation: lockBounce 1s infinite alternate;
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent, #00D0FF);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent, #00D0FF);
+  animation: pulse 1.5s infinite alternate;
 }
 
-@keyframes lockBounce {
-  from { transform: translateY(0); }
-  to { transform: translateY(-2px); }
+@keyframes pulse {
+  0% { transform: scale(0.9); opacity: 0.5; }
+  100% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 15px var(--accent, #00D0FF); }
 }
 
-@keyframes pulseBadge {
-  0% { box-shadow: 0 0 10px rgba(0, 208, 255, 0.1); border-color: rgba(0, 208, 255, 0.3); }
-  100% { box-shadow: 0 0 25px rgba(0, 208, 255, 0.35); border-color: rgba(0, 208, 255, 0.8); }
+.badge-text {
+  background: linear-gradient(90deg, #ffffff, var(--accent, #00D0FF));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Big Countdown Display styling */
-.countdown-display {
+/* Globe Glass-Neumorphism */
+.countdown-globe-wrapper {
+  margin-bottom: 2rem;
+}
+
+.countdown-globe {
   position: relative;
-  width: 160px;
-  height: 160px;
+  width: 150px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 2.5rem;
+  border-radius: 50%;
+  background: radial-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 208, 255, 0.02) 100%);
+  border: 1px solid rgba(0, 208, 255, 0.35);
+  /* Double shadow for Neumorphic sphere projection */
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.6),
+    inset 0 4px 15px rgba(255, 255, 255, 0.1),
+    inset 0 -4px 15px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(0, 208, 255, 0.15);
+  animation: globePulse 2s ease-in-out infinite alternate;
 }
 
 .count-number {
-  font-family: 'Bruno Ace SC', 'Syne', sans-serif;
-  font-size: 5.5rem;
-  font-weight: 700;
+  font-family: var(--font);
+  font-size: 5rem;
+  font-weight: 800;
   color: #ffffff;
-  text-shadow: 0 0 35px rgba(0, 208, 255, 0.8),
-               0 0 60px rgba(0, 208, 255, 0.4);
-  line-height: 1;
+  text-shadow: 0 0 20px rgba(0, 208, 255, 0.7);
   z-index: 2;
-  animation: numberPulse 1s ease-out infinite;
+  animation: numberPop 1s ease-out infinite;
 }
 
-.glow-ring {
+.globe-inner-ring {
   position: absolute;
-  inset: 0;
+  inset: 8px;
   border-radius: 50%;
-  border: 2px solid #00D0FF;
-  box-shadow: 0 0 25px rgba(0, 208, 255, 0.4),
-              inset 0 0 25px rgba(0, 208, 255, 0.4);
-  animation: ringPulse 1s ease-out infinite;
-  z-index: 1;
+  border: 1px dashed rgba(0, 208, 255, 0.35);
+  animation: spinRing 20s linear infinite;
 }
 
-@keyframes numberPulse {
-  0% { transform: scale(0.85); opacity: 0.5; }
-  15% { transform: scale(1.05); opacity: 1; }
-  100% { transform: scale(0.95); opacity: 0.9; }
+@keyframes spinRing {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-@keyframes ringPulse {
-  0% { transform: scale(0.9); opacity: 0.3; }
-  50% { transform: scale(1.08); opacity: 0.9; }
-  100% { transform: scale(1.15); opacity: 0; }
+@keyframes globePulse {
+  0% { box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 208, 255, 0.1); }
+  100% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 35px rgba(0, 208, 255, 0.3); border-color: rgba(0, 208, 255, 0.6); }
 }
 
-/* Linear progress line */
+@keyframes numberPop {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.95; }
+}
+
+/* Premium Typography */
+.premium-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: #ffffff;
+  margin: 0;
+  background: linear-gradient(135deg, #ffffff 30%, var(--accent, #00D0FF) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.premium-subtitle {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 6px;
+  color: rgba(0, 208, 255, 0.75);
+  margin: 0.5rem 0 2rem 0;
+  text-transform: uppercase;
+}
+
+/* Status Glass Container */
+.status-box {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 20px;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Progress bar inside a glass groove */
 .progress-container {
   width: 100%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.1);
+  height: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   overflow: hidden;
-  margin-bottom: 2rem;
+  margin-bottom: 1.2rem;
 }
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #00D0FF, #FFFFFF);
-  box-shadow: 0 0 10px #00D0FF;
+  background: linear-gradient(90deg, rgba(0, 208, 255, 0.5), var(--accent, #00D0FF), #ffffff);
+  box-shadow: 0 0 12px rgba(0, 208, 255, 0.6);
   transition: width 1s linear;
 }
 
@@ -282,13 +324,13 @@ onMounted(() => {
 }
 
 .status-phrase {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 1px;
-  color: #E2E8F0;
+  letter-spacing: 1.5px;
+  color: #e5e5e5;
   text-transform: uppercase;
-  min-height: 24px;
+  min-height: 20px;
+  margin: 0;
 }
 
 .animate-text {
@@ -296,49 +338,96 @@ onMounted(() => {
 }
 
 @keyframes textFlicker {
-  0% { opacity: 0.3; transform: scale(0.98); }
-  50% { opacity: 0.8; }
-  100% { opacity: 1; transform: scale(1); }
+  0% { opacity: 0.3; }
+  100% { opacity: 1; }
 }
 
 .encryption-key {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: 'Courier New', monospace;
-  font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.4);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: monospace;
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
   padding-top: 0.75rem;
   margin-top: 0.25rem;
 }
 
-.blink {
-  color: #00FF66;
-  text-shadow: 0 0 5px #00FF66;
-  animation: blinkAnim 1.5s step-end infinite;
+.secure-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--accent, #00D0FF);
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
-@keyframes blinkAnim {
-  50% { opacity: 0; }
+.secure-icon {
+  font-size: 0.7rem;
 }
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
+  .loader-container {
+    padding: 2.5rem 1.5rem;
+  }
   .premium-badge {
     font-size: 0.65rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.2rem;
+  }
+  .countdown-globe {
+    width: 120px;
+    height: 120px;
   }
   .count-number {
-    font-size: 4.5rem;
+    font-size: 4rem;
   }
-  .countdown-display {
-    width: 130px;
-    height: 130px;
-    margin-bottom: 2rem;
-  }
-  .status-phrase {
-    font-size: 0.75rem;
+  .premium-title {
+    font-size: 1.2rem;
   }
 }
+/* Inline specific overrides */
+.loader-overlay.is-inline .loader-container {
+  padding: 1.5rem;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  justify-content: center;
+}
+
+.loader-overlay.is-inline .premium-badge {
+  margin-bottom: 0.8rem;
+  padding: 0.4rem 1rem;
+}
+
+.loader-overlay.is-inline .countdown-globe {
+  width: 110px;
+  height: 110px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.loader-overlay.is-inline .count-number {
+  font-size: 3.5rem;
+}
+
+.loader-overlay.is-inline .premium-title {
+  font-size: 1.1rem;
+}
+
+.loader-overlay.is-inline .premium-subtitle {
+  margin: 0.3rem 0 1rem 0;
+  font-size: 0.55rem;
+}
+
+.loader-overlay.is-inline .status-box {
+  padding: 1rem;
+  border-radius: 12px;
+}
 </style>
+
