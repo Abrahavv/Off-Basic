@@ -757,43 +757,41 @@ const scrollToProducts = () => {
 
   /* Adjustments to make the placeholder content fit perfectly within 280px height */
   .placeholder-content {
-    padding: 0.8rem;
-    gap: 0.4rem;
+    padding: 1rem;
   }
   .lock-shield-icon {
-    margin-bottom: 0.2rem;
-    display: block !important;
+    margin-bottom: 0.3rem;
   }
   .lock-shield-icon svg {
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
   }
   .play-btn-pulse {
-    width: 44px;
-    height: 44px;
-    margin-bottom: 0.4rem;
-    box-shadow: 0 0 12px rgba(0, 208, 255, 0.35);
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.6rem;
+    box-shadow: 0 0 15px rgba(0, 208, 255, 0.35);
   }
   .play-icon {
-    font-size: 1rem;
-    margin-left: 2px;
+    font-size: 1.1rem;
+    margin-left: 3px;
   }
   .placeholder-title {
-    font-size: 0.85rem;
-    margin-bottom: 0.2rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
     letter-spacing: 1px;
   }
   .placeholder-desc {
-    display: none; /* Hide description on mobile to free up vertical space and show the lock & badge */
+    font-size: 0.68rem;
+    margin-bottom: 0.6rem;
+    line-height: 1.4;
   }
   .secure-badge {
-    padding: 0.25rem 0.6rem;
+    padding: 0.3rem 0.7rem;
     font-size: 0.55rem;
-    letter-spacing: 0.5px;
-    margin-top: 0.2rem;
+    letter-spacing: 1px;
   }
 }
-
 
 
 @media (max-width: 480px) {
