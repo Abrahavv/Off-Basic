@@ -105,6 +105,8 @@ onMounted(() => {
   z-index: 99999;
   font-family: var(--font);
   overflow: hidden;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .loader-overlay.is-inline {
@@ -114,10 +116,11 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   border-radius: 16px;
-  background-color: rgba(11, 12, 16, 0.95);
+  background-color: rgba(11, 12, 16, 0.96);
   z-index: 10;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 0.5rem;
 }
 
 /* Luxury ambient background glows */
@@ -153,20 +156,24 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 3.5rem 2.5rem;
-  max-width: 480px;
-  width: 90%;
+  justify-content: center;
+  padding: 3rem 2rem;
+  max-width: 460px;
+  width: 100%;
+  max-height: 90vh;
   text-align: center;
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
   border: 1px solid rgba(0, 208, 255, 0.2);
   border-radius: 30px;
-  /* Dual layer shadow for Neumorphism feel over dark space */
   box-shadow: 
     0 20px 50px rgba(0, 0, 0, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.15),
     inset 0 10px 20px rgba(0, 208, 255, 0.05);
+  box-sizing: border-box;
+  overflow-y: auto;
+  gap: 1.5rem;
 }
 
 /* Premium Badge */
@@ -180,10 +187,11 @@ onMounted(() => {
   color: var(--accent, #00D0FF);
   background: linear-gradient(135deg, rgba(0, 208, 255, 0.12) 0%, rgba(0, 0, 0, 0.4) 100%);
   border: 1px solid rgba(0, 208, 255, 0.35);
-  padding: 0.7rem 1.5rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 50px;
   box-shadow: 0 4px 15px rgba(0, 208, 255, 0.15);
-  margin-bottom: 2rem;
+  margin: 0;
+  flex-shrink: 0;
 }
 
 .pulse-dot {
@@ -209,31 +217,32 @@ onMounted(() => {
 
 /* Globe Glass-Neumorphism */
 .countdown-globe-wrapper {
-  margin-bottom: 2rem;
+  margin: 0;
+  flex-shrink: 0;
 }
 
 .countdown-globe {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 140px;
+  height: 140px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   background: radial-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 208, 255, 0.02) 100%);
   border: 1px solid rgba(0, 208, 255, 0.35);
-  /* Double shadow for Neumorphic sphere projection */
   box-shadow: 
     0 15px 30px rgba(0, 0, 0, 0.6),
     inset 0 4px 15px rgba(255, 255, 255, 0.1),
     inset 0 -4px 15px rgba(0, 0, 0, 0.8),
     0 0 30px rgba(0, 208, 255, 0.15);
   animation: globePulse 2s ease-in-out infinite alternate;
+  transition: width 0.3s ease, height 0.3s ease;
 }
 
 .count-number {
   font-family: var(--font);
-  font-size: 5rem;
+  font-size: 4.5rem;
   font-weight: 800;
   color: #ffffff;
   text-shadow: 0 0 20px rgba(0, 208, 255, 0.7);
@@ -265,37 +274,26 @@ onMounted(() => {
   100% { transform: scale(0.95); opacity: 0.95; }
 }
 
-/* Premium Typography */
-.premium-title {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: 4px;
-  color: #ffffff;
-  margin: 0;
-  background: linear-gradient(135deg, #ffffff 30%, var(--accent, #00D0FF) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .premium-subtitle {
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 6px;
-  color: rgba(0, 208, 255, 0.75);
-  margin: 0.5rem 0 2rem 0;
+  letter-spacing: 5px;
+  color: rgba(0, 208, 255, 0.85);
+  margin: 0;
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 
 /* Status Glass Container */
 .status-box {
   width: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 1.5rem;
+  padding: 1.25rem;
   border-radius: 20px;
   box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 /* Progress bar inside a glass groove */
@@ -306,7 +304,7 @@ onMounted(() => {
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   overflow: hidden;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1rem;
 }
 
 .progress-bar {
@@ -320,17 +318,21 @@ onMounted(() => {
 .phrases-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.6rem;
 }
 
 .status-phrase {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 1.5px;
-  color: #e5e5e5;
+  letter-spacing: 1px;
+  color: #f1f1f1;
   text-transform: uppercase;
-  min-height: 20px;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0;
+  line-height: 1.3;
 }
 
 .animate-text {
@@ -347,11 +349,13 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   font-family: monospace;
-  font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.3);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 0.75rem;
-  margin-top: 0.25rem;
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.35);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 0.6rem;
+  margin-top: 0.2rem;
+  flex-wrap: wrap;
+  gap: 0.4rem;
 }
 
 .secure-badge {
@@ -367,67 +371,172 @@ onMounted(() => {
   font-size: 0.7rem;
 }
 
-/* Responsive adjustments */
+/* =======================================================
+   RESPONSIVENESS & MEDIA QUERIES (Mobile & Landscape)
+   ======================================================= */
+
+/* General mobile viewports (portrait and smaller screens) */
 @media (max-width: 480px) {
   .loader-container {
-    padding: 2.5rem 1.5rem;
+    padding: 2rem 1.25rem;
+    gap: 1.2rem;
+    border-radius: 24px;
   }
   .premium-badge {
-    font-size: 0.65rem;
-    padding: 0.5rem 1.2rem;
+    font-size: 0.68rem;
+    padding: 0.5rem 1rem;
   }
   .countdown-globe {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
   }
   .count-number {
-    font-size: 4rem;
+    font-size: 3.5rem;
   }
-  .premium-title {
-    font-size: 1.2rem;
+  .premium-subtitle {
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+  }
+  .status-box {
+    padding: 1rem;
+    border-radius: 16px;
+  }
+  .status-phrase {
+    font-size: 0.7rem;
+    min-height: 32px;
   }
 }
-/* Inline specific overrides */
+
+/* Prevent overflow in short landscape screens */
+@media (max-height: 520px) {
+  .loader-container {
+    padding: 1rem 1.5rem;
+    gap: 0.6rem;
+    max-height: 95vh;
+  }
+  .premium-badge {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.65rem;
+  }
+  .countdown-globe {
+    width: 75px;
+    height: 75px;
+  }
+  .count-number {
+    font-size: 2.2rem;
+  }
+  .premium-subtitle {
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+  }
+  .status-box {
+    padding: 0.6rem 1rem;
+  }
+  .progress-container {
+    margin-bottom: 0.5rem;
+  }
+  .status-phrase {
+    font-size: 0.65rem;
+    min-height: 20px;
+  }
+  .encryption-key {
+    padding-top: 0.4rem;
+    margin-top: 0.1rem;
+  }
+}
+
+/* =======================================================
+   INLINE COMPONENT SPECIFIC RESPONSIVENESS OVERRIDES
+   ======================================================= */
 .loader-overlay.is-inline .loader-container {
-  padding: 1.5rem;
+  padding: 1.25rem;
   max-width: 100%;
   width: 100%;
   height: 100%;
+  max-height: 100%;
   background: transparent;
   border: none;
   box-shadow: none;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   justify-content: center;
+  gap: 0.8rem;
+  overflow: hidden;
 }
 
 .loader-overlay.is-inline .premium-badge {
-  margin-bottom: 0.8rem;
   padding: 0.4rem 1rem;
+  font-size: 0.68rem;
 }
 
 .loader-overlay.is-inline .countdown-globe {
-  width: 110px;
-  height: 110px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+  width: 95px;
+  height: 95px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 .loader-overlay.is-inline .count-number {
-  font-size: 3.5rem;
-}
-
-.loader-overlay.is-inline .premium-title {
-  font-size: 1.1rem;
+  font-size: 3rem;
 }
 
 .loader-overlay.is-inline .premium-subtitle {
-  margin: 0.3rem 0 1rem 0;
-  font-size: 0.55rem;
+  font-size: 0.6rem;
+  letter-spacing: 3px;
 }
 
 .loader-overlay.is-inline .status-box {
-  padding: 1rem;
-  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  border-radius: 14px;
 }
+
+.loader-overlay.is-inline .progress-container {
+  margin-bottom: 0.6rem;
+}
+
+.loader-overlay.is-inline .status-phrase {
+  font-size: 0.68rem;
+  min-height: 24px;
+  line-height: 1.2;
+}
+
+.loader-overlay.is-inline .encryption-key {
+  padding-top: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+/* Extra safety rule for very small inline height parent wrappers (e.g. mobile vsl card <= 280px height) */
+@media (max-width: 768px) {
+  .loader-overlay.is-inline .loader-container {
+    gap: 0.4rem;
+    padding: 0.75rem;
+  }
+  .loader-overlay.is-inline .premium-badge {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+  }
+  .loader-overlay.is-inline .countdown-globe {
+    width: 70px;
+    height: 70px;
+  }
+  .loader-overlay.is-inline .count-number {
+    font-size: 2.2rem;
+  }
+  .loader-overlay.is-inline .premium-subtitle {
+    display: none; /* Hide subtitle to preserve precious vertical space on small mobile inline containers */
+  }
+  .loader-overlay.is-inline .status-box {
+    padding: 0.6rem 0.75rem;
+  }
+  .loader-overlay.is-inline .status-phrase {
+    font-size: 0.62rem;
+    min-height: 18px;
+  }
+  .loader-overlay.is-inline .encryption-key {
+    font-size: 0.55rem;
+    padding-top: 0.4rem;
+  }
+}
+
 </style>
 
