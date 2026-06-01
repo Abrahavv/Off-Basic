@@ -6,14 +6,15 @@ import baulImg from '../assets/Baul-Off-Basic.png';
 import AliadoLoader from './AliadoLoader.vue';
 
 const props = defineProps({ 
-  mode: String
+  mode: String,
+  isAliadoUnlocked: Boolean
 });
-const emit = defineEmits(['switch-mode']);
+const emit = defineEmits(['switch-mode', 'unlocked']);
 
 const isAliado = computed(() => props.mode === 'aliado');
 
 const vslLoading = ref(false);
-const vslUnlocked = ref(false);
+const vslUnlocked = computed(() => props.isAliadoUnlocked);
 
 const startVslLoading = () => {
   vslLoading.value = true;
@@ -21,7 +22,7 @@ const startVslLoading = () => {
 
 const onVslLoaderFinished = () => {
   vslLoading.value = false;
-  vslUnlocked.value = true;
+  emit('unlocked');
 };
 
 const scrollToProducts = () => {
@@ -148,7 +149,7 @@ const scrollToProducts = () => {
         </div>
       </div>
  
-      <div class="hero-actions st-6">
+      <div v-if="vslUnlocked" class="hero-actions st-6">
         <button class="btn-primary btn-shimmer" @click="scrollToProducts" aria-label="Acceder al catálogo de inversión del Baúl">ACCEDER AHORA</button>
         <a 
           href="/Presentacion_Off_Basic.pdf" 

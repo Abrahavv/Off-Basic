@@ -16,30 +16,38 @@ import FaqSection from './FaqSection.vue';
 
 const props = defineProps({
   mode: String,
-  products: Array
+  products: Array,
+  isAliadoUnlocked: Boolean
 });
-const emit = defineEmits(['switch-mode']);
+const emit = defineEmits(['switch-mode', 'unlocked']);
 </script>
 
 <template>
   <div class="mode-page-inner">
-    <Hero :mode="props.mode" @switch-mode="emit('switch-mode', $event)" />
+    <Hero 
+      :mode="props.mode" 
+      :isAliadoUnlocked="props.isAliadoUnlocked" 
+      @switch-mode="emit('switch-mode', $event)" 
+      @unlocked="emit('unlocked')"
+    />
 
-    <BaulExplainer mode="aliado" />
-    <BenefitsSection />
-    <ComparisonSection mode="aliado" />
+    <template v-if="props.isAliadoUnlocked">
+      <BaulExplainer mode="aliado" />
+      <BenefitsSection />
+      <ComparisonSection mode="aliado" />
 
-    <ProductList :mode="props.mode" :products="props.products" />
+      <ProductList :mode="props.mode" :products="props.products" />
 
-    <KeysSection mode="aliado" />
-    <BonusSection mode="aliado" />
+      <KeysSection mode="aliado" />
+      <BonusSection mode="aliado" />
 
-    <ObjectivesSection :mode="props.mode" />
-    <FounderSection :mode="props.mode" />
-    <PaymentMethods :mode="props.mode" />
-    <TestimonialsSection :mode="props.mode" />
-    <ClosingSection />
-    <FaqSection :mode="props.mode" />
+      <ObjectivesSection :mode="props.mode" />
+      <FounderSection :mode="props.mode" />
+      <PaymentMethods :mode="props.mode" />
+      <TestimonialsSection :mode="props.mode" />
+      <ClosingSection />
+      <FaqSection :mode="props.mode" />
+    </template>
   </div>
 </template>
 

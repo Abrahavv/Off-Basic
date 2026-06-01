@@ -9,6 +9,7 @@ import MaintenanceMode from './components/MaintenanceMode.vue';
 import ModePersonalView from './components/ModePersonalView.vue';
 import ModeAliadoView from './components/ModeAliadoView.vue';
 import { safeStorage } from './utils/storage';
+import AliadoLoader from './components/AliadoLoader.vue';
 
 
 // --- DATA ---
@@ -168,6 +169,12 @@ const getInitialMode = () => {
 
 const currentMode = ref(getInitialMode());
 const activeProductId = ref(null);
+
+const isAliadoUnlocked = ref(safeStorage.getItem('offbasic_aliado_unlocked') === 'true');
+const unlockAliado = () => {
+  safeStorage.setItem('offbasic_aliado_unlocked', 'true');
+  isAliadoUnlocked.value = true;
+};
 // --- SCROLLPERSIST ---
 
 const handleScroll = () => {
@@ -368,7 +375,9 @@ watch(currentMode, () => {
               :key="currentMode"
               :mode="currentMode"
               :products="currentMode === 'aliado' ? displayProducts : products"
+              :isAliadoUnlocked="isAliadoUnlocked"
               @switch-mode="setMode"
+              @unlocked="unlockAliado"
             />
           </transition>
         </main>
