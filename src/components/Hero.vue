@@ -152,8 +152,8 @@ const scrollToProducts = () => {
       <div v-if="vslUnlocked" class="hero-actions st-6">
         <button class="btn-primary btn-shimmer" @click="scrollToProducts" aria-label="Acceder al catálogo de inversión del Baúl">ACCEDER AHORA</button>
         <a 
-          href="/Presentacion_Off_Basic.pdf" 
-          download="Presentacion_Off_Basic.pdf"
+          href="/Off%20Basic%20Protocolo.pdf" 
+          download="Off Basic Protocolo.pdf"
           class="btn-primary btn-shimmer btn-pdf"
           aria-label="Descargar presentación en formato PDF"
         >
