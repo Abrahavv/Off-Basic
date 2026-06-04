@@ -27,7 +27,7 @@ const abrirCompra = () => {
         <iframe
           width="100%"
           height="500"
-          src="https://www.youtube.com/embed/caAWn6xFWkI"
+          src="https://www.youtube.com/embed/xuEwkRWv7U0"
           title="YouTube video player"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

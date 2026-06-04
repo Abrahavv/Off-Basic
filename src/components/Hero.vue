@@ -114,7 +114,7 @@ const scrollToProducts = () => {
         <iframe
           v-else-if="vslUnlocked"
           class="hero-video"
-          src="https://www.youtube.com/embed/caAWn6xFWkI"
+          src="https://www.youtube.com/embed/xuEwkRWv7U0"
           title="Baúl de Off Basic"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
